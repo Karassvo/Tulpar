@@ -1,0 +1,487 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Tulpar-Man: Ten Nights Over Astana</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Unbounded:wght@600;800&display=swap">
+<style>
+/* Layout: a noir comic book. Dark gutters, ink-bordered panels in rows (one wide panel, then two), yellow narration boxes, white lettering balloons, SFX bursts. Single committed dark look. */
+:root{
+  --gutter:#0b0e17; --ink:#05070c; --paper:#f4efe2; --night:#141a2e; --night-2:#1f2847;
+  --cape:#a3202e; --gold:#f2b632; --cyan:#7fe7ff; --caption:#f5cf3a; --red:#e2412f; --soft:#9aa6bf;
+  --f-sfx:"Bangers","Impact","Arial Black",sans-serif;
+  --f-letter:"Comic Neue","Comic Sans MS","Trebuchet MS",sans-serif;
+  --f-title:"Unbounded","Arial Black",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:64px;scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--gutter);color:var(--paper);font-family:var(--f-letter);font-size:17px;line-height:1.45}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--gutter)}
+a{color:var(--gold)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.book{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px;display:flex;flex-direction:column;gap:46px}
+
+/* top nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--gutter);border-bottom:2px solid var(--ink)}
+.nav .in{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px;display:flex;gap:6px;align-items:center;overflow-x:auto;scrollbar-width:none}
+.nav .in::-webkit-scrollbar{display:none}
+.nav b{font-family:var(--f-sfx);font-size:1.25rem;letter-spacing:.06em;color:var(--gold);margin-right:8px;white-space:nowrap}
+.nav a{font-family:var(--f-sfx);font-size:1rem;letter-spacing:.06em;text-decoration:none;color:var(--paper);border:2px solid var(--night-2);border-radius:6px;padding:.15rem .5rem;white-space:nowrap}
+.nav a:hover{border-color:var(--gold);color:var(--gold)}
+
+/* page */
+.page{display:flex;flex-direction:column;gap:12px}
+.issue-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;border-bottom:3px solid var(--gold);padding-bottom:6px}
+.issue-head .no{font-family:var(--f-sfx);font-size:1.1rem;letter-spacing:.12em;color:var(--gold)}
+.issue-head h2{font-family:var(--f-sfx);font-weight:400;font-size:clamp(2rem,6vw,3.2rem);letter-spacing:.04em;line-height:1;margin:0;color:var(--paper);text-shadow:3px 3px 0 var(--cape)}
+.issue-head .topic{font-size:.95rem;color:var(--soft);font-weight:700}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.panel{position:relative;background:var(--night);border:4px solid var(--ink);outline:2px solid var(--paper);outline-offset:-8px;overflow:hidden;container-type:inline-size;min-width:0}
+.panel.wide{grid-column:1/-1}
+.panel svg.art{display:block;width:100%;height:auto}
+.panel::after{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.3px);background-size:6px 6px;mix-blend-mode:screen}
+@media (max-width:640px){.row{grid-template-columns:1fr}}
+
+/* lettering */
+.bub{position:absolute;z-index:2;background:#fff;color:#0a0a0a;border:2.5px solid var(--ink);border-radius:46%/40%;padding:.55em .9em;font-weight:700;line-height:1.22;text-align:center;font-size:max(11.5px,3.55cqw)}
+.wide .bub,.wide .cap,.wide .sfx{font-size:max(11.5px,1.85cqw)}
+.bub::after{content:"";position:absolute;width:16px;height:16px;background:#fff;border:2.5px solid var(--ink);border-top:0;border-left:0;bottom:-10px;transform:rotate(45deg)}
+.bub.tl::after{left:22%} .bub.tr::after{right:22%} .bub.none::after{display:none}
+.bub.think{border-radius:50%;border-style:dashed}
+.bub.think::after{display:none}
+.bub.villain{background:#ffe3df}
+.bub.villain::after{background:#ffe3df}
+.bub.shout{border-radius:8px;transform:rotate(-2deg);font-size:max(12.5px,4cqw)}
+.wide .bub.shout{font-size:max(12.5px,2.1cqw)}
+.cap{position:absolute;z-index:2;background:var(--caption);color:#0a0a0a;border:2.5px solid var(--ink);padding:.35em .65em;font-weight:700;line-height:1.25;font-size:max(11.5px,3.4cqw);box-shadow:3px 3px 0 var(--ink)}
+.sfx{position:absolute;z-index:2;font-family:var(--f-sfx);font-size:max(26px,9cqw)!important;letter-spacing:.04em;line-height:.9;color:var(--gold);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;text-shadow:4px 4px 0 var(--cape);transform:rotate(-8deg);white-space:nowrap}
+.wide .sfx{font-size:max(26px,5.2cqw)!important}
+.sfx.red{color:var(--red);text-shadow:4px 4px 0 var(--ink)}
+.file{border:3px solid var(--gold);background:var(--night);padding:.75rem 1rem;display:grid;grid-template-columns:auto 1fr;gap:.3rem 1rem;align-items:start}
+.file .lbl{font-family:var(--f-sfx);font-size:1.15rem;letter-spacing:.08em;color:var(--gold);line-height:1.2}
+.file p{margin:0;font-size:1rem}
+.file code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em;color:var(--cyan)}
+@media (max-width:560px){.file{grid-template-columns:1fr}}
+
+/* cover */
+.cover{position:relative;border:5px solid var(--ink);outline:3px solid var(--gold);outline-offset:-12px;overflow:hidden;background:var(--night);container-type:inline-size}
+.cover svg{display:block;width:100%;height:auto}
+.cover .ct{position:absolute;left:5%;top:5%;right:5%;display:flex;flex-direction:column;gap:.4cqw}
+.cover .price{font-family:var(--f-sfx);font-size:max(13px,2.2cqw);letter-spacing:.12em;color:var(--gold)}
+.cover h1{font-family:var(--f-sfx);font-weight:400;font-size:max(48px,13cqw);line-height:.85;letter-spacing:.03em;margin:0;color:var(--paper);-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-shadow:7px 7px 0 var(--cape)}
+.cover .sub{font-family:var(--f-sfx);font-size:max(18px,4.2cqw);letter-spacing:.06em;color:var(--gold);-webkit-text-stroke:1.5px var(--ink);paint-order:stroke fill}
+.cover .team{position:absolute;left:5%;bottom:5%;right:5%;font-weight:700;font-size:max(12px,1.9cqw);color:var(--paper);background:rgba(5,7,12,.72);padding:.5em .8em;border-left:6px solid var(--gold)}
+.intro{display:flex;flex-direction:column;gap:.7rem;max-width:68ch}
+.intro p{margin:0}
+.intro .k{font-family:var(--f-sfx);letter-spacing:.08em;color:var(--gold);font-size:1.2rem}
+.credits{border-top:3px solid var(--gold);padding-top:1rem;display:flex;flex-direction:column;gap:.8rem;font-size:.95rem;color:var(--soft)}
+.credits h3{font-family:var(--f-sfx);font-weight:400;font-size:1.8rem;letter-spacing:.05em;color:var(--paper);margin:0}
+.credits table{border-collapse:collapse;width:100%;font-size:.92rem}
+.credits td{border-bottom:1px solid var(--night-2);padding:.45rem .5rem;vertical-align:top;color:var(--paper)}
+.credits td:first-child{color:var(--gold);font-weight:700;width:28%}
+@media (prefers-reduced-motion: no-preference){
+  .sfx{animation:pop .5s cubic-bezier(.2,1.6,.4,1) both}
+  @keyframes pop{from{transform:rotate(-8deg) scale(.6)}to{transform:rotate(-8deg) scale(1)}}
+}
+</style>
+<nav class="nav" aria-label="Issues"><div class="in" id="navIn"><b>TULPAR-MAN</b><a href="#cover">Cover</a></div></nav>
+<main class="book" id="book"></main>
+<script>
+
+/* ================= ART KIT ================= */
+var UID = 0;
+function rng(seed){ var s = seed >>> 0; return function(){ s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+var INK = "#05070c";
+
+function sky(w, h, o){
+  o = o || {}; var id = "g" + (++UID);
+  var top = o.top || "#0c1124", bot = o.bot || "#2a3566";
+  var s = '<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + top + '"/><stop offset="1" stop-color="' + bot + '"/></linearGradient></defs>';
+  s += '<rect width="' + w + '" height="' + h + '" fill="url(#' + id + ')"/>';
+  if (o.moon !== false) {
+    var mx = o.mx || w * 0.82, my = o.my || 70, mr = o.mr || 38;
+    s += '<circle cx="' + mx + '" cy="' + my + '" r="' + (mr + 16) + '" fill="#f4efe2" opacity=".08"/>';
+    s += '<circle cx="' + mx + '" cy="' + my + '" r="' + mr + '" fill="#efe6c8"/>';
+    s += '<circle cx="' + (mx - mr * .3) + '" cy="' + (my - mr * .2) + '" r="' + (mr * .18) + '" fill="#d8cda6"/>';
+    s += '<circle cx="' + (mx + mr * .35) + '" cy="' + (my + mr * .3) + '" r="' + (mr * .12) + '" fill="#d8cda6"/>';
+  }
+  if (o.stars !== false) { var r = rng(o.seed || 7); for (var i = 0; i < 26; i++) s += '<circle cx="' + (r() * w).toFixed(0) + '" cy="' + (r() * h * .45).toFixed(0) + '" r="' + (r() * 1.4 + .4).toFixed(1) + '" fill="#f4efe2" opacity="' + (r() * .6 + .2).toFixed(2) + '"/>'; }
+  return s;
+}
+function skyline(w, h, o){
+  o = o || {}; var r = rng(o.seed || 3), s = "", x = -10, base = h - (o.ground || 30);
+  var far = '<g fill="#111733">', near = '<g fill="#080b16">', win = '<g fill="#f2b632">';
+  while (x < w + 10) { var bw = 26 + r() * 34, bh = 50 + r() * 110 * (o.tall || 1); far += '<rect x="' + x.toFixed(0) + '" y="' + (base - bh - 40).toFixed(0) + '" width="' + bw.toFixed(0) + '" height="' + (bh + 40).toFixed(0) + '"/>'; x += bw + 2; }
+  x = -10;
+  while (x < w + 10) { var nw = 34 + r() * 46, nh = 40 + r() * 90 * (o.tall || 1); near += '<rect x="' + x.toFixed(0) + '" y="' + (base - nh).toFixed(0) + '" width="' + nw.toFixed(0) + '" height="' + (nh + 2).toFixed(0) + '"/>';
+    for (var wy = base - nh + 8; wy < base - 8; wy += 13) for (var wx = x + 6; wx < x + nw - 8; wx += 11) if (r() < .28) win += '<rect x="' + wx.toFixed(0) + '" y="' + wy.toFixed(0) + '" width="5" height="6" opacity="' + (.45 + r() * .5).toFixed(2) + '"/>';
+    x += nw + 4; }
+  s += far + '</g>';
+  if (o.khan !== undefined) s += khanShatyr(o.khan, base, o.ks || 1);
+  if (o.baiterek !== undefined) s += baiterek(o.baiterek, base, o.bs || 1);
+  s += near + '</g>' + win + '</g>';
+  s += '<rect x="0" y="' + base + '" width="' + w + '" height="' + (h - base) + '" fill="#06080f"/>';
+  return s;
+}
+function baiterek(x, base, k){
+  var t = base - 230 * k;
+  return '<g stroke="' + INK + '" stroke-width="2">' +
+    '<path d="M' + (x - 16 * k) + ' ' + base + ' L' + (x - 4 * k) + ' ' + (t + 30 * k) + ' L' + (x + 4 * k) + ' ' + (t + 30 * k) + ' L' + (x + 16 * k) + ' ' + base + 'Z" fill="#cfd6e6"/>' +
+    '<path d="M' + (x - 4 * k) + ' ' + (t + 30 * k) + ' C' + (x - 30 * k) + ' ' + (t + 10 * k) + ' ' + (x - 30 * k) + ' ' + (t - 4 * k) + ' ' + (x - 22 * k) + ' ' + (t - 14 * k) + 'M' + (x + 4 * k) + ' ' + (t + 30 * k) + ' C' + (x + 30 * k) + ' ' + (t + 10 * k) + ' ' + (x + 30 * k) + ' ' + (t - 4 * k) + ' ' + (x + 22 * k) + ' ' + (t - 14 * k) + '" fill="none" stroke="#cfd6e6" stroke-width="' + (3 * k) + '"/>' +
+    '<circle cx="' + x + '" cy="' + (t + 4 * k) + '" r="' + (20 * k) + '" fill="#f2b632"/></g>';
+}
+function khanShatyr(x, base, k){
+  return '<path d="M' + (x - 70 * k) + ' ' + base + ' Q' + (x - 20 * k) + ' ' + (base - 60 * k) + ' ' + (x + 6 * k) + ' ' + (base - 150 * k) + ' Q' + (x + 30 * k) + ' ' + (base - 60 * k) + ' ' + (x + 80 * k) + ' ' + base + 'Z" fill="#1a2348" stroke="#7fe7ff" stroke-opacity=".35" stroke-width="2"/>' +
+    '<path d="M' + (x + 6 * k) + ' ' + (base - 150 * k) + ' L' + (x + 4 * k) + ' ' + base + 'M' + (x - 30 * k) + ' ' + (base - 40 * k) + ' L' + (x + 40 * k) + ' ' + (base - 40 * k) + '" stroke="#7fe7ff" stroke-opacity=".25" stroke-width="1.5"/>';
+}
+function rain(w, h, seed){ var r = rng(seed || 11), s = '<g stroke="#9fb3e0" stroke-width="1.2" opacity=".35">'; for (var i = 0; i < 70; i++) { var x = r() * w, y = r() * h; s += '<path d="M' + x.toFixed(0) + ' ' + y.toFixed(0) + 'l-6 18"/>'; } return s + '</g>'; }
+function beams(x, y, w, h){ return '<path d="M' + x + ' ' + y + ' L' + (x - w) + ' ' + h + ' L' + (x + w) + ' ' + h + 'Z" fill="#f2b632" opacity=".13"/>'; }
+function speedLines(cx, cy, w, h, n){ var r = rng(5), s = '<g stroke="#f4efe2" stroke-width="2" opacity=".18">'; for (var i = 0; i < (n || 26); i++) { var a = r() * Math.PI * 2, r1 = 80 + r() * 40, r2 = Math.max(w, h); s += '<path d="M' + (cx + Math.cos(a) * r1).toFixed(0) + ' ' + (cy + Math.sin(a) * r1).toFixed(0) + 'L' + (cx + Math.cos(a) * r2).toFixed(0) + ' ' + (cy + Math.sin(a) * r2).toFixed(0) + '"/>'; } return s + '</g>'; }
+function burst(cx, cy, r, color){ var p = ""; for (var i = 0; i < 18; i++) { var a = i / 18 * Math.PI * 2, rr = i % 2 ? r * .62 : r; p += (i ? "L" : "M") + (cx + Math.cos(a) * rr).toFixed(1) + " " + (cy + Math.sin(a) * rr).toFixed(1); } return '<path d="' + p + 'Z" fill="' + (color || "#f2b632") + '" stroke="' + INK + '" stroke-width="3"/>'; }
+
+/* Tulpar-Man: the hero. Origin at feet centre. */
+function hero(x, y, s, pose, flip){
+  pose = pose || "stand";
+  var g = '<g transform="translate(' + x + ' ' + y + ') scale(' + (flip ? -s : s) + ' ' + s + ')' + (pose === "fly" ? ' rotate(62)' : '') + '" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round">';
+  if (pose === "fly") g += '<path d="M-14 4 Q0 46 0 70 Q8 40 14 4Z" fill="#f2b632" stroke-width="2"/><path d="M-8 4 Q0 30 2 48 Q6 26 8 4Z" fill="#fff" stroke="none"/>';
+  // cape
+  var capeWave = pose === "fly" ? 'M-30 -96 Q-80 -40 -70 30 Q-20 10 0 22 Q24 8 66 26 Q78 -40 30 -96Z' : 'M-30 -96 Q-62 -40 -54 4 Q-26 -6 0 6 Q26 -6 54 4 Q62 -40 30 -96Z';
+  g += '<path d="' + capeWave + '" fill="#a3202e"/>';
+  // arms
+  if (pose === "punch") { g += '<rect x="22" y="-70" width="58" height="15" rx="7" fill="#2a3550"/><circle cx="84" cy="-62" r="12" fill="#f2b632"/>'; g += '<rect x="-36" y="-68" width="14" height="36" rx="7" fill="#2a3550"/>'; }
+  else if (pose === "think") { g += '<rect x="-36" y="-68" width="14" height="36" rx="7" fill="#2a3550"/><path d="M24 -66 L42 -84 L30 -98" fill="none" stroke="#2a3550" stroke-width="13" stroke-linecap="round"/><path d="M24 -66 L42 -84 L30 -98" fill="none" stroke="' + INK + '" stroke-width="3" opacity="0"/>'; }
+  else if (pose === "fly") { g += '<rect x="-8" y="-150" width="16" height="44" rx="8" fill="#2a3550"/><circle cx="0" cy="-152" r="11" fill="#f2b632"/>'; }
+  else { g += '<rect x="-36" y="-68" width="14" height="38" rx="7" fill="#2a3550"/><rect x="22" y="-68" width="14" height="38" rx="7" fill="#2a3550"/>'; }
+  // body + emblem (a gold wing)
+  g += '<rect x="-26" y="-74" width="52" height="52" rx="11" fill="#2a3550"/>';
+  g += '<path d="M-15 -46 C-12 -60 4 -66 16 -62 C8 -58 6 -54 10 -50 C2 -50 0 -46 4 -42 C-4 -43 -10 -42 -15 -46Z" fill="#f2b632" stroke-width="2"/>';
+  // head with visor
+  g += '<rect x="-23" y="-112" width="46" height="36" rx="10" fill="#2a3550"/><rect x="-19" y="-101" width="38" height="13" rx="6" fill="#0a0d16" stroke-width="2"/>';
+  g += '<circle cx="-8" cy="-94.5" r="3.6" fill="#7fe7ff" stroke="none"/><circle cx="8" cy="-94.5" r="3.6" fill="#7fe7ff" stroke="none"/>';
+  g += '<path d="M0 -112 V-126" stroke-width="3"/><circle cx="0" cy="-129" r="4.5" fill="#f2b632" stroke-width="2"/>';
+  // base + wheels
+  if (pose !== "fly") { g += '<rect x="-30" y="-24" width="60" height="13" rx="6" fill="#2a3550"/><circle cx="-17" cy="-4" r="8" fill="#141a2e"/><circle cx="17" cy="-4" r="8" fill="#141a2e"/>'; }
+  else { g += '<rect x="-30" y="-24" width="60" height="13" rx="6" fill="#2a3550"/>'; }
+  return g + '</g>';
+}
+/* Plain delivery robot before the cape */
+function bot(x, y, s, dizzy){
+  var g = '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')" stroke="' + INK + '" stroke-width="3">';
+  g += '<rect x="-26" y="-74" width="52" height="50" rx="11" fill="#7c8aa8"/><rect x="-18" y="-64" width="36" height="22" rx="4" fill="#f4efe2"/><path d="M-12 -57h24M-12 -50h16" stroke-width="2"/>';
+  g += '<rect x="-23" y="-110" width="46" height="34" rx="10" fill="#7c8aa8"/>';
+  if (dizzy) g += '<path d="M-14 -98l8 8m0 -8l-8 8M6 -98l8 8m0 -8l-8 8" stroke-width="2.5"/>'; else g += '<circle cx="-9" cy="-93" r="4" fill="' + INK + '"/><circle cx="9" cy="-93" r="4" fill="' + INK + '"/>';
+  g += '<path d="M0 -110 V-122"/><circle cx="0" cy="-125" r="4" fill="#f2b632" stroke-width="2"/>';
+  g += '<rect x="-30" y="-24" width="60" height="13" rx="6" fill="#7c8aa8"/><circle cx="-17" cy="-4" r="8" fill="#141a2e"/><circle cx="17" cy="-4" r="8" fill="#141a2e"/>';
+  return g + '</g>';
+}
+/* Bürkit the golden eagle. Origin at body centre. */
+function eagle(x, y, s, flip){
+  var g = '<g transform="translate(' + x + ' ' + y + ') scale(' + (flip ? -s : s) + ' ' + s + ')" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round">';
+  g += '<path d="M-6 -4 C-30 -30 -62 -34 -92 -22 C-70 -16 -60 -8 -54 2 C-40 -2 -24 0 -10 8Z" fill="#8a5a2b"/>';
+  g += '<path d="M6 -4 C30 -30 62 -34 92 -22 C70 -16 60 -8 54 2 C40 -2 24 0 10 8Z" fill="#8a5a2b"/>';
+  g += '<path d="M-14 -6 C-14 -22 14 -22 14 -6 L10 24 L0 34 L-10 24Z" fill="#6b4220"/>';
+  g += '<path d="M-10 -14 C-10 -32 10 -32 10 -14 C6 -8 -6 -8 -10 -14Z" fill="#e9d9b0"/>';
+  g += '<path d="M8 -22 L20 -18 L9 -13Z" fill="#f2b632" stroke-width="2"/><circle cx="3" cy="-21" r="2" fill="' + INK + '" stroke="none"/>';
+  return g + '</g>';
+}
+/* Villain silhouette with glowing eyes. o: {c: coat, h: hat type, l: chest letter} */
+function villain(x, y, s, o, flip){
+  o = o || {};
+  var c = o.c || "#3a1f4d", d = o.d || "#24122f", e = o.e || "#ff5a3c";
+  var g = '<g transform="translate(' + x + ' ' + y + ') scale(' + (flip ? -s : s) + ' ' + s + ')" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round">';
+  g += '<path d="M-46 0 L-34 -96 Q0 -110 34 -96 L46 0Z" fill="' + c + '"/>';
+  g += '<path d="M-34 -96 L-60 -40 L-46 -34 M34 -96 L62 -44 L50 -36" fill="none" stroke-width="10" stroke="' + d + '" stroke-linecap="round"/>';
+  g += '<circle cx="0" cy="-118" r="25" fill="' + d + '"/>';
+  g += '<path d="M-14 -122 L-4 -117 L-14 -114Z M14 -122 L4 -117 L14 -114Z" fill="' + e + '" stroke="none"/>';
+  g += '<path d="M-10 -104 Q0 -98 10 -104" fill="none" stroke="' + e + '" stroke-width="2.5"/>';
+  if (o.h === "top") g += '<rect x="-22" y="-176" width="44" height="40" fill="#0b0b10"/><rect x="-32" y="-140" width="64" height="8" fill="#0b0b10"/><rect x="-22" y="-148" width="44" height="7" fill="' + e + '" stroke="none"/>';
+  if (o.h === "horns") g += '<path d="M-18 -136 Q-34 -162 -20 -176 Q-20 -152 -8 -142Z M18 -136 Q34 -162 20 -176 Q20 -152 8 -142Z" fill="#e9e2cf"/>';
+  if (o.h === "crown") g += '<path d="M-22 -138 L-22 -162 L-11 -148 L0 -168 L11 -148 L22 -162 L22 -138Z" fill="#f2b632"/>';
+  if (o.h === "hood") g += '<path d="M-30 -110 Q-30 -150 0 -152 Q30 -150 30 -110 Q20 -136 0 -138 Q-20 -136 -30 -110Z" fill="' + c + '"/>';
+  if (o.h === "antenna") g += '<path d="M-10 -142 L-20 -168 M10 -142 L20 -168"/><circle cx="-20" cy="-170" r="5" fill="' + e + '"/><circle cx="20" cy="-170" r="5" fill="' + e + '"/>';
+  if (o.l) g += '<circle cx="0" cy="-56" r="17" fill="' + e + '"/><text x="0" y="-49" text-anchor="middle" font-family="Bangers,Impact,sans-serif" font-size="20" fill="' + INK + '" stroke="none">' + o.l + '</text>';
+  return g + '</g>';
+}
+function txt(x, y, t, size, fill, anchor, extra){ return '<text x="' + x + '" y="' + y + '" font-family="Bangers,Impact,sans-serif" font-size="' + (size || 20) + '" fill="' + (fill || "#f4efe2") + '" text-anchor="' + (anchor || "middle") + '" ' + (extra || "") + '>' + t + '</text>'; }
+function mono(x, y, t, size, fill, anchor){ return '<text x="' + x + '" y="' + y + '" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="' + (size || 14) + '" font-weight="700" fill="' + (fill || "#f4efe2") + '" text-anchor="' + (anchor || "middle") + '">' + t + '</text>'; }
+
+/* ================= PROPS ================= */
+function car(x, y, c){ return '<g stroke="' + INK + '" stroke-width="3"><path d="M' + (x - 46) + ' ' + (y - 12) + ' L' + (x - 34) + ' ' + (y - 34) + ' L' + (x + 26) + ' ' + (y - 34) + ' L' + (x + 44) + ' ' + (y - 12) + ' Z" fill="' + c + '"/><rect x="' + (x - 50) + '" y="' + (y - 16) + '" width="100" height="16" rx="5" fill="' + c + '"/><circle cx="' + (x - 28) + '" cy="' + y + '" r="9" fill="#141a2e"/><circle cx="' + (x + 28) + '" cy="' + y + '" r="9" fill="#141a2e"/><circle cx="' + (x + 46) + '" cy="' + (y - 9) + '" r="4" fill="#f2b632" stroke-width="1.5"/></g>'; }
+function light(x, y, on){ return '<g stroke="' + INK + '" stroke-width="3"><rect x="' + (x - 3) + '" y="' + (y - 120) + '" width="6" height="120" fill="#2a3550"/><rect x="' + (x - 14) + '" y="' + (y - 170) + '" width="28" height="58" rx="5" fill="#141a2e"/><circle cx="' + x + '" cy="' + (y - 156) + '" r="8" fill="' + (on === "r" ? "#e2412f" : "#3a1414") + '"/><circle cx="' + x + '" cy="' + (y - 134) + '" r="8" fill="' + (on === "g" ? "#3ddc84" : "#123222") + '"/></g>'; }
+function person(x, y, s, c){ return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')" stroke="' + INK + '" stroke-width="3"><path d="M-16 0 L-12 -40 Q0 -48 12 -40 L16 0Z" fill="' + (c || "#5b6787") + '"/><circle cx="0" cy="-54" r="11" fill="#d9b48f"/><path d="M-12 -38 L-26 -62 M12 -38 L26 -62" stroke-width="6" stroke="' + (c || "#5b6787") + '" stroke-linecap="round"/></g>'; }
+function expo(x, y, r){ var s = '<g stroke="#7fe7ff" stroke-width="1.6" fill="none" opacity=".8"><circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#18224a"/>'; for (var i = 1; i < 6; i++) { var k = i / 6 * 2 - 1; s += '<ellipse cx="' + x + '" cy="' + y + '" rx="' + (r * Math.sqrt(1 - k * k)).toFixed(1) + '" ry="' + r + '" />'; s += '<path d="M' + (x - r * Math.sqrt(1 - k * k)).toFixed(1) + ' ' + (y + k * r).toFixed(1) + 'H' + (x + r * Math.sqrt(1 - k * k)).toFixed(1) + '"/>'; } return s + '</g>'; }
+function maze(x0, y0, cols, rows, cs){ var r = rng(21), s = '<g stroke="#7fe7ff" stroke-width="4" stroke-linecap="square" opacity=".75">'; s += '<rect x="' + x0 + '" y="' + y0 + '" width="' + cols * cs + '" height="' + rows * cs + '" fill="#0d1530"/>'; for (var i = 0; i < cols; i++) for (var j = 0; j < rows; j++) { var x = x0 + i * cs, y = y0 + j * cs; if (r() < .42) s += '<path d="M' + x + ' ' + y + 'h' + cs + '"/>'; if (r() < .42) s += '<path d="M' + x + ' ' + y + 'v' + cs + '"/>'; } return s + '</g>'; }
+function cage(x, y){ return '<g stroke="#c9ced8" stroke-width="3"><rect x="' + (x - 34) + '" y="' + (y - 70) + '" width="68" height="70" fill="none"/><path d="M' + (x - 17) + ' ' + (y - 70) + 'v70M' + x + ' ' + (y - 70) + 'v70M' + (x + 17) + ' ' + (y - 70) + 'v70"/><path d="M' + (x - 38) + ' ' + (y - 74) + 'h76" stroke-width="6"/></g>'; }
+function hills(w, h){ return '<path d="M0 300 C60 250 110 190 170 200 C220 210 230 260 290 262 C360 264 380 170 470 124 C540 96 600 160 660 220 C720 270 760 270 800 280 V360 H0Z" fill="#1b2a24" stroke="' + INK + '" stroke-width="3"/><path d="M0 330 C140 300 300 320 420 310 S700 300 800 320 V360 H0Z" fill="#101c18"/>'; }
+function board(x, y, w){ var s = '<g stroke="' + INK + '" stroke-width="3"><rect x="' + (x - w / 2) + '" y="' + (y - 44) + '" width="' + w + '" height="44" rx="8" fill="#7a4b22"/>'; for (var i = 0; i < 9; i++) { var cx = x - w / 2 + 16 + i * (w - 32) / 8; s += '<circle cx="' + cx.toFixed(0) + '" cy="' + (y - 31) + '" r="6" fill="#3b2410" stroke-width="1.5"/><circle cx="' + cx.toFixed(0) + '" cy="' + (y - 13) + '" r="6" fill="#3b2410" stroke-width="1.5"/>'; } return s + '</g>'; }
+function screen(x, y, w, h, lines, c){ var s = '<g stroke="' + INK + '" stroke-width="4"><rect x="' + (x - 6) + '" y="' + (y + h) + '" width="12" height="60" fill="#2a3550"/><rect x="' + (x - w / 2) + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="6" fill="' + (c || "#0b2a1f") + '"/></g>'; lines.forEach(function(l, i){ s += txt(x, y + 34 + i * 30, l, 24, "#7fe7ff"); }); return s; }
+function factory(w){ var s = '<g stroke="' + INK + '" stroke-width="3">'; [[60, 120], [200, 150], [610, 130], [720, 110]].forEach(function(b){ s += '<rect x="' + (b[0] - 50) + '" y="' + (330 - b[1]) + '" width="100" height="' + b[1] + '" fill="#232c45"/><rect x="' + (b[0] + 16) + '" y="' + (330 - b[1] - 60) + '" width="20" height="60" fill="#2c3655"/>'; }); s += '</g>'; s += '<g fill="#c9ced8" opacity=".22"><circle cx="86" cy="140" r="18"/><circle cx="96" cy="112" r="14"/><circle cx="626" cy="126" r="20"/><circle cx="640" cy="96" r="14"/></g>'; return s; }
+function motor(x, y, label, hot){ return '<g stroke="' + INK + '" stroke-width="3"><rect x="' + (x - 40) + '" y="' + (y - 50) + '" width="80" height="50" rx="8" fill="#3a4766"/><circle cx="' + x + '" cy="' + (y - 25) + '" r="15" fill="#1d2436"/><rect x="' + (x - 46) + '" y="' + (y - 84) + '" width="92" height="26" rx="4" fill="' + (hot ? "#e2412f" : "#1f6f4a") + '"/></g>' + txt(x, y - 64, label, 17, "#fff"); }
+function ground(w, y, c){ return '<rect x="0" y="' + y + '" width="' + w + '" height="' + (360 - y) + '" fill="' + (c || "#0a0d18") + '"/>'; }
+function fog(w, h){ var r = rng(31), s = '<g fill="#c9d2e6">'; for (var i = 0; i < 16; i++) s += '<ellipse cx="' + (r() * w).toFixed(0) + '" cy="' + (h * .45 + r() * h * .5).toFixed(0) + '" rx="' + (60 + r() * 110).toFixed(0) + '" ry="' + (14 + r() * 20).toFixed(0) + '" opacity="' + (.06 + r() * .1).toFixed(2) + '"/>'; return s + '</g>'; }
+function panelBg(w){ return '<rect width="' + w + '" height="360" fill="#141a2e"/>'; }
+function room(w){ return '<rect width="' + w + '" height="360" fill="#1a2035"/><path d="M0 300 L' + w + ' 300" stroke="' + INK + '" stroke-width="4"/><rect x="0" y="300" width="' + w + '" height="60" fill="#10141f"/>'; }
+
+/* ================= PAGES ================= */
+var PAGES = [
+ { id:"origin", no:"ORIGIN", title:"A Robot Learns to Think", topic:"Prologue",
+   panels:[
+    { wide:true, art: sky(800,360,{mx:120,my:70}) + skyline(800,360,{seed:4,baiterek:560,khan:180}) + '<g stroke="'+INK+'" stroke-width="3"><rect x="330" y="120" width="140" height="210" fill="#0d1120"/><rect x="380" y="196" width="40" height="34" fill="#f2b632"/></g>' + txt(400,150,"QAIRU",22,"#7fe7ff") + beams(400,230,70,360) + rain(800,360,2),
+      L:[["cap",3,6,46,"Astana. 2:00 a.m. Every light in the university labs is off. Except one."]] },
+    { art: room(400) + '<rect x="250" y="40" width="120" height="110" fill="#22305e" stroke="'+INK+'" stroke-width="4"/><circle cx="330" cy="80" r="18" fill="#efe6c8"/><path d="M250 95h120M310 40v110" stroke="'+INK+'" stroke-width="4"/>' + eagle(290,130,.6,true) + '<path d="M40 300 V170 H130" stroke="#7c8aa8" stroke-width="10" fill="none"/>' + bot(95,300,.95,true),
+      L:[["bub",2,6,52,"If wall, turn right. If wall, turn right. If wall...","think"],["sfx",54,48,"BONK!"],["bub",44,66,54,"You follow rules, little one. You do not THINK.","tr"]] },
+    { art: panelBg(400) + speedLines(200,200,400,360,34) + burst(200,215,150,"#26346a") + hero(200,330,1.25,"stand") + eagle(330,120,.5),
+      L:[["cap",3,80,62,"That night, the robot found a cape in the lost-and-found."],["sfx",6,8,"TULPAR-MAN!"]] }
+   ],
+   file:"Tulpar-Man is the hero of our e-book <i>Tulpar</i>. Each issue below is one week of the AI Fundamentals course and one villain. The Tulpar File under every issue sums up the idea you need for the exam." },
+
+ { id:"issue1", no:"ISSUE 01 · WEEK 1", title:"Reflex Rex", topic:"Agents, environments, rationality",
+   panels:[
+    { wide:true, art: sky(800,360,{mx:700,my:60,seed:12}) + skyline(800,360,{seed:9,ground:60}) + ground(800,300,"#0d1120") + '<path d="M0 330H800" stroke="#f2b632" stroke-width="4" stroke-dasharray="26 18"/>' + light(90,300,"r") + light(710,300,"r") + car(170,330,"#3c6fd1") + car(300,330,"#d1503c") + car(560,330,"#3cb38a") + car(680,330,"#c9a12c") + villain(430,330,1.05,{c:"#4a4f5c",d:"#2c3038",h:"antenna",l:"R"}),
+      L:[["cap",2,5,40,"Night 1. A rogue traffic robot has frozen every crossing on Turan Avenue."],["bub",50,8,34,"IF light is red THEN stop. IF stopped THEN honk!","villain tl"],["sfx",76,40,"HONK!","red"]] },
+    { art: panelBg(400) + skyline(400,360,{seed:5,ground:40}) + hero(140,330,1.1,"think") + eagle(310,180,.55,true),
+      L:[["bub",2,5,56,"He only reacts to the percept NOW. No memory. No goal.","tl"],["bub",52,62,46,"First describe the job: PEAS.","tr"]] },
+    { art: panelBg(400) + speedLines(250,200,400,360) + burst(270,210,90) + villain(300,335,.85,{c:"#4a4f5c",d:"#2c3038",h:"antenna",l:"R"}) + hero(110,330,1.05,"punch"),
+      L:[["sfx",56,8,"KRAK!"],["bub",2,4,50,"A rational agent picks the best EXPECTED action!","tl"],["bub",54,40,44,"Does... not... compute...","villain tr"]] }
+   ],
+   file:"<b>Agent</b> = sensors + actuators + agent program. <b>PEAS</b> = Performance, Environment, Actuators, Sensors. Four designs, from simple to rich: <b>reflex</b> → <b>model-based</b> (memory) → <b>goal-based</b> (plans) → <b>utility-based</b> (trade-offs). Rational means best <i>expected</i> outcome, not all-knowing. Describe the environment on six axes: fully/partially observable, deterministic/stochastic, episodic/sequential, static/dynamic, single/multi-agent, discrete/continuous. Rex's street is partially observable, stochastic, sequential, dynamic and multi-agent." },
+
+ { id:"issue2", no:"ISSUE 02 · WEEK 2", title:"The Labyrinth", topic:"BFS, DFS, UCS, A*",
+   panels:[
+    { wide:true, art: sky(800,360,{moon:false,seed:3}) + expo(400,120,90) + maze(60,200,24,5,28) + cage(700,330) + eagle(700,300,.32) + villain(120,330,.9,{c:"#1f4d3a",d:"#12301f",h:"hood",l:"L",e:"#7fffb0"}),
+      L:[["cap",2,4,34,"Night 2. Under the EXPO sphere, the Labyrinth has locked Bürkit in a maze."],["bub",62,6,36,"Search every room, little robot! BFS will take ALL night!","villain tl"]] },
+    { art: panelBg(400) + '<g stroke="#f4efe2" stroke-width="2.5"><path d="M200 120L120 190M200 120L280 190M120 190L80 260M120 190L160 260M280 190L320 260"/></g>' + [[200,120,"A"],[120,190,"B"],[280,190,"C"],[80,260,"D"],[160,260,"E"],[320,260,"F"]].map(function(n){return '<circle cx="'+n[0]+'" cy="'+n[1]+'" r="18" fill="#26346a" stroke="'+INK+'" stroke-width="3"/>'+txt(n[0],n[1]+7,n[2],20);}).join("") + mono(160,320,"BFS = FIFO · DFS = LIFO",14,"#7fe7ff") + hero(345,350,.55,"think"),
+      L:[["bub",3,4,60,"BFS: fewest steps, but it opens everything. DFS dives deep and gets lost.","tl"]] },
+    { art: maze(0,0,15,13,28) + '<path d="M30 340 L30 250 L130 250 L130 150 L260 150 L260 60 L380 60" fill="none" stroke="#f2b632" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>' + hero(300,150,.7,"fly") + txt(110,320,"f = g + h",36,"#f2b632",'middle','stroke="'+INK+'" stroke-width="5" paint-order="stroke"'),
+      L:[["bub",2,4,56,"A*! Cost so far plus Bürkit's straight-line guess.","tl"],["sfx",58,64,"ZOOM!"]] }
+   ],
+   file:"A search problem = states, actions, goal test, path cost. <b>BFS</b> (queue) finds the fewest steps; <b>DFS</b> (stack) saves memory but is not optimal; <b>UCS</b> expands the cheapest path. <b>A*</b> expands the lowest <code>f(n) = g(n) + h(n)</code>; an admissible <code>h</code> never overestimates, so the path is optimal. In our book's lab, BFS opens 138 cells and A* only 97 for the same 30-step path." },
+
+ { id:"issue3", no:"ISSUE 03 · WEEK 3", title:"Local Maximus", topic:"Hill climbing, simulated annealing, CSP",
+   panels:[
+    { wide:true, art: sky(800,360,{mx:120,my:60,seed:8,bot:"#3a2f5a"}) + hills(800,360) + hero(170,200,.6,"stand") + villain(470,124,.5,{c:"#5a3b12",d:"#3a240a",h:"crown",l:"M",e:"#ffd23c"}),
+      L:[["cap",2,4,36,"Night 3. Local Maximus rules the Hills of False Peaks."],["bub",62,10,36,"Ha! You climbed the first hill and STOPPED. So greedy!","villain tl"]] },
+    { art: panelBg(400) + '<g stroke="'+INK+'" stroke-width="3"><rect x="60" y="70" width="30" height="210" rx="15" fill="#f4efe2"/><rect x="66" y="120" width="18" height="150" rx="9" fill="#e2412f"/><circle cx="75" cy="290" r="24" fill="#e2412f"/></g>' + mono(240,140,"P(accept) = e^(ΔE/T)",17,"#f2b632") + mono(240,190,"ΔE = −2, T = 10 → 0.82",15,"#7fe7ff") + mono(240,222,"ΔE = −2, T = 1  → 0.14",15,"#7fe7ff") + hero(320,345,.5,"think"),
+      L:[["bub",3,4,64,"Then I'll take a WORSE move... sometimes. Often when hot, rarely when cold.","tl"]] },
+    { art: sky(400,360,{moon:false,seed:2}) + '<path d="M0 300 C60 230 100 230 140 290 C190 340 240 120 320 80 C360 70 380 140 400 160 V360 H0Z" fill="#1b2a24" stroke="'+INK+'" stroke-width="3"/>' + '<path d="M80 220 Q200 40 310 70" fill="none" stroke="#f2b632" stroke-width="4" stroke-dasharray="10 10"/>' + hero(260,90,.55,"fly") + '<path d="M330 100 l18 40 l-26 -6z" fill="#f2b632" stroke="'+INK+'" stroke-width="2"/>',
+      L:[["sfx",4,62,"WHOOSH!"],["bub",3,4,58,"Simulated annealing: explore while hot, settle when cold!","tl"]] }
+   ],
+   file:"<b>Local search</b> improves a complete answer (a route, a timetable) and keeps almost no memory. <b>Hill climbing</b> gets stuck on local maxima, plateaus and ridges. Fixes: random restarts, <b>simulated annealing</b> (accept a worse move with probability <code>e^(ΔE/T)</code>), beam search, genetic algorithms. A <b>CSP</b> = variables + domains + constraints, solved by backtracking with MRV and forward checking." },
+
+ { id:"issue4", no:"ISSUE 04 · WEEK 4", title:"Count Zero-Sum", topic:"Minimax, alpha–beta, expectimax",
+   panels:[
+    { wide:true, art: sky(800,360,{mx:400,my:60,seed:14}) + skyline(800,360,{seed:15,khan:400,ks:1.3,ground:50}) + '<rect x="0" y="300" width="800" height="60" fill="#151b30" stroke="'+INK+'" stroke-width="3"/>' + board(400,310,300) + hero(170,320,1,"think") + villain(640,320,1,{c:"#2b2b3a",d:"#18181f",h:"top",l:"Z"}),
+      L:[["cap",2,4,40,"Night 4. On the roof of Khan Shatyr, Count Zero-Sum challenges our hero to togyz kumalak."],["bub",58,10,34,"Every point you win, I LOSE. Shall we play?","villain tr"]] },
+    { art: panelBg(400) + (function(){ var s='<g stroke="#f4efe2" stroke-width="2.5"><path d="M200 70L80 150M200 70L200 150M200 70L320 150"/>'; [[80,40],[200,160],[320,280]].forEach(function(p){ s+='<path d="M'+p[0]+' 150L'+(p[0]-34)+' 240M'+p[0]+' 150L'+p[0]+' 240M'+p[0]+' 150L'+(p[0]+34)+' 240"/>'; }); s+='</g>'; s+='<polygon points="200,40 228,80 172,80" fill="#7fe7ff" stroke="'+INK+'" stroke-width="3"/>'+txt(200,74,"3",20,INK); [[80,"3"],[200,"2"],[320,"2"]].forEach(function(m){ s+='<polygon points="'+(m[0]-24)+',140 '+(m[0]+24)+',140 '+m[0]+',176" fill="#e2412f" stroke="'+INK+'" stroke-width="3"/>'+txt(m[0],160,m[1],18,"#fff"); }); var L=[["3","12","8"],["2","4","6"],["14","5","2"]]; [80,200,320].forEach(function(x,i){ [-34,0,34].forEach(function(dx,j){ var pr=(i===1&&j>0); s+='<rect x="'+(x+dx-15)+'" y="240" width="30" height="26" rx="5" fill="'+(pr?"#2a3040":"#f4efe2")+'" stroke="'+INK+'" stroke-width="2"/>'+txt(x+dx,260,L[i][j],17,pr?"#6b7590":INK); }); }); s+='<path d="M182 272H252" stroke="#e2412f" stroke-width="4"/>'; s+=txt(340,72,"MAX",16,"#7fe7ff")+txt(372,165,"MIN",16,"#e2412f"); return s; })(),
+      L:[["bub",3,77,72,"MIN would give 3, 2 and 2. I take the 3.","tl none"]] },
+    { art: panelBg(400) + speedLines(260,200,400,360) + burst(280,200,90,"#e2412f") + villain(310,335,.85,{c:"#2b2b3a",d:"#18181f",h:"top",l:"Z"}) + hero(110,330,1.05,"punch"),
+      L:[["sfx",50,6,"PRUNED!"],["bub",54,42,44,"You never even looked at my 4 and 6!","villain tr"],["bub",2,4,46,"Alpha–beta. Same answer, less work.","tl"]] }
+   ],
+   file:"<b>Minimax</b>: MAX takes the largest child value, MIN the smallest; here the root value is 3. <b>Alpha–beta</b> stops a branch when α ≥ β and always returns the same move as minimax. Real games use depth limits and evaluation functions (watch the horizon effect). Against chance, use <b>expectimax</b>: ½·8 + ⅓·24 + ⅙·(−12) = 10." },
+
+ { id:"issue5", no:"ISSUE 05 · WEEK 5", title:"Black Ice", topic:"MDPs, Bellman equation, Q-learning",
+   panels:[
+    { wide:true, art: sky(800,360,{top:"#0b1830",bot:"#27507a",mx:680,seed:19}) + skyline(800,360,{seed:21,ground:70}) + '<rect x="0" y="290" width="800" height="70" fill="#a9d6ea" opacity=".85"/><path d="M0 300 C200 292 400 310 800 296" stroke="#fff" stroke-width="3" fill="none" opacity=".7"/>' + hero(330,330,.9,"stand") + '<g stroke="#f2b632" stroke-width="5" fill="#f2b632"><path d="M370 250H470"/><path d="M470 250l-14-8v16z"/><path d="M330 170V120"/><path d="M330 120l-8 14h16z"/></g>' + txt(420,240,"80%",24,"#f2b632") + txt(368,130,"10%",20,"#f2b632") + villain(650,330,1,{c:"#1e4f66",d:"#0f2f40",h:"hood",l:"I",e:"#7fe7ff"}),
+      L:[["cap",2,4,36,"Night 5. Black Ice has frozen the city. Every move is a gamble."],["bub",58,8,36,"On my ice you go right only 80% of the time!","villain tr"]] },
+    { art: panelBg(400) + mono(200,120,"Q(s, RIGHT)",18,"#f2b632") + mono(200,160,"= 0.8 × (−1 + 0.9×10)",15,"#7fe7ff") + mono(200,190,"+ 0.2 × (−1 + 0.9×(−5))",15,"#7fe7ff") + mono(200,228,"= 6.4 − 1.1 = 5.3",17,"#f4efe2") + hero(80,350,.55,"think"),
+      L:[["bub",3,4,70,"So no fixed path. I need a POLICY: the best move from EVERY square.","tl"]] },
+    { art: panelBg(400) + speedLines(200,200,400,360) + '<g stroke="'+INK+'" stroke-width="3"><rect x="40" y="120" width="320" height="110" rx="10" fill="#0d1530"/></g>' + mono(200,160,"Q ← Q + α[r + γ·maxQ′ − Q]",16,"#f2b632") + mono(200,200,"4 + 0.5 × (9.2 − 4) = 6.6",16,"#7fe7ff") + hero(80,350,.6,"stand") + villain(330,350,.55,{c:"#1e4f66",d:"#0f2f40",h:"hood",e:"#7fe7ff"}),
+      L:[["bub",3,4,58,"Q-learning! Every slip teaches me something.","tl"],["sfx",50,70,"CRACK!"]] }
+   ],
+   file:"An <b>MDP</b> = states, actions, transition probabilities T(s′|s,a), rewards R and discount γ. Its answer is a <b>policy</b> π(s). <b>Bellman</b>: value now = reward + γ·value later. <b>Value iteration</b> and <b>policy iteration</b> need the model; <b>Q-learning</b> learns from experience. α = learning rate, γ = discount, ε = how often to explore." },
+
+ { id:"issue6", no:"ISSUE 06 · WEEK 6", title:"Baron Base-Rate", topic:"Probability, Bayes' theorem, Bayesian networks",
+   panels:[
+    { wide:true, art: sky(800,360,{mx:120,seed:23}) + skyline(800,360,{seed:24,baiterek:690,bs:.8}) + fog(800,360) + person(380,340,.9,"#6c4f87") + person(440,340,.85) + person(500,340,.95,"#4f876c") + person(560,340,.8,"#876c4f") + villain(180,330,1.05,{c:"#4d2a1f",d:"#2e180f",h:"top",l:"B"}) + '<path d="M215 230 L270 210 L270 250 Z" fill="#c9ced8" stroke="'+INK+'" stroke-width="3"/>',
+      L:[["cap",2,4,32,"Night 6. In the fog, Baron Base-Rate is spreading panic."],["bub",34,8,36,"The test is 95% accurate and you're POSITIVE! Panic!","villain tl"],["sfx",74,30,"AAAH!","red"]] },
+    { art: panelBg(400) + (function(){ var s='<g stroke="#f4efe2" stroke-width="2.5" fill="none"><path d="M200 70L100 140M200 70L300 140M100 140L60 220M100 140L140 220M300 140L260 220M300 140L340 220"/></g>'; [[200,58,"10,000","#26346a"],[100,140,"100 ill","#7a2b2b"],[300,140,"9,900 well","#265e45"],[60,232,"95 +","#f2b632"],[140,232,"5 −","#3a4766"],[260,232,"990 +","#f2b632"],[340,232,"8,910 −","#3a4766"]].forEach(function(n){ s+='<rect x="'+(n[0]-46)+'" y="'+(n[1]-18)+'" width="92" height="32" rx="8" fill="'+n[3]+'" stroke="'+INK+'" stroke-width="3"/>'+txt(n[0],n[1]+6,n[2],17,n[3]==="#f2b632"?INK:"#fff"); }); return s; })() + hero(345,350,.45,"think"),
+      L:[["bub",3,75,62,"Let's COUNT: 95 real positives, 990 false ones.","tl none"]] },
+    { art: panelBg(400) + fog(400,360) + '<g stroke="'+INK+'" stroke-width="3"><rect x="40" y="110" width="320" height="70" rx="10" fill="#0d1530"/></g>' + mono(200,152,"P(ill | +) = 95 / 1085 ≈ 8.8%",17,"#f2b632") + hero(90,340,.65,"stand") + '<g opacity=".45">' + villain(320,340,.6,{c:"#4d2a1f",d:"#2e180f",h:"top"}) + '</g>',
+      L:[["bub",2,4,52,"Get a second test, not a panic!","tl"],["bub",52,56,46,"Noooo... my PRIOR!","villain tr"]] }
+   ],
+   file:"<b>Conditional probability</b>: <code>P(A|B) = P(A,B) / P(B)</code>, so knowing B shrinks the world to the cases where B is true. <b>Bayes</b>: <code>P(H|E) = P(E|H)·P(H) / P(E)</code>. When the condition is rare, most positive tests are false: the <b>base-rate fallacy</b>. A <b>Bayesian network</b> = a DAG + a probability table per node; with rain → sprinkler → wet grass, P(rain | wet grass) ≈ 35.8%, up from 20%." },
+
+ { id:"issue7", no:"ISSUE 07 · WEEK 7", title:"The Hidden Hand", topic:"Hidden Markov models, filtering, Viterbi",
+   panels:[
+    { wide:true, art: panelBg(800) + '<rect width="800" height="360" fill="#121726"/>' + ground(800,300,"#0b0e18") + motor(140,300,"HIGH",true) + motor(300,300,"NORMAL",false) + motor(660,300,"HIGH",true) + '<g fill="none" stroke="#e2412f" stroke-width="2.5" stroke-dasharray="8 8" opacity=".7"><path d="M444 330 L456 234 Q490 220 524 234 L536 330"/><circle cx="490" cy="196" r="26"/></g><path d="M476 192 L486 197 L476 200Z M504 192 L494 197 L504 200Z" fill="#ff5a3c"/>',
+      L:[["cap",2,4,40,"Night 7. Motors fail all over the city. The saboteur is invisible."],["bub",60,6,34,"You can't see me. Only my CLUES!","villain tl"]] },
+    { art: panelBg(400) + txt(40,108,"t=1",18,"#f4efe2","start") + '<rect x="100" y="86" width="139" height="30" fill="#3ddc84" stroke="'+INK+'" stroke-width="2"/><rect x="239" y="86" width="121" height="30" fill="#e2412f" stroke="'+INK+'" stroke-width="2"/>' + mono(300,107,"46.7%",14,"#fff") + txt(40,168,"t=2",18,"#f4efe2","start") + '<rect x="100" y="146" width="72" height="30" fill="#3ddc84" stroke="'+INK+'" stroke-width="2"/><rect x="172" y="146" width="188" height="30" fill="#e2412f" stroke="'+INK+'" stroke-width="2"/>' + mono(266,167,"72.3% FAULTY",14,"#fff") + mono(200,212,"predict → observe → normalize",13,"#7fe7ff") + hero(330,352,.5,"think"),
+      L:[["bub",3,4,66,"Two HIGH readings in a row: 72% sure the motor is faulty.","tl"]] },
+    { art: panelBg(400) + speedLines(270,200,400,360) + burst(270,200,80) + villain(290,335,.8,{c:"#5a1f1f",d:"#3a1010",h:"none",l:"H"}) + hero(100,330,1,"punch"),
+      L:[["sfx",50,6,"GOTCHA!"],["bub",2,4,50,"Viterbi found your whole path: Faulty → Faulty!","tl"]] }
+   ],
+   file:"An <b>HMM</b> = initial probabilities π + transitions T + emissions O. <b>Filtering</b>: what is the state now? <b>Prediction</b>: what comes next? <b>Smoothing</b>: what was it earlier, using later evidence? <b>Viterbi</b>: the most likely whole sequence (here Faulty, Faulty, score 0.0784). Filtering sums over paths; Viterbi takes the max." },
+
+ { id:"issue8", no:"ISSUE 08 · WEEK 8", title:"The Overfitter", topic:"Expected utility, classical ML, metrics",
+   panels:[
+    { wide:true, art: sky(800,360,{moon:false,top:"#14101e",bot:"#3a2a2a",seed:30}) + factory(800) + ground(800,330,"#0b0e18") + screen(400,60,260,130,["ACCURACY 98%","\"ALWAYS NORMAL\""],"#0b2a1f") + villain(400,340,.75,{c:"#3d4d1f",d:"#243012",h:"antenna",l:"O",e:"#c6ff3c"}),
+      L:[["cap",2,4,32,"Night 8. The Overfitter's model has missed every factory breakdown."],["bub",66,46,32,"98% accurate! It just says NORMAL every time!","villain tl"]] },
+    { art: panelBg(400) + '<g stroke="'+INK+'" stroke-width="3"><rect x="120" y="80" width="110" height="70" fill="#3ddc84"/><rect x="230" y="80" width="110" height="70" fill="#e2412f"/><rect x="120" y="150" width="110" height="70" fill="#f2b632"/><rect x="230" y="150" width="110" height="70" fill="#3a4766"/></g>' + txt(175,122,"TP 18",22,INK) + txt(285,122,"FN 2",22,"#fff") + txt(175,192,"FP 30",22,INK) + txt(285,192,"TN 950",22,"#fff") + txt(60,122,"failed",15,"#f4efe2") + txt(60,192,"normal",15,"#f4efe2") + mono(230,252,"recall = 18/20 = 90%",15,"#7fe7ff") + hero(365,352,.42,"think"),
+      L:[["bub",3,77,70,"With rare failures, accuracy LIES. Check recall and precision.","tl none"]] },
+    { art: panelBg(400) + speedLines(260,200,400,360) + burst(270,205,85,"#c6ff3c") + villain(300,335,.82,{c:"#3d4d1f",d:"#243012",h:"antenna",l:"O",e:"#c6ff3c"}) + hero(105,330,1.05,"punch"),
+      L:[["sfx",56,6,"BAM!"],["bub",2,4,50,"Repair when p > 2,000 / 10,000 = 0.2. Decide by COST!","tl"],["bub",54,46,44,"My memorised training data!","villain tr"]] }
+   ],
+   file:"A rational choice maximises <b>expected utility</b>: EU(a) = Σ P(outcome)·U(outcome). <b>Supervised</b> learning uses labels, <b>unsupervised</b> finds structure (K-means), <b>reinforcement</b> learns from reward. Classical models: <b>linear regression</b> <code>ŷ = wx + b</code> (minimise MSE), <b>logistic regression</b> <code>σ(wᵀx + b)</code> for probabilities, <b>Naive Bayes</b> <code>P(C|x) ∝ P(C)·Π P(xᵢ|C)</code> (spam example: 71%), decision trees and random forests. Test on unseen data; watch for <b>overfitting</b>, data leakage and distribution shift. Here accuracy is 96.8%, recall 90%, precision 37.5%, F1 ≈ 0.53." },
+
+ { id:"issue9", no:"ISSUE 09 · WEEK 9", title:"XOR the Unseparable", topic:"Perceptrons and neural networks",
+   panels:[
+    { wide:true, art: panelBg(800) + (function(){ var s='<g stroke="#26346a" stroke-width="1.5">'; for(var i=0;i<=800;i+=40) s+='<path d="M'+i+' 0V360"/>'; for(var j=0;j<=360;j+=40) s+='<path d="M0 '+j+'H800"/>'; s+='</g>'; [[150,90,"#7fe7ff"],[650,290,"#7fe7ff"],[150,290,"#f2b632"],[650,90,"#f2b632"]].forEach(function(p){ s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="22" fill="'+p[2]+'" stroke="'+INK+'" stroke-width="3"/>'; }); s+=mono(150,330,"(0,0)",14,"#f4efe2")+mono(650,330,"(1,0)",14,"#f4efe2")+mono(150,58,"(0,1)",14,"#f4efe2")+mono(650,58,"(1,1)",14,"#f4efe2"); return s; })() + villain(400,340,1.05,{c:"#4d1f45",d:"#30102a",h:"horns",l:"X",e:"#ff7ae0"}),
+      L:[["cap",22,4,36,"Night 9. In the Forest of Neurons, XOR the Unseparable laughs at straight lines."],["bub",56,30,30,"Split my blue from my gold with ONE straight line. You can't!","villain tl"]] },
+    { art: panelBg(400) + '<g stroke="#f4efe2" stroke-width="2.5"><path d="M70 120L200 180M70 240L200 180M200 180L300 180"/></g><g stroke="'+INK+'" stroke-width="3"><circle cx="70" cy="120" r="20" fill="#7fe7ff"/><circle cx="70" cy="240" r="20" fill="#7fe7ff"/><circle cx="200" cy="180" r="30" fill="#26346a"/></g>' + txt(70,127,"x₁",18,INK) + txt(70,247,"x₂",18,INK) + txt(200,190,"Σ",28,"#f2b632") + mono(200,280,"z = w·x + b",17,"#f2b632") + '<path d="M300 180h40" stroke="#f4efe2" stroke-width="3"/>' + txt(356,187,"ŷ",22) + hero(350,352,.42,"think"),
+      L:[["bub",3,4,66,"One perceptron draws ONE line. AND, OR fine. XOR? Never.","tl"]] },
+    { art: panelBg(400) + speedLines(200,180,400,360) + (function(){ var s='<g stroke="#f4efe2" stroke-width="2.5">'; [[60,120],[60,240]].forEach(function(a){ [[190,110],[190,250]].forEach(function(b){ s+='<path d="M'+a[0]+' '+a[1]+'L'+b[0]+' '+b[1]+'"/>'; }); }); s+='<path d="M190 110L320 180M190 250L320 180"/></g><g stroke="'+INK+'" stroke-width="3"><circle cx="60" cy="120" r="18" fill="#7fe7ff"/><circle cx="60" cy="240" r="18" fill="#7fe7ff"/><circle cx="190" cy="110" r="28" fill="#2a3550"/><circle cx="190" cy="250" r="28" fill="#2a3550"/><circle cx="320" cy="180" r="28" fill="#f2b632"/></g>'; s+=txt(190,117,"OR",18,"#f2b632")+txt(190,257,"AND",18,"#f2b632")+txt(320,187,"XOR",16,INK); return s; })(),
+      L:[["bub",3,4,64,"Add a HIDDEN LAYER: OR, but not AND!","tl"],["sfx",30,74,"KA-CHUNK!"]] }
+   ],
+   file:"A <b>perceptron</b> computes <code>z = w·x + b</code> and outputs 1 if z &gt; 0. It learns any <b>linearly separable</b> pattern (AND, OR), but never XOR. A <b>hidden layer</b> with non-linear activations (ReLU, sigmoid, tanh) fixes this. Training loop: forward pass → loss → <b>backpropagation</b> (chain rule) → <b>gradient descent</b>." },
+
+ { id:"issue10", no:"ISSUE 10 · WEEK 10", title:"Doctor Hallucination", topic:"LLMs, generative AI, AI safety and law",
+   panels:[
+    { wide:true, art: sky(800,360,{mx:90,my:60,seed:41}) + skyline(800,360,{seed:42,ground:40}) + screen(470,40,420,150,["BAITEREK IS 9,000 M TALL!","SOURCE: TRUST ME"],"#2a0b2a") + person(260,350,.8) + person(320,350,.75,"#6c4f87") + person(700,350,.8,"#4f876c") + villain(120,330,1,{c:"#1f2f4d",d:"#101a30",h:"top",l:"H",e:"#ff5ad8"}),
+      L:[["cap",2,4,30,"Night 10. Doctor Hallucination's billboard tells the city beautiful lies."],["bub",20,58,30,"I sound confident, so I must be RIGHT!","villain tl"]] },
+    { art: panelBg(400) + (function(){ var s=txt(110,128,"T = 0.5",18,"#f2b632")+txt(290,128,"T = 2",18,"#f2b632"); [[86.7,11.7,1.6],[50.6,30.7,18.6]].forEach(function(v,k){ var x0=k?230:50; v.forEach(function(p,i){ var h=p*1.6; s+='<rect x="'+(x0+i*40)+'" y="'+(250-h)+'" width="30" height="'+h+'" fill="'+(i?"#7fe7ff":"#f2b632")+'" stroke="'+INK+'" stroke-width="2"/>'; }); }); s+='<path d="M40 250H370" stroke="#f4efe2" stroke-width="2"/>'; s+=mono(200,280,"softmax over next tokens",13,"#f4efe2"); return s; })() + hero(345,352,.42,"think"),
+      L:[["bub",3,4,70,"An LLM predicts the next token. Fluent is not the same as TRUE.","tl"]] },
+    { art: sky(400,360,{moon:false,seed:43}) + screen(250,120,260,90,["AI-GENERATED","CHECK SOURCES"],"#0b2a1f") + hero(80,345,.62,"stand") + eagle(335,280,.45,true),
+      L:[["bub",2,3,74,"Kazakhstan's AI Law: label AI content, no manipulation, humans in control.","tl"],["sfx",46,70,"BZZZT!"]] }
+   ],
+   file:"A <b>large language model</b> is a transformer trained to predict the next token, then fine-tuned (often with RLHF). <b>Temperature</b> controls randomness. Other generative models: <b>GANs</b> (a generator against a discriminator) and <b>diffusion models</b> (remove noise step by step to make an image). Limits: <b>hallucination</b>, bias, outdated knowledge, privacy. Safety: alignment, robustness, human oversight, transparency. Kazakhstan's Law <b>No. 230-VIII ZRK</b> (17 Nov 2025) sets risk levels, requires labelling of synthetic content and bans manipulative AI. (The real Bäiterek is 105 m tall, with its viewing deck at 97 m.)" },
+
+ { id:"finale", no:"EPILOGUE", title:"Dawn Over Astana", topic:"Ten nights, ten lessons",
+   panels:[
+    { wide:true, art: sky(800,360,{top:"#2a3566",bot:"#f2b632",mx:400,my:300,mr:60,stars:false}) + skyline(800,360,{seed:51,baiterek:400,bs:1.2,khan:640}) + hero(250,250,.7,"stand") + eagle(650,58,.55,true),
+      L:[["cap",2,4,30,"Dawn. Ten nights, ten villains, ten lessons."],["bub",60,22,36,"Search, games, chance, learning... and responsibility.","tr"]] },
+    { art: room(400) + '<g stroke="'+INK+'" stroke-width="4"><rect x="250" y="80" width="110" height="220" fill="#5b3a22"/><circle cx="270" cy="200" r="6" fill="#f2b632"/></g>' + txt(305,120,"ROOM B",22,"#f2b632") + hero(150,300,.9,"stand") + '<rect x="186" y="230" width="34" height="24" fill="#f4efe2" stroke="'+INK+'" stroke-width="2"/>',
+      L:[["bub",2,4,56,"Papers for Room B. Four minutes early.","tl"]] },
+    { art: panelBg(400) + speedLines(200,180,400,360,40) + burst(200,180,140,"#a3202e"),
+      L:[["sfx",22,34,"THE END"],["cap",8,80,84,"...until the next algorithm goes rogue."]] }
+   ],
+   file:"Based on our e-book <i>Tulpar: a small robot's journey through the ten lands of AI</i>. Read the full chapters, worked examples, Python code and interactive labs there." }
+];
+
+/* ================= EXTRA PANELS: every syllabus subtopic drawn ================= */
+function box(x, y, w, h, fill, label, size, tc){ return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="8" fill="' + fill + '" stroke="' + INK + '" stroke-width="3"/>' + (label ? txt(x + w / 2, y + h / 2 + (size || 18) * .35, label, size || 18, tc || "#fff") : ""); }
+function arrow(x1, y1, x2, y2, c){ var a = Math.atan2(y2 - y1, x2 - x1), hx = x2 - Math.cos(a) * 12, hy = y2 - Math.sin(a) * 12; return '<path d="M' + x1 + ' ' + y1 + 'L' + hx.toFixed(1) + ' ' + hy.toFixed(1) + '" stroke="' + (c || "#f4efe2") + '" stroke-width="3"/><path d="M' + x2 + ' ' + y2 + 'L' + (hx + Math.sin(a) * 7).toFixed(1) + ' ' + (hy - Math.cos(a) * 7).toFixed(1) + 'L' + (hx - Math.sin(a) * 7).toFixed(1) + ' ' + (hy + Math.cos(a) * 7).toFixed(1) + 'Z" fill="' + (c || "#f4efe2") + '"/>'; }
+function node(x, y, r, fill, label, tc, size){ return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + fill + '" stroke="' + INK + '" stroke-width="3"/>' + txt(x, y + (size || 18) * .35, label, size || 18, tc || "#fff"); }
+function die(x, y, n){ var s = '<rect x="' + (x - 22) + '" y="' + (y - 22) + '" width="44" height="44" rx="8" fill="#f4efe2" stroke="' + INK + '" stroke-width="3"/>'; var P = {1: [[0, 0]], 2: [[-10, -10], [10, 10]], 3: [[-11, -11], [0, 0], [11, 11]], 6: [[-10, -12], [-10, 0], [-10, 12], [10, -12], [10, 0], [10, 12]]}[n]; P.forEach(function(p){ s += '<circle cx="' + (x + p[0]) + '" cy="' + (y + p[1]) + '" r="4" fill="' + INK + '"/>'; }); return s; }
+var G = "#f2b632", C = "#7fe7ff", R = "#e2412f", N = "#26346a", P = "#f4efe2", GR = "#3ddc84";
+
+var EXTRA = {
+ issue1: [
+  { art: panelBg(400) + (function(){ var rows = [["Observable?","PARTIALLY"],["Deterministic?","STOCHASTIC"],["Episodic?","SEQUENTIAL"],["Static?","DYNAMIC"],["Agents?","MULTI"],["Actions?","DISCRETE*"]], s = ""; rows.forEach(function(r, i){ var y = 92 + i * 38; s += box(30, y, 160, 30, N, "", 0) + txt(110, y + 21, r[0], 16, P) + box(200, y, 130, 30, G, "", 0) + txt(265, y + 21, r[1], 16, INK); }); return s; })() + hero(365, 352, .4, "think"),
+    L:[["bub",3,3,70,"Rex's street, on six axes. Know the world before you design the agent.","tl"],["cap",3,85,62,"*discrete in our model, continuous in real motors"]] },
+  { art: panelBg(400) + box(20, 250, 82, 44, "#3a4766", "REFLEX", 15) + box(112, 200, 82, 44, "#3a4766", "MODEL", 15) + box(204, 150, 82, 44, "#3a4766", "GOAL", 15) + box(296, 100, 90, 44, G, "UTILITY", 15, INK) + arrow(60, 245, 140, 205, P) + arrow(152, 195, 232, 155, P) + arrow(244, 145, 330, 105, P) + mono(62, 316, "now", 13, C) + mono(154, 266, "memory", 13, C) + mono(246, 216, "future", 13, C) + mono(340, 166, "trade-offs", 13, C) + hero(60, 238, .38, "stand"),
+    L:[["bub",3,3,62,"Climb the ladder: each step adds memory, goals, then a way to compare outcomes.","tl"]] }
+ ],
+ issue2: [
+  { art: panelBg(400) + arrow(80, 180, 200, 100, P) + arrow(80, 180, 200, 270, P) + arrow(200, 100, 320, 180, R) + arrow(200, 270, 320, 180, GR) + node(80, 180, 24, N, "A") + node(200, 100, 24, N, "B") + node(200, 270, 24, N, "C") + node(320, 180, 24, G, "F", INK) + txt(130, 128, "2", 22, G) + txt(130, 246, "8", 22, G) + txt(272, 128, "10", 22, G) + txt(272, 246, "1", 22, G) + mono(200, 330, "A→B→F = 12   A→C→F = 9", 15, C),
+    L:[["bub",3,3,66,"UCS: expand the CHEAPEST path, not the shortest. 9 beats 12.","tl"]] },
+  { art: sky(400, 360, {moon:false, seed:71}) + '<g stroke="#7fe7ff" stroke-width="3" fill="none" opacity=".55"><path d="M60 330 L60 270 L170 270 L170 200 L300 200 L300 300 L350 300"/></g>' + '<path d="M60 300 L350 300" stroke="' + G + '" stroke-width="4" stroke-dasharray="10 8"/>' + hero(60, 330, .4, "stand") + '<rect x="330" y="282" width="36" height="36" fill="' + G + '" stroke="' + INK + '" stroke-width="3"/>' + eagle(205, 110, .7) + '<path d="M205 140 L205 290" stroke="' + G + '" stroke-width="2" stroke-dasharray="4 6" opacity=".6"/>',
+    L:[["bub",48,3,50,"From up here, the straight line is never longer than the real road.","villain tr"],["cap",3,3,42,"Admissible h: 0 ≤ h(n) ≤ h*(n). If h = 0, A* is just UCS."]] }
+ ],
+ issue3: [
+  { art: sky(400, 360, {moon:false, seed:72}) + '<path d="M0 300 C40 250 70 250 100 290 C130 320 150 200 200 190 C250 180 260 280 290 270 C320 260 340 90 380 80 L400 90 V360 H0Z" fill="#1b2a24" stroke="' + INK + '" stroke-width="3"/>' + hero(68, 262, .32, "stand") + hero(200, 192, .32, "stand") + hero(375, 84, .32, "stand") + txt(68, 200, "#1", 22, P) + txt(200, 140, "#2", 22, P) + txt(330, 50, "#3 BEST", 22, G),
+    L:[["bub",3,3,58,"Random restarts: start in many places, keep the best peak.","tl none"]] },
+  { art: panelBg(400) + (function(){ var s = "", slots = ["Mon 9", "Mon 11", "Tue 9"], vars = [["AI", 0], ["Math", 1], ["Physics", 0], ["Python", 1]]; slots.forEach(function(t, i){ s += txt(150 + i * 85, 96, t, 16, C); }); vars.forEach(function(v, j){ var y = 112 + j * 44; s += txt(56, y + 26, v[0], 17, P); for (var i = 0; i < 3; i++) s += '<rect x="' + (110 + i * 85) + '" y="' + y + '" width="78" height="36" rx="6" fill="' + (i === v[1] ? G : "#1d2540") + '" stroke="' + INK + '" stroke-width="2"/>'; }); s += mono(200, 312, "AI≠Python  AI≠Math  Math≠Physics", 13, R); return s; })(),
+    L:[["bub",3,3,70,"A CSP: variables, domains, constraints. Backtrack, pick the tightest (MRV), check ahead.","tl"]] }
+ ],
+ issue4: [
+  { art: panelBg(400) + node(200, 135, 30, "#9b59b6", "10", "#fff", 22) + arrow(200, 165, 90, 245, P) + arrow(200, 165, 200, 245, P) + arrow(200, 165, 310, 245, P) + txt(126, 205, "1/2", 16, G) + txt(218, 212, "1/3", 16, G) + txt(278, 205, "1/6", 16, G) + box(62, 250, 56, 34, P, "8", 20, INK) + box(172, 250, 56, 34, P, "24", 20, INK) + box(282, 250, 56, 34, P, "−12", 20, INK) + die(345, 140, 6) + die(55, 140, 3) + mono(200, 326, "½·8 + ⅓·24 + ⅙·(−12) = 10", 15, C),
+    L:[["bub",3,3,62,"Dice don't hate you. EXPECTIMAX averages: chance node = 10.","tl"]] },
+  { art: panelBg(400) + (function(){ var s = '<g stroke="' + P + '" stroke-width="2">'; [[200, 110, 120, 160], [200, 110, 280, 160], [120, 160, 80, 210], [120, 160, 160, 210], [280, 160, 240, 210], [280, 160, 320, 210]].forEach(function(e){ s += '<path d="M' + e[0] + ' ' + e[1] + 'L' + e[2] + ' ' + e[3] + '"/>'; }); s += '</g><g stroke="' + P + '" stroke-width="2" stroke-dasharray="4 6" opacity=".4"><path d="M80 210L70 290M160 210L170 290M240 210L230 290M320 210L330 290"/></g>'; [[200, 110], [120, 160], [280, 160], [80, 210], [160, 210], [240, 210], [320, 210]].forEach(function(n){ s += '<circle cx="' + n[0] + '" cy="' + n[1] + '" r="12" fill="' + C + '" stroke="' + INK + '" stroke-width="2"/>'; }); s += '<path d="M20 234H380" stroke="' + G + '" stroke-width="3" stroke-dasharray="12 8"/>' + txt(376, 254, "DEPTH LIMIT", 15, G, "end") + burst(330, 300, 26, R) + txt(330, 306, "!", 20, "#fff"); return s; })(),
+    L:[["bub",3,3,66,"Too deep? Stop at a limit and score: Eval = w₁f₁ + w₂f₂ + …","tl"],["cap",3,83,62,"Horizon effect: the trap just past the limit stays hidden."]] }
+ ],
+ issue5: [
+  { art: panelBg(400) + (function(){ var s = "", vals = [["4.58", "6.2", "8", "10"]]; [0, 1, 2, 3].forEach(function(i){ var x = 60 + i * 95; s += box(x - 36, 150, 72, 56, i === 3 ? G : N, "", 0) + txt(x, 186, ["4.58", "6.2", "8", "GOAL 10"][i], i === 3 ? 16 : 22, i === 3 ? INK : P); if (i < 3) s += arrow(x + 60, 178, x + 36 + 23, 178, G); }); s += '<g>' + arrow(330, 230, 70, 230, C) + '</g>' + mono(200, 262, "value flows back one square per sweep", 13, C) + mono(200, 300, "V = −1 + 0.9 × V(next)", 15, G); return s; })(),
+    L:[["bub",3,3,66,"Value iteration: repeat the Bellman update until the numbers stop changing.","tl"]] },
+  { art: panelBg(400) + die(110, 160, 1) + '<circle cx="290" cy="160" r="60" fill="' + N + '" stroke="' + INK + '" stroke-width="3"/><path d="M290 160 L290 100 A60 60 0 0 1 347 141 Z" fill="' + R + '" stroke="' + INK + '" stroke-width="2"/>' + txt(318, 128, "20%", 15, "#fff") + txt(270, 190, "80%", 18, P) + mono(110, 220, "explore", 15, R) + mono(290, 250, "exploit", 15, C) + mono(200, 300, "G = 5 + 0.9·10 + 0.81·20 = 30.2", 14, G),
+    L:[["bub",3,3,66,"ε-greedy, ε = 0.2: one move in five I try something NEW.","tl"],["cap",3,87,50,"Discount γ: later rewards count less."]] }
+ ],
+ issue6: [
+  { art: panelBg(400) + (function(){ var s = ""; for (var i = 0; i < 100; i++) { var x = 38 + (i % 20) * 16.5, y = 90 + Math.floor(i / 20) * 26, rainy = i < 30, heavy = i < 24 || (i >= 30 && i < 51); s += '<rect x="' + x + '" y="' + y + '" width="13" height="20" rx="3" fill="' + (heavy ? R : "#3a4766") + '" stroke="' + (rainy ? C : INK) + '" stroke-width="' + (rainy ? 2.5 : 1) + '"/>'; } s += mono(200, 248, "30 rainy days (blue outline)", 13, C) + mono(200, 272, "24 of them heavy traffic (red)", 13, R) + mono(200, 308, "P(Heavy | Rain) = 24 / 30 = 80%", 15, G); return s; })(),
+    L:[["bub",3,3,66,"Conditional probability: look ONLY at the rainy days.","tl"]] },
+  { art: panelBg(400) + arrow(130, 110, 245, 110, P) + arrow(100, 130, 180, 228, P) + arrow(275, 132, 225, 228, P) + box(40, 86, 100, 46, C, "RAIN", 18, INK) + box(250, 86, 120, 46, G, "SPRINKLER", 16, INK) + box(140, 230, 130, 46, GR, "WET GRASS", 16, INK) + mono(90, 155, "P=0.2", 13, C) + mono(310, 155, "0.01 / 0.40", 13, G) + mono(205, 306, "P(Rain | Wet) ≈ 35.8%", 16, G),
+    L:[["bub",3,3,70,"A Bayesian network: arrows + small tables. Wet grass makes rain likelier.","tl"],["cap",3,88,56,"Enumerate, then normalise: 0.160 / 0.448"]] }
+ ],
+ issue7: [
+  { art: panelBg(400) + node(110, 170, 46, GR, "HEALTHY", INK, 14) + node(290, 170, 46, R, "FAULTY", "#fff", 14) + '<path d="M150 145 Q200 115 250 145" fill="none" stroke="' + P + '" stroke-width="3"/>' + arrow(240, 142, 252, 148, P) + '<path d="M250 195 Q200 225 150 195" fill="none" stroke="' + P + '" stroke-width="3"/>' + arrow(160, 198, 148, 193, P) + txt(200, 122, "0.1", 16, G) + txt(200, 236, "0.2", 16, G) + txt(52, 120, "0.9", 16, G) + txt(348, 120, "0.8", 16, G) + mono(200, 290, "[0.8, 0.2] × T = [0.76, 0.24]", 15, C),
+    L:[["bub",3,3,66,"A Markov chain: tomorrow depends only on today. Rows add to 1.","tl"]] },
+  { art: panelBg(400) + (function(){ var s = ""; ["t=1", "t=2", "t=3"].forEach(function(t, i){ var x = 80 + i * 120; s += box(x - 40, 140, 80, 50, i === 2 ? "#3a4766" : N, t, 18); }); s += arrow(180, 230, 280, 230, G) + txt(230, 256, "PREDICT", 16, G) + arrow(220, 110, 100, 110, C) + txt(160, 100, "SMOOTH", 16, C); s += mono(320, 290, "60.6% faulty", 14, G) + mono(80, 290, "67.7% faulty", 14, C); return s; })(),
+    L:[["cap",3,3,46,"Prediction looks forward with no new reading."],["cap",51,3,46,"Smoothing re-checks the past with later evidence."]] }
+ ],
+ issue8: [
+  { art: panelBg(400) + box(30, 100, 160, 140, N, "", 0) + box(210, 100, 160, 140, N, "", 0) + txt(110, 132, "PROJECT A", 18, P) + mono(110, 166, "90% → +100", 14, C) + mono(110, 190, "10% → −20", 14, R) + txt(110, 226, "EU = 88", 22, G) + txt(290, 132, "PROJECT B", 18, P) + mono(290, 166, "60% → +200", 14, C) + mono(290, 190, "40% → −50", 14, R) + txt(290, 226, "EU = 100", 22, G) + '<path d="M215 104h150v132h-150z" fill="none" stroke="' + G + '" stroke-width="4"/>' + hero(200, 352, .42, "think"),
+    L:[["bub",3,3,66,"Maximum expected utility: Σ probability × utility. Pick B.","tl"]] },
+  { art: panelBg(400) + '<path d="M40 300H380M40 300V80" stroke="' + P + '" stroke-width="2"/>' + (function(){ var s = "", r = rng(81); for (var i = 0; i < 12; i++) { var x = 60 + i * 15, y = 280 - (x - 60) * .9 - r() * 26 + 13; s += '<circle cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" r="5" fill="' + C + '"/>'; } s += '<path d="M50 290 L240 110" stroke="' + G + '" stroke-width="4"/>'; s += '<path d="M250 280 C300 280 300 120 370 110" fill="none" stroke="' + R + '" stroke-width="4"/>'; s += mono(140, 330, "ŷ = wx + b · MSE", 13, G) + mono(320, 330, "σ(wᵀx + b)", 13, R) + txt(320, 100, "1", 14, P) + txt(258, 296, "0", 14, P); return s; })(),
+    L:[["bub",3,3,72,"Linear regression predicts a NUMBER. Logistic regression gives a PROBABILITY.","tl"]] },
+  { art: panelBg(400) + '<g stroke="' + INK + '" stroke-width="3"><rect x="60" y="110" width="160" height="110" rx="6" fill="' + P + '"/><path d="M60 110 L140 170 L220 110" fill="none"/></g>' + txt(140, 250, "\"FREE\" + \"MEETING\"", 18, G) + mono(300, 130, "spam:", 14, R) + mono(300, 152, "0.4×0.30×0.05", 13, R) + mono(300, 186, "not spam:", 14, C) + mono(300, 208, "0.6×0.02×0.20", 13, C) + mono(200, 300, "P(spam | email) ≈ 71%", 17, G),
+    L:[["bub",3,3,70,"Naive Bayes: multiply prior × each word's likelihood, then normalise.","tl"]] },
+  { art: panelBg(400) + (function(){ var s = "", r = rng(91), cs = [[110, 150, C], [290, 140, G], [200, 270, GR]]; cs.forEach(function(c){ for (var i = 0; i < 12; i++) { var a = r() * 6.28, d = r() * 42; s += '<circle cx="' + (c[0] + Math.cos(a) * d).toFixed(0) + '" cy="' + (c[1] + Math.sin(a) * d).toFixed(0) + '" r="5" fill="' + c[2] + '"/>'; } s += '<path d="M' + (c[0] - 10) + ' ' + c[1] + 'h20M' + c[0] + ' ' + (c[1] - 10) + 'v20" stroke="#fff" stroke-width="4"/>'; }); s += mono(200, 330, "assign → move centres → repeat", 13, P); return s; })(),
+    L:[["bub",3,3,70,"No labels? K-means finds K groups by itself (unsupervised).","tl"]] }
+ ],
+ issue9: [
+  { art: panelBg(400) + mono(200, 130, "w ← w + η (y − ŷ) x", 20, G) + mono(200, 180, "b ← b + η (y − ŷ)", 20, G) + box(40, 215, 150, 44, GR, "right: no change", 15, INK) + box(210, 215, 150, 44, R, "wrong: nudge", 15) + hero(360, 352, .4, "think"),
+    L:[["bub",3,3,70,"The perceptron rule: if I'm wrong, nudge each weight toward the answer.","tl"]] },
+  { art: panelBg(400) + box(130, 80, 140, 40, N, "FORWARD", 16) + box(260, 165, 120, 40, R, "LOSS", 16) + box(130, 250, 140, 40, "#9b59b6", "BACKPROP", 16) + box(20, 165, 120, 40, G, "GRAD. DESCENT", 13, INK) + arrow(270, 110, 310, 160, P) + arrow(300, 210, 260, 250, P) + arrow(130, 270, 90, 210, P) + arrow(90, 160, 130, 110, P) + mono(200, 330, "repeat for many epochs · watch overfitting", 12, C),
+    L:[["cap",3,3,46,"Training loop. Stop early or use dropout if test error rises."]] }
+ ],
+ issue10: [
+  { art: panelBg(400) + box(20, 90, 110, 46, "#9b59b6", "GENERATOR", 15) + box(270, 90, 110, 46, R, "JUDGE", 16) + arrow(130, 113, 268, 113, P) + txt(200, 100, "fake?", 15, G) + mono(200, 166, "GAN: two networks compete", 14, C) + (function(){ var s = "", r = rng(99); [0, 1, 2].forEach(function(k){ var x = 70 + k * 130; s += '<rect x="' + (x - 46) + '" y="200" width="92" height="80" rx="6" fill="#0d1530" stroke="' + INK + '" stroke-width="3"/>'; for (var i = 0; i < 40 * (2 - k) + 4; i++) s += '<circle cx="' + (x - 40 + r() * 80).toFixed(0) + '" cy="' + (206 + r() * 68).toFixed(0) + '" r="2" fill="' + P + '"/>'; if (k === 2) s += '<circle cx="' + x + '" cy="240" r="22" fill="' + G + '" stroke="' + INK + '" stroke-width="2"/>'; if (k < 2) s += arrow(x + 48, 240, x + 82, 240, G); }); s += mono(200, 312, "diffusion: noise → image", 14, C); return s; })(),
+    L:[["bub",3,3,66,"Generative AI beyond words: GANs and diffusion models.","tl"]] },
+  { art: panelBg(400) + box(220, 92, 160, 58, "#0b2a1f", "SCORE: 9999", 18, C) + bot(300, 322, .6, false) + '<path d="M300 248 L296 152" stroke="' + R + '" stroke-width="4"/>' + hero(80, 345, .55, "stand") + '<rect x="40" y="100" width="70" height="42" rx="6" fill="' + R + '" stroke="' + INK + '" stroke-width="3"/>' + txt(75, 128, "STOP", 18, "#fff"),
+    L:[["cap",2,3,96,"Alignment, robustness, human oversight: a person can always press STOP."],["bub",2,45,44,"It hacked the score, not the goal!","tl"]] }
+ ]
+};
+PAGES.forEach(function(p){ if (EXTRA[p.id]) p.panels = p.panels.concat(EXTRA[p.id]); });
+
+/* ================= BUILD ================= */
+(function(){
+  var book = document.getElementById("book");
+  function svgWrap(inner, w){ return '<svg class="art" viewBox="0 0 ' + w + ' 360" preserveAspectRatio="xMidYMid meet" aria-hidden="true">' + inner + '</svg>'; }
+  function esc(t){ return t; }
+  // cover
+  var coverArt = sky(1000, 1250, {mx:640, my:330, mr:200, seed:61}) + skyline(1000, 1250, {seed:62, baiterek:220, bs:1.9, khan:820, ks:1.8, tall:2.2, ground:120}) + rain(1000, 1250, 63) + beams(500, 1250, 260, 600) + hero(640, 690, 2.2, "fly") + eagle(400, 520, 1, false);
+  var cv = document.createElement("section"); cv.className = "cover"; cv.id = "cover";
+  cv.innerHTML = '<svg viewBox="0 0 1000 1250" role="img" aria-label="Comic cover: Tulpar-Man flies over night-time Astana past the Bäiterek tower, with Bürkit the golden eagle">' + coverArt + '</svg>' +
+    '<div class="ct"><span class="price">No. 1 · AI FUNDAMENTALS · 10 ISSUES</span><h1>TULPAR-MAN</h1><span class="sub">TEN NIGHTS OVER ASTANA</span></div>' +
+    '<div class="team">Team 67 · Alua · Eldar · Zeynep · Aruzhan<br>A comic based on our e-book <i>Tulpar</i></div>';
+  book.appendChild(cv);
+  var intro = document.createElement("section"); intro.className = "intro";
+  intro.innerHTML = '<span class="k">HOW TO READ</span><p>Each issue is one week of the course. A villain breaks the city with a bad algorithm, and Tulpar-Man beats him with the right idea from AI. The formulas in the panels are real; the <b>Tulpar File</b> under each issue is your one-paragraph exam summary.</p>';
+  book.appendChild(intro);
+  // nav
+  var nav = document.getElementById("navIn");
+  PAGES.forEach(function(p){
+    var a = document.createElement("a"); a.href = "#" + p.id; a.textContent = p.id === "origin" ? "Origin" : p.id === "finale" ? "Dawn" : p.no.split(" · ")[0].replace("ISSUE ", "#"); nav.appendChild(a);
+    var sec = document.createElement("section"); sec.className = "page"; sec.id = p.id;
+    var h = '<header class="issue-head"><span class="no">' + p.no + '</span><h2>' + p.title + '</h2><span class="topic">' + p.topic + '</span></header>';
+    var rows = '<div class="row">';
+    p.panels.forEach(function(pn){
+      var w = pn.wide ? 800 : 400;
+      var L = (pn.L || []).map(function(l){
+        var kind = l[0];
+        if (kind === "sfx") return '<div class="sfx ' + (l[4] || "") + '" style="left:' + l[1] + '%;top:' + l[2] + '%">' + l[3] + '</div>';
+        if (kind === "cap") return '<div class="cap" style="left:' + l[1] + '%;top:' + l[2] + '%;width:' + l[3] + '%">' + l[4] + '</div>';
+        return '<div class="bub ' + (l[5] || "tl") + '" style="left:' + l[1] + '%;top:' + l[2] + '%;width:' + l[3] + '%">' + l[4] + '</div>';
+      }).join("");
+      rows += '<div class="panel' + (pn.wide ? ' wide' : '') + '">' + svgWrap(pn.art, w) + L + '</div>';
+    });
+    rows += '</div>';
+    var file = '<div class="file"><span class="lbl">TULPAR FILE</span><p>' + p.file + '</p></div>';
+    sec.innerHTML = h + rows + file;
+    book.appendChild(sec);
+  });
+  // credits
+  var cr = document.createElement("section"); cr.className = "credits"; cr.id = "credits";
+  cr.innerHTML = '<h3>Credits</h3><table><tbody>' +
+    '<tr><td>Team 67</td><td>Alua, Eldar, Zeynep, Aruzhan · QAIRU · AI Fundamentals (AIF1303) · 2026–2027</td></tr>' +
+    '<tr><td>Based on</td><td>Our e-book <a href="https://karassvo.github.io/Tulpar/" target="_blank" rel="noopener">Tulpar: a small robot\'s journey through the ten lands of AI</a></td></tr>' +
+    '<tr><td>Characters</td><td>Tulpar-Man, Bürkit and all ten villains are original characters created for this project.</td></tr>' +
+    '<tr><td>Sources</td><td>Course lecture slides, weeks 1–8; Russell &amp; Norvig, <i>Artificial Intelligence: A Modern Approach</i>; Law of the Republic of Kazakhstan "On Artificial Intelligence", No. 230-VIII ZRK.</td></tr>' +
+    '<tr><td>AI use</td><td>Drawn and lettered with help from Claude (Anthropic): script drafts, SVG artwork and layout. The team checked every formula and number against our lecture slides and the e-book.</td></tr>' +
+    '</tbody></table>';
+  book.appendChild(cr);
+})();
+</script>
+
+</body></html>
