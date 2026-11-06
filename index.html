@@ -1,1 +1,1792 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tulpar: Ten Lands of AI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a single-column e-book on "steppe sky" paper; each chapter opens with a land banner, then story → concepts → worked example → code → quiz. */
+:root{
+  --paper:#f2f5f7; --paper-2:#e6ecf0; --card:#ffffff;
+  --ink:#152238; --ink-soft:#4a5a70; --line:#c9d4dd;
+  --sky:#0b6e99; --sky-soft:#d5e9f2; --gold:#b9790a; --gold-soft:#f6e7c8;
+  --steppe:#55784a; --steppe-soft:#dfe9d8; --danger:#b3402e; --danger-soft:#f5dcd6;
+  --code-bg:#14223a; --code-fg:#e4ecf3; --code-key:#f0b94a; --code-com:#8fa6bd;
+  --sky-top:#9fd0e8; --sky-bottom:#f6e7c8; --hill-1:#7f9f6b; --hill-2:#55784a; --hill-3:#3e5c38; --sun:#e9a92a;
+  --f-display:"Unbounded","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Literata",Georgia,"Times New Roman",serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --measure:68ch;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0d1624; --paper-2:#152236; --card:#111d2e;
+  --ink:#e6ecf2; --ink-soft:#a8b6c6; --line:#2a3b52;
+  --sky:#5fb7de; --sky-soft:#13344a; --gold:#f0b94a; --gold-soft:#3a2d12;
+  --steppe:#9cc48a; --steppe-soft:#1f3320; --danger:#f08a76; --danger-soft:#3d1c17;
+  --code-bg:#08111d; --code-fg:#dbe6f0; --code-key:#f0b94a; --code-com:#7d93aa;
+  --sky-top:#0f2a47; --sky-bottom:#36304a; --hill-1:#2b4430; --hill-2:#203626; --hill-3:#15261a; --sun:#f0b94a;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0d1624; --paper-2:#152236; --card:#111d2e;
+  --ink:#e6ecf2; --ink-soft:#a8b6c6; --line:#2a3b52;
+  --sky:#5fb7de; --sky-soft:#13344a; --gold:#f0b94a; --gold-soft:#3a2d12;
+  --steppe:#9cc48a; --steppe-soft:#1f3320; --danger:#f08a76; --danger-soft:#3d1c17;
+  --code-bg:#08111d; --code-fg:#dbe6f0; --code-key:#f0b94a; --code-com:#7d93aa;
+  --sky-top:#0f2a47; --sky-bottom:#36304a; --hill-1:#2b4430; --hill-2:#203626; --hill-3:#15261a; --sun:#f0b94a;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:18px;line-height:1.65;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:var(--sky)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:4px}
+h1,h2,h3,h4{font-family:var(--f-display);line-height:1.2;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.25rem;font-weight:600;margin-top:2.2rem}
+h4{font-size:1rem;font-weight:600}
+p{margin:0}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.prose{display:flex;flex-direction:column;gap:1rem}
+.prose > p, .prose > ul, .prose > ol{max-width:var(--measure)}
+.prose ul,.prose ol{margin:0;padding-left:1.3rem;display:flex;flex-direction:column;gap:.35rem}
+.label{font-family:var(--f-display);font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.muted{color:var(--ink-soft)}
+.term{font-weight:600;color:var(--sky)}
+code{font-family:var(--f-mono);font-size:.86em;background:var(--paper-2);padding:.05em .35em;border-radius:4px}
+.math{font-family:var(--f-mono);font-size:.95rem;background:var(--paper-2);border-radius:8px;padding:.7rem 1rem;overflow-x:auto;white-space:nowrap}
+
+/* top bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px;max-width:1100px}
+.brand{font-family:var(--f-display);font-weight:800;font-size:.95rem;text-decoration:none;color:var(--ink);letter-spacing:.04em}
+.brand span{color:var(--gold)}
+.top-actions{display:flex;gap:8px;align-items:center}
+.btn{font-family:var(--f-display);font-size:.78rem;font-weight:600;letter-spacing:.04em;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:.5rem .85rem;border-radius:999px;cursor:pointer}
+.btn:hover{border-color:var(--sky);color:var(--sky)}
+.btn.primary{background:var(--sky);color:var(--paper);border-color:var(--sky)}
+.btn.primary:hover{filter:brightness(1.08);color:var(--paper)}
+.progress{height:3px;background:var(--gold);width:0;transition:width .1s linear}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(360px,92vw);background:var(--card);border-left:1px solid var(--line);z-index:30;transform:translateX(105%);transition:transform .25s ease;padding:calc(env(safe-area-inset-top,0px) + 18px) calc(env(safe-area-inset-right,0px) + 20px) calc(env(safe-area-inset-bottom,0px) + 18px) 20px;overflow-y:auto}
+.drawer.open{transform:none}
+.drawer ol{list-style:none;padding:0;margin:1rem 0 0;display:flex;flex-direction:column;gap:2px}
+.drawer a{display:grid;grid-template-columns:2.2rem 1fr;gap:.4rem;text-decoration:none;color:var(--ink);padding:.5rem .4rem;border-radius:8px;font-size:.95rem;line-height:1.3}
+.drawer a:hover{background:var(--paper-2)}
+.drawer a b{font-family:var(--f-display);color:var(--gold);font-size:.8rem;padding-top:.15rem}
+.scrim{position:fixed;inset:0;background:rgba(5,10,20,.45);z-index:25}
+
+/* cover */
+.cover{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.cover svg.scene{display:block;width:100%;height:auto;max-height:78vh;min-height:360px;object-fit:cover}
+.cover-text{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-start;padding-top:clamp(20px,6vw,64px)}
+.cover-text .wrap{width:100%;max-width:1100px}
+.kicker{font-family:var(--f-display);font-size:clamp(.65rem,1.6vw,.8rem);font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ink)}
+.cover h1{font-size:clamp(2.6rem,11vw,7.5rem);font-weight:800;letter-spacing:.02em;line-height:.95;color:var(--ink);margin-top:.4rem}
+.cover .sub{font-family:var(--f-body);font-style:italic;font-size:clamp(1rem,2.6vw,1.45rem);max-width:30ch;margin-top:.8rem;color:var(--ink)}
+.cover .team{font-family:var(--f-display);font-size:clamp(.62rem,1.5vw,.78rem);letter-spacing:.12em;text-transform:uppercase;margin-top:1rem;color:var(--ink-soft)}
+
+/* ornament band */
+.band{display:block;width:100%;height:22px;color:var(--gold)}
+
+/* chapter */
+section.chapter{padding-block:3.5rem 2rem;border-bottom:1px solid var(--line)}
+.ch-head{display:grid;grid-template-columns:auto 1fr;gap:1.2rem;align-items:end;margin-bottom:1.6rem}
+.ch-num{font-family:var(--f-display);font-weight:800;font-size:clamp(4rem,14vw,7rem);line-height:.8;color:var(--sky);opacity:.9}
+.ch-meta{display:flex;flex-direction:column;gap:.4rem;padding-bottom:.3rem;min-width:0}
+.ch-meta .label{color:var(--gold)}
+.ch-lede{font-size:1.1rem;color:var(--ink-soft);max-width:var(--measure);margin-top:.2rem}
+
+/* boxes */
+.story{font-style:italic;background:var(--paper-2);border-radius:14px;padding:1.2rem 1.3rem;display:grid;grid-template-columns:44px 1fr;gap:1rem;align-items:start}
+.story p+p{margin-top:.7rem}
+.story .who{font-style:normal}
+.story svg{width:44px;height:44px;color:var(--sky)}
+.say{font-style:normal;font-weight:600;color:var(--sky)}
+.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:0}
+.terms div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.85rem 1rem;min-width:0}
+.terms dt{font-family:var(--f-display);font-size:.85rem;font-weight:600;color:var(--sky);margin-bottom:.25rem}
+.terms dd{margin:0;font-size:.95rem;line-height:1.5}
+.did{background:var(--gold-soft);border-radius:14px;padding:1rem 1.2rem;display:flex;flex-direction:column;gap:.35rem}
+.did .label{color:var(--gold)}
+.myth{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.myth > div{padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.35rem;min-width:0}
+.myth .m{background:var(--danger-soft)} .myth .m .label{color:var(--danger)}
+.myth .f{background:var(--steppe-soft)} .myth .f .label{color:var(--steppe)}
+@media (max-width:620px){.myth{grid-template-columns:1fr}}
+.worked{border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.2rem;background:var(--card);display:flex;flex-direction:column;gap:.7rem}
+.worked .label{color:var(--steppe)}
+.worked ol{margin:0;padding-left:1.3rem;display:flex;flex-direction:column;gap:.35rem}
+.recap{background:var(--sky-soft);border-radius:14px;padding:1rem 1.2rem}
+.recap .label{color:var(--sky)}
+.recap ul{margin:.5rem 0 0;padding-left:1.2rem;display:flex;flex-direction:column;gap:.3rem}
+pre.code{background:var(--code-bg);color:var(--code-fg);font-family:var(--f-mono);font-size:.82rem;line-height:1.55;border-radius:12px;padding:1rem 1.1rem;overflow-x:auto;margin:0}
+pre.code .c{color:var(--code-com)} pre.code .k{color:var(--code-key)}
+.code-cap{font-size:.85rem;color:var(--ink-soft);margin-top:-.5rem}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:.92rem;background:var(--card)}
+th,td{text-align:left;padding:.55rem .75rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-display);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--ink-soft);background:var(--paper-2)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.yes{color:var(--steppe);font-weight:600} .no{color:var(--danger);font-weight:600}
+figure{margin:0;display:flex;flex-direction:column;gap:.5rem}
+figure .fig{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
+figure svg{display:block;max-width:100%;height:auto;margin:0 auto}
+figcaption{font-size:.85rem;color:var(--ink-soft)}
+/* svg tokens */
+.s-ink{fill:var(--ink)} .s-soft{fill:var(--ink-soft)} .s-sky{fill:var(--sky)} .s-gold{fill:var(--gold)} .s-steppe{fill:var(--steppe)} .s-danger{fill:var(--danger)}
+.s-card{fill:var(--card)} .s-paper2{fill:var(--paper-2)} .s-skysoft{fill:var(--sky-soft)} .s-goldsoft{fill:var(--gold-soft)} .s-steppesoft{fill:var(--steppe-soft)} .s-dangersoft{fill:var(--danger-soft)}
+.st-ink{stroke:var(--ink)} .st-line{stroke:var(--line)} .st-sky{stroke:var(--sky)} .st-gold{stroke:var(--gold)} .st-soft{stroke:var(--ink-soft)} .st-danger{stroke:var(--danger)} .st-steppe{stroke:var(--steppe)}
+svg text{font-family:var(--f-display);font-size:13px}
+svg .t-body{font-family:var(--f-body)} svg .t-mono{font-family:var(--f-mono)}
+
+/* interactive lab */
+.lab{border:2px solid var(--sky);border-radius:16px;padding:1.1rem 1.2rem;background:var(--card);display:flex;flex-direction:column;gap:.9rem}
+.lab > .label{color:var(--sky)}
+.lab-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lab-out{font-family:var(--f-mono);font-size:.85rem;font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+.slider{display:grid;grid-template-columns:minmax(150px,1fr) 2fr 4.5rem;gap:10px;align-items:center;font-size:.92rem}
+.slider output{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+.slider input{width:100%;accent-color:var(--sky)}
+@media (max-width:560px){.slider{grid-template-columns:1fr 4.5rem}.slider label{grid-column:1/-1}}
+
+/* quiz */
+.quiz{border:1px solid var(--line);border-radius:16px;padding:1.1rem 1.2rem;background:var(--card);display:flex;flex-direction:column;gap:1.2rem}
+.quiz > .label{color:var(--gold)}
+.q{display:flex;flex-direction:column;gap:.5rem}
+.q .prompt{font-weight:600}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{font-family:var(--f-body);font-size:.95rem;text-align:left;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:.55rem .8rem;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--sky)}
+.opt.right{background:var(--steppe-soft);border-color:var(--steppe)}
+.opt.wrong{background:var(--danger-soft);border-color:var(--danger)}
+.opt:disabled{cursor:default}
+.explain{font-size:.92rem;padding:.6rem .8rem;border-radius:10px;background:var(--paper-2)}
+.score{font-family:var(--f-display);font-size:.8rem;color:var(--ink-soft)}
+
+/* map / toc */
+.journey{padding-block:3rem}
+.journey-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:1.2rem}
+.stop{display:grid;grid-template-columns:3rem 1fr;gap:.6rem;align-items:start;text-decoration:none;color:var(--ink);padding:.8rem .9rem;border:1px solid var(--line);border-radius:12px;background:var(--card);min-width:0}
+.stop:hover{border-color:var(--sky)}
+.stop b{font-family:var(--f-display);font-size:1.5rem;color:var(--gold);line-height:1}
+.stop span{display:block;font-size:.8rem;color:var(--ink-soft)}
+.stop strong{font-family:var(--f-display);font-size:.9rem;font-weight:600}
+
+.timeline{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;border-left:2px solid var(--line);margin-left:.5rem}
+.timeline li{display:grid;grid-template-columns:4.5rem 1fr;gap:.8rem;padding:.55rem 0 .55rem 1rem;position:relative}
+.timeline li::before{content:"";position:absolute;left:-7px;top:.95rem;width:12px;height:12px;border-radius:50%;background:var(--gold)}
+.timeline b{font-family:var(--f-display);font-size:.9rem;color:var(--sky)}
+.gloss{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.2rem 1.6rem;margin:0}
+.gloss div{padding:.5rem 0;border-bottom:1px solid var(--line);min-width:0}
+.gloss dt{font-weight:600}
+.gloss dd{margin:0;font-size:.92rem;color:var(--ink-soft)}
+.gloss dd i{color:var(--gold);font-style:normal;font-family:var(--f-display);font-size:.7rem;letter-spacing:.06em}
+footer{padding-block:2.5rem 3rem;color:var(--ink-soft);font-size:.9rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:620px){.two{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.9rem 1rem;min-width:0}
+.panel h4{margin-bottom:.35rem;color:var(--sky)}
+.panel p,.panel li{font-size:.95rem}
+.panel ul{margin:.2rem 0 0;padding-left:1.1rem}
+</style>
+<style>img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="horn" width="48" height="22" patternUnits="userSpaceOnUse">
+      <path d="M24 22V13M24 13C24 6 17 2 12 5C8 7.5 9.5 13 14 12.5C17 12 17 9 14.5 9M24 13C24 6 31 2 36 5C40 7.5 38.5 13 34 12.5C31 12 31 9 33.5 9M0 21H48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </pattern>
+    <symbol id="eagle" viewBox="0 0 48 48"><path d="M4 22c6-3 12-4 17-2 1-3 2-5 3-5s2 2 3 5c5-2 11-1 17 2-5 1-9 3-12 6l-4 1 2 6-6-3-6 3 2-6-4-1c-3-3-7-5-12-6z" fill="currentColor"/></symbol>
+    <symbol id="bot" viewBox="0 0 48 48"><rect x="12" y="12" width="24" height="18" rx="5" fill="currentColor"/><circle cx="20" cy="21" r="2.6" fill="var(--paper)"/><circle cx="28" cy="21" r="2.6" fill="var(--paper)"/><path d="M24 12V6" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="5" r="2.2" fill="var(--gold)"/><rect x="10" y="31" width="28" height="7" rx="3" fill="currentColor"/><circle cx="16" cy="41" r="4" fill="currentColor"/><circle cx="32" cy="41" r="4" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">TULPAR<span>·</span>AI</a>
+    <div class="top-actions">
+      <button class="btn" id="themeBtn" type="button" aria-label="Switch colour theme">Theme</button>
+      <button class="btn primary" id="tocBtn" type="button" aria-expanded="false" aria-controls="drawer">Contents</button>
+    </div>
+  </div>
+  <div class="progress" id="progress"></div>
+</header>
+
+<div class="scrim" id="scrim" hidden></div>
+<nav class="drawer" id="drawer" aria-label="Book contents">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <span class="label muted">Contents</span>
+    <button class="btn" id="closeToc" type="button">Close</button>
+  </div>
+  <ol>
+    <li><a href="#prologue"><b>·</b>Prologue: a robot leaves the city</a></li>
+    <li><a href="#ch1"><b>01</b>The Land of Agents</a></li>
+    <li><a href="#ch2"><b>02</b>The Land of Paths</a></li>
+    <li><a href="#ch3"><b>03</b>The Land of Hills and Puzzles</a></li>
+    <li><a href="#ch4"><b>04</b>The Land of Rivals</a></li>
+    <li><a href="#ch5"><b>05</b>The Land of Long Journeys</a></li>
+    <li><a href="#ch6"><b>06</b>The Land of Fog</a></li>
+    <li><a href="#ch7"><b>07</b>The Land of Hidden Things</a></li>
+    <li><a href="#ch8"><b>08</b>The Land of Choices and Data</a></li>
+    <li><a href="#ch9"><b>09</b>The Land of Neurons</a></li>
+    <li><a href="#ch10"><b>10</b>The Land of Words and Responsibility</a></li>
+    <li><a href="#epilogue"><b>·</b>Epilogue: the whole map</a></li>
+    <li><a href="#history"><b>·</b>AI history timeline</a></li>
+    <li><a href="#glossary"><b>·</b>Glossary</a></li>
+    <li><a href="#about"><b>·</b>Sources, team and AI use</a></li>
+  </ol>
+</nav>
+
+<main id="top">
+<section class="cover" aria-label="Book cover">
+  <svg class="scene" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A small robot on the steppe at sunrise, with a golden eagle above">
+    <defs>
+      <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" style="stop-color:var(--sky-top)"/>
+        <stop offset="1" style="stop-color:var(--sky-bottom)"/>
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="720" fill="url(#skyG)"/>
+    <g transform="translate(880 400)">
+      <circle r="150" class="s-goldsoft" opacity=".55"/>
+      <circle r="105" style="fill:var(--sun)"/>
+      <g fill="none" style="stroke:var(--paper)" stroke-width="4" opacity=".75">
+        <circle r="62"/>
+        <path d="M-62 0C-30-40 30-40 62 0M-62 0C-30 40 30 40 62 0M0-62C-40-30-40 30 0 62M0-62C40-30 40 30 0 62"/>
+      </g>
+      <g style="stroke:var(--sun)" stroke-width="3" opacity=".6">
+        <path d="M0-120V-175M85-85L124-124M120 0H175M-85-85L-124-124M-120 0H-175"/>
+      </g>
+    </g>
+    <use href="#eagle" x="820" y="190" width="120" height="120" style="color:var(--ink)" opacity=".85"/>
+    <path d="M0 520C160 470 300 500 460 480S760 430 900 470 1120 520 1200 500V720H0Z" style="fill:var(--hill-1)"/>
+    <path d="M0 590C200 545 360 575 560 555S880 520 1040 560 1160 590 1200 585V720H0Z" style="fill:var(--hill-2)"/>
+    <path d="M0 655C240 625 420 650 640 635S1000 615 1200 640V720H0Z" style="fill:var(--hill-3)"/>
+    <g transform="translate(250 470)">
+      <path d="M-200 120C-120 100 -40 92 40 104S180 120 260 110" fill="none" style="stroke:var(--gold)" stroke-width="4" stroke-dasharray="10 12" stroke-linecap="round"/>
+      <use href="#bot" x="0" y="0" width="120" height="120" style="color:var(--ink)"/>
+    </g>
+  </svg>
+  <div class="cover-text">
+    <div class="wrap">
+      <div class="kicker">AI Fundamentals · An illustrated journey</div>
+      <h1>TULPAR</h1>
+      <p class="sub">A small robot's journey through the ten lands of Artificial Intelligence</p>
+      <p class="team">Team 67 · Alua · Eldar · Zeynep · Aruzhan</p>
+    </div>
+  </div>
+</section>
+<svg class="band" aria-hidden="true"><rect width="100%" height="22" fill="url(#horn)"/></svg>
+
+<section class="journey" id="prologue">
+  <div class="wrap prose">
+    <span class="label" style="color:var(--gold)">Prologue</span>
+    <h2>A robot leaves the city</h2>
+    <div class="story">
+      <svg aria-hidden="true"><use href="#bot"/></svg>
+      <div>
+        <p>In a university building in Astana there lived a small delivery robot. Its makers called it <b class="who">Tulpar</b>, after the winged horse of Kazakh legends, although it could not fly and had wheels instead of hooves. Every day Tulpar carried papers from Room A to Room B. One morning a corridor was blocked. Tulpar turned right, met a wall, turned right again, and spun in the same corner until its battery ran out.</p>
+        <p>An old golden eagle, <b class="who">Bürkit</b>, watched from the window. <span class="say">"You follow rules, little one, but you do not think. Cross the ten lands of the steppe with me. In each land you will learn one idea that makes a machine intelligent."</span></p>
+      </div>
+    </div>
+    <p>This book follows Tulpar and Bürkit through the ten weeks of the <i>AI Fundamentals</i> course. Each chapter is one land and one week. You can read it in order, like a story, or jump to the topic you need before an exam.</p>
+    <h3>How each chapter works</h3>
+    <div class="terms">
+      <div><dt>Story</dt><dd>A short scene where Tulpar meets a problem it cannot solve yet.</dd></div>
+      <div><dt>Key terms</dt><dd>Every technical word is defined the first time it appears.</dd></div>
+      <div><dt>Worked example</dt><dd>A calculation with real numbers, step by step, so you can check it by hand.</dd></div>
+      <div><dt>Python</dt><dd>A short, runnable snippet. Paste it into Google Colab and press run.</dd></div>
+      <div><dt>Try it</dt><dd>Small interactive labs: run A*, train a Q-learner, move Bayes sliders, train a perceptron.</dd></div>
+      <div><dt>Quiz</dt><dd>Three questions at the end of every chapter. Click an answer to see the explanation.</dd></div>
+    </div>
+    <h3>The map of the journey</h3>
+    <div class="journey-grid">
+      <a class="stop" href="#ch1"><b>01</b><div><strong>The Land of Agents</strong><span>Agents, environments, PEAS, rationality</span></div></a>
+      <a class="stop" href="#ch2"><b>02</b><div><strong>The Land of Paths</strong><span>BFS, DFS, UCS, A*, heuristics</span></div></a>
+      <a class="stop" href="#ch3"><b>03</b><div><strong>Hills and Puzzles</strong><span>Local search, annealing, CSP</span></div></a>
+      <a class="stop" href="#ch4"><b>04</b><div><strong>The Land of Rivals</strong><span>Minimax, alpha–beta, expectimax</span></div></a>
+      <a class="stop" href="#ch5"><b>05</b><div><strong>Long Journeys</strong><span>MDPs, Bellman, Q-learning</span></div></a>
+      <a class="stop" href="#ch6"><b>06</b><div><strong>The Land of Fog</strong><span>Probability, Bayes, Bayesian networks</span></div></a>
+      <a class="stop" href="#ch7"><b>07</b><div><strong>Hidden Things</strong><span>HMMs, filtering, Viterbi</span></div></a>
+      <a class="stop" href="#ch8"><b>08</b><div><strong>Choices and Data</strong><span>Expected utility, classical ML, metrics</span></div></a>
+      <a class="stop" href="#ch9"><b>09</b><div><strong>The Land of Neurons</strong><span>Perceptrons, neural networks</span></div></a>
+      <a class="stop" href="#ch10"><b>10</b><div><strong>Words and Responsibility</strong><span>LLMs, generative AI, AI safety and law</span></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 1 ============ -->
+<section class="chapter" id="ch1">
+<div class="wrap prose">
+  <div class="ch-head"><div class="ch-num">01</div><div class="ch-meta"><span class="label">Week 1 · Introduction to AI</span><h2>The Land of Agents</h2></div></div>
+  <p class="ch-lede">Before any algorithm, we must say who is acting, in what world, and what counts as success.</p>
+  <div class="story">
+    <svg aria-hidden="true"><use href="#eagle"/></svg>
+    <div><p>Bürkit landed on Tulpar's antenna. <span class="say">"Tell me what you are."</span> "A robot," said Tulpar. <span class="say">"No. You are an agent. You sense the world, and you act on it. Your trouble this morning was not your wheels. It was the way you choose."</span></p></div>
+  </div>
+
+  <h3>Agents and environments</h3>
+  <p>An <span class="term">agent</span> is anything that perceives its <span class="term">environment</span> through <span class="term">sensors</span> and acts on it through <span class="term">actuators</span>. A <span class="term">percept</span> is what the sensors deliver at one moment. The full list of everything the agent has perceived so far is its <span class="term">percept history</span>. The agent's behaviour is a mapping from percept history to action, called the <span class="term">agent function</span>; the program that implements it is the <span class="term">agent program</span>.</p>
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 640 210" width="640" role="img" aria-label="Agent–environment loop: the environment sends percepts to the agent's sensors, the agent program chooses an action, actuators act on the environment">
+        <rect x="20" y="40" width="240" height="130" rx="16" class="s-skysoft"/>
+        <text x="140" y="70" text-anchor="middle" class="s-sky" font-weight="600">AGENT</text>
+        <rect x="45" y="85" width="190" height="34" rx="8" class="s-card st-sky" stroke-width="1.5"/>
+        <text x="140" y="107" text-anchor="middle" class="s-ink">agent program</text>
+        <text x="140" y="148" text-anchor="middle" class="s-soft t-body" font-size="13">sensors in · actuators out</text>
+        <rect x="380" y="40" width="240" height="130" rx="16" class="s-steppesoft"/>
+        <text x="500" y="70" text-anchor="middle" class="s-steppe" font-weight="600">ENVIRONMENT</text>
+        <text x="500" y="105" text-anchor="middle" class="s-ink t-body" font-size="14">corridors, doors, people,</text>
+        <text x="500" y="125" text-anchor="middle" class="s-ink t-body" font-size="14">other robots, weather</text>
+        <path d="M380 75 C330 30 310 30 262 75" fill="none" class="st-gold" stroke-width="3"/>
+        <path d="M262 75 l12 -2 -5 11z" class="s-gold"/>
+        <text x="320" y="28" text-anchor="middle" class="s-gold" font-weight="600">percepts</text>
+        <path d="M262 140 C310 190 330 190 380 140" fill="none" class="st-sky" stroke-width="3"/>
+        <path d="M380 140 l-12 1 6 -11z" class="s-sky"/>
+        <text x="320" y="200" text-anchor="middle" class="s-sky" font-weight="600">actions</text>
+      </svg>
+    </div>
+    <figcaption>The agent–environment loop. Sensors give evidence about the world; they do not always reveal the full state.</figcaption>
+  </figure>
+
+  <h3>Rationality</h3>
+  <p>A <span class="term">rational agent</span> chooses the action that is expected to maximise its <span class="term">performance measure</span>, given its percept history and what it knows about the world. Rational does not mean all-knowing (<span class="term">omniscient</span>). If a rational driver brakes for a shadow that turns out to be harmless, the choice was still rational, because it was the best choice given the evidence at that moment. We judge rationality by the information available before the action, not by hindsight.</p>
+
+  <h3>PEAS: describe the job before the algorithm</h3>
+  <p>PEAS stands for <b>P</b>erformance measure, <b>E</b>nvironment, <b>A</b>ctuators, <b>S</b>ensors. Writing these four lines turns a vague wish ("make the robot smart") into a clear specification.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>PEAS</th><th>Self-driving car</th><th>Tulpar, the delivery robot</th></tr></thead>
+    <tbody>
+      <tr><td><b>P</b>erformance</td><td>Safety, travel time, comfort, legal driving</td><td>Documents delivered, delivery time, no collisions, battery used</td></tr>
+      <tr><td><b>E</b>nvironment</td><td>Roads, traffic, pedestrians, weather</td><td>Corridors, rooms, doors, students, lifts</td></tr>
+      <tr><td><b>A</b>ctuators</td><td>Steering, throttle, brakes, signals</td><td>Wheels (forward, turn left, turn right, stop), gripper</td></tr>
+      <tr><td><b>S</b>ensors</td><td>Cameras, radar, lidar, GPS</td><td>Obstacle sensor, door sensor, wheel odometer, room-number camera</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Six ways to describe an environment</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Dimension</th><th>Options</th><th>Tulpar's building</th></tr></thead>
+    <tbody>
+      <tr><td>Observability</td><td>Fully / partially observable</td><td><b>Partially</b>: it sees only nearby obstacles, not the whole floor</td></tr>
+      <tr><td>Uncertainty</td><td>Deterministic / stochastic</td><td><b>Stochastic</b>: wheels slip, people move unpredictably</td></tr>
+      <tr><td>Time structure</td><td>Episodic / sequential</td><td><b>Sequential</b>: each turn changes where it can go next</td></tr>
+      <tr><td>Dynamics</td><td>Static / dynamic</td><td><b>Dynamic</b>: the corridor changes while it thinks</td></tr>
+      <tr><td>Agents</td><td>Single / multi-agent</td><td><b>Multi-agent</b>: students and other robots</td></tr>
+      <tr><td>Actions</td><td>Discrete / continuous</td><td><b>Discrete</b> in our model (four commands); continuous in real motors</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Four agent architectures</h3>
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 700 170" width="700" role="img" aria-label="Four agent architectures from simple to rich: simple reflex, model-based, goal-based, utility-based">
+        <g font-size="13">
+          <rect x="10" y="30" width="155" height="110" rx="12" class="s-paper2"/>
+          <text x="87" y="58" text-anchor="middle" class="s-sky" font-weight="600">Simple reflex</text>
+          <text x="87" y="84" text-anchor="middle" class="s-ink t-body" font-size="13">percept → rule</text>
+          <text x="87" y="104" text-anchor="middle" class="s-soft t-body" font-size="12">"if hot then fan on"</text>
+          <text x="87" y="128" text-anchor="middle" class="s-gold" font-size="11">NOW</text>
+          <rect x="185" y="30" width="155" height="110" rx="12" class="s-paper2"/>
+          <text x="262" y="58" text-anchor="middle" class="s-sky" font-weight="600">Model-based</text>
+          <text x="262" y="84" text-anchor="middle" class="s-ink t-body" font-size="13">keeps internal state</text>
+          <text x="262" y="104" text-anchor="middle" class="s-soft t-body" font-size="12">remembers unseen walls</text>
+          <text x="262" y="128" text-anchor="middle" class="s-gold" font-size="11">MEMORY</text>
+          <rect x="360" y="30" width="155" height="110" rx="12" class="s-paper2"/>
+          <text x="437" y="58" text-anchor="middle" class="s-sky" font-weight="600">Goal-based</text>
+          <text x="437" y="84" text-anchor="middle" class="s-ink t-body" font-size="13">plans toward a goal</text>
+          <text x="437" y="104" text-anchor="middle" class="s-soft t-body" font-size="12">route from A to B</text>
+          <text x="437" y="128" text-anchor="middle" class="s-gold" font-size="11">FUTURE</text>
+          <rect x="535" y="30" width="155" height="110" rx="12" class="s-paper2"/>
+          <text x="612" y="58" text-anchor="middle" class="s-sky" font-weight="600">Utility-based</text>
+          <text x="612" y="84" text-anchor="middle" class="s-ink t-body" font-size="13">weighs trade-offs</text>
+          <text x="612" y="104" text-anchor="middle" class="s-soft t-body" font-size="12">fast route vs safe route</text>
+          <text x="612" y="128" text-anchor="middle" class="s-gold" font-size="11">TRADE-OFFS</text>
+          <path d="M20 160H680" class="st-gold" stroke-width="2"/><path d="M680 160l-10 -5v10z" class="s-gold"/>
+          <text x="350" y="20" text-anchor="middle" class="s-soft" font-size="11">richer reasoning · more computation and design effort →</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption>Each step adds something: memory, then goals, then a way to compare good outcomes. A <b>learning agent</b> can sit on top of any of them and improve with experience.</figcaption>
+  </figure>
+  <p>Tulpar's morning failure is a classic case. Its rules were "if obstacle ahead, turn right; otherwise go forward". These rules react only to the current percept. They cannot remember a dead end and they do not know where Room B is, so nothing guarantees arrival. Tulpar needs at least a model of the building and a goal, which leads directly to search in Chapter 2.</p>
+
+  <h3>Python: a simple reflex agent</h3>
+  <pre class="code"><span class="k">def</span> greenhouse_agent(temperature, humidity):
+    <span class="k">if</span> temperature &lt; 18:
+        <span class="k">return</span> "Heater ON"
+    <span class="k">elif</span> temperature &gt; 28:
+        <span class="k">return</span> "Fan ON"
+    <span class="k">elif</span> humidity &gt; 80:
+        <span class="k">return</span> "Dehumidifier ON"
+    <span class="k">else</span>:
+        <span class="k">return</span> "No action"
+
+print(greenhouse_agent(24, 85))   <span class="c"># Dehumidifier ON</span>
+print(greenhouse_agent(17, 90))   <span class="c"># Heater ON: the first matching rule wins</span></pre>
+  <p class="code-cap">A greenhouse is a good fit for a reflex agent: the right action depends only on the current reading. Notice that the order of the rules decides what happens when two conditions are true at once.</p>
+
+  <div class="did"><span class="label">Did you know?</span><p>The phrase "artificial intelligence" comes from a 1955 proposal by John McCarthy, Marvin Minsky, Nathaniel Rochester and Claude Shannon for a summer workshop at Dartmouth College in 1956. That workshop is usually counted as the birth of AI as a field.</p></div>
+  <div class="myth">
+    <div class="m"><span class="label">Myth</span><p>A rational agent never makes mistakes.</p></div>
+    <div class="f"><span class="label">Fact</span><p>A rational agent makes the best choice it can justify with the evidence it has. With noisy sensors, a rational choice can still have a bad outcome.</p></div>
+  </div>
+  <div class="recap"><span class="label">Remember</span><ul>
+    <li>PEAS defines the task; the environment's properties shape the design.</li>
+    <li>Rationality means maximising <i>expected</i> performance, not being right every time.</li>
+    <li>Reflex → model-based → goal-based → utility-based: more reasoning, more cost.</li>
+  </ul></div>
+  <div class="quiz" data-quiz="ch1"></div>
+</div>
+</section>
+
+<!-- ============ CHAPTER 2 ============ -->
+<section class="chapter" id="ch2">
+<div class="wrap prose">
+  <div class="ch-head"><div class="ch-num">02</div><div class="ch-meta"><span class="label">Week 2 · Uninformed search, A* and heuristics</span><h2>The Land of Paths</h2></div></div>
+  <p class="ch-lede">When the world is known and actions are predictable, intelligence becomes a question of which possibility to explore next.</p>
+  <div class="story">
+    <svg aria-hidden="true"><use href="#bot"/></svg>
+    <div><p>The first land was a maze of roads between villages. "How do I find the way?" asked Tulpar. Bürkit rose high into the sky. <span class="say">"From up here I cannot see the roads you will take, but I can see how far you are from the goal in a straight line. That guess is a gift. Use it wisely and you will search less."</span></p></div>
+  </div>
+
+  <h3>What is a search problem?</h3>
+  <dl class="terms">
+    <div><dt>State space</dt><dd>All the situations the agent can be in. For a route, a state can be just a location (x, y). We keep only the details needed for planning; this is <b>abstraction</b>.</dd></div>
+    <div><dt>Initial state</dt><dd>Where the problem starts, for example Astana.</dd></div>
+    <div><dt>Actions and successors</dt><dd>The legal moves from a state and the states they lead to (the <b>transition model</b>).</dd></div>
+    <div><dt>Goal test</dt><dd>A check that tells whether a state is a goal, for example "is the city Almaty?"</dd></div>
+    <div><dt>Path cost</dt><dd>The sum of step costs along a path, such as kilometres or minutes.</dd></div>
+    <div><dt>Solution</dt><dd>A sequence of actions from the initial state to a goal. An <b>optimal</b> solution has the lowest path cost.</dd></div>
+  </dl>
+  <p>A <span class="term">state-space graph</span> has each state once, with arrows for actions. A <span class="term">search tree</span> is a "what if" tree of plans: the root is the start, and every node stands for a whole path from the start. The same state can appear many times in a tree. The set of nodes waiting to be expanded is called the <span class="term">frontier</span> (or fringe). Every search algorithm in this chapter follows the same loop; they differ only in <b>which frontier node they expand next</b>.</p>
+
+  <div class="tbl"><table>
+    <thead><tr><th>Algorithm</th><th>Expands next</th><th>Frontier</th><th>Complete?</th><th>Optimal?</th><th>Memory</th></tr></thead>
+    <tbody>
+      <tr><td><b>BFS</b> breadth-first</td><td>shallowest node</td><td>FIFO queue</td><td class="yes">Yes*</td><td>Only if all steps cost the same</td><td>High, O(b<sup>d</sup>)</td></tr>
+      <tr><td><b>DFS</b> depth-first</td><td>deepest node</td><td>LIFO stack</td><td class="no">Not in infinite or cyclic spaces without checks</td><td class="no">No</td><td>Low, O(bm)</td></tr>
+      <tr><td><b>IDS</b> iterative deepening</td><td>DFS with depth limit 1, 2, 3…</td><td>stack</td><td class="yes">Yes*</td><td>If step costs are equal</td><td>Low, O(bd)</td></tr>
+      <tr><td><b>UCS</b> uniform-cost</td><td>lowest path cost g(n)</td><td>priority queue</td><td class="yes">Yes*</td><td class="yes">Yes, with positive costs</td><td>High</td></tr>
+      <tr><td><b>A*</b></td><td>lowest f(n) = g(n) + h(n)</td><td>priority queue</td><td class="yes">Yes*</td><td class="yes">Yes, if h is admissible (consistent for graph search)</td><td>High</td></tr>
+    </tbody>
+  </table></div>
+  <p class="code-cap">b = branching factor (choices per state), d = depth of the shallowest goal, m = maximum depth. *Assuming a finite branching factor and, for UCS and A*, step costs above some small positive number.</p>
+
+  <div class="worked"><span class="label">Worked example · why BFS is not enough</span>
+    <p>Edges: A→B costs 2, A→C costs 8, B→F costs 10, C→F costs 1. Both routes to F have two steps.</p>
+    <ol>
+      <li>BFS sees two paths of equal depth and may return A→B→F.</li>
+      <li>UCS compares total costs: A→B→F = 2 + 10 = <b>12</b>, A→C→F = 8 + 1 = <b>9</b>.</li>
+      <li>UCS returns A→C→F because it always expands the cheapest path so far.</li>
+    </ol>
+  </div>
+
+  <h3>A*: past cost plus a smart guess</h3>
+  <p>UCS asks "what have I paid so far?". A* also asks "how much is probably left?". It uses three numbers for every node n:</p>
+  <div class="math">f(n) = g(n) + h(n)   ·   g = exact cost so far   ·   h = estimated cost to the goal   ·   f = estimated total</div>
+  <p>The estimate h is a <span class="term">heuristic</span>. A heuristic is <span class="term">admissible</span> if it never overestimates: 0 ≤ h(n) ≤ h*(n), where h*(n) is the true cheapest cost to a goal. Straight-line distance on a map is admissible, because no road is shorter than a straight line. On a grid where you move up, down, left and right, <b>Manhattan distance</b> |Δx| + |Δy| is admissible. A heuristic is <span class="term">consistent</span> if h(n) ≤ cost(n, n′) + h(n′) for every step; consistency guarantees optimality even when we avoid re-expanding visited states.</p>
+  <div class="worked"><span class="label">Worked example · which node does A* expand?</span>
+    <div class="tbl"><table><thead><tr><th>Node</th><th class="num">g(n)</th><th class="num">h(n)</th><th class="num">f(n)</th></tr></thead>
+    <tbody><tr><td>A</td><td class="num">2</td><td class="num">10</td><td class="num">12</td></tr><tr><td>B</td><td class="num">5</td><td class="num">4</td><td class="num"><b>9</b></td></tr><tr><td>C</td><td class="num">7</td><td class="num">3</td><td class="num">10</td></tr></tbody></table></div>
+    <p>A* expands <b>B</b>. It has already cost more than A, but its estimated total is the smallest. A* is willing to pay more now when the whole route looks better.</p>
+  </div>
+  <p>Two useful facts: if h(n) = 0 everywhere, then f = g and A* behaves exactly like UCS. If h overestimates, A* may run faster but can return a route that is not optimal.</p>
+  <details class="panel"><summary><b>Why is A* optimal with an admissible heuristic?</b> (proof sketch)</summary>
+    <p style="margin-top:.6rem">Let A be the optimal goal and B a worse goal on the frontier. Some node n on the optimal path to A is also on the frontier. Then f(n) = g(n) + h(n) ≤ g(A) because h never overestimates, and g(A) = f(A) because h = 0 at a goal. Since B is worse, f(A) = g(A) &lt; g(B) = f(B). So f(n) ≤ f(A) &lt; f(B): every node on the path to A is expanded before B, and A is returned first.</p>
+  </details>
+
+  <div class="lab" id="labSearch"><span class="label">Try it · BFS vs A* on a grid</span>
+    <p style="font-size:.95rem">Tulpar starts at the green circle and must reach the gold square. Walls are dark. Run both algorithms and compare how many cells each one explores before finding a path of the same length.</p>
+    <div class="lab-row"><button class="btn primary" type="button" id="runBfs">Run BFS</button><button class="btn primary" type="button" id="runAstar">Run A* (Manhattan)</button><button class="btn" type="button" id="clearGrid">Clear</button></div>
+    <div style="overflow-x:auto"><canvas id="gridCanvas" width="640" height="320" style="max-width:100%;height:auto;display:block;border-radius:10px" aria-label="Grid search visualisation"></canvas></div>
+    <div class="lab-out" id="searchOut" aria-live="polite">Press a button to start.</div>
+  </div>
+
+  <h3>Python: breadth-first search</h3>
+  <pre class="code"><span class="k">from</span> collections <span class="k">import</span> deque
+
+<span class="k">def</span> bfs(graph, start, goal):
+    queue = deque([(start, [start])])      <span class="c"># frontier holds (state, path)</span>
+    visited = {start}
+    <span class="k">while</span> queue:
+        state, path = queue.popleft()      <span class="c"># FIFO: oldest plan first</span>
+        <span class="k">if</span> state == goal:
+            <span class="k">return</span> path
+        <span class="k">for</span> nxt <span class="k">in</span> graph[state]:
+            <span class="k">if</span> nxt <span class="k">not in</span> visited:
+                visited.add(nxt)
+                queue.append((nxt, path + [nxt]))
+    <span class="k">return None</span>
+
+graph = {"A":["B","C"], "B":["D","E"], "C":["F"], "D":[], "E":["G"], "F":[], "G":[]}
+print(bfs(graph, "A", "G"))   <span class="c"># ['A', 'B', 'E', 'G']</span></pre>
+  <p class="code-cap">Change <code>popleft()</code> to <code>pop()</code> and the queue becomes a stack: that one change turns BFS into DFS. Replace the queue with <code>heapq</code> ordered by cost and you get UCS; order by g + h and you get A*.</p>
+
+  <div class="did"><span class="label">Did you know?</span><p>A* was published in 1968 by Peter Hart, Nils Nilsson and Bertram Raphael at the Stanford Research Institute. It was created for Shakey, one of the first mobile robots that could plan its own moves. Map apps, game characters and warehouse robots still use descendants of it.</p></div>
+  <div class="myth">
+    <div class="m"><span class="label">Myth</span><p>A* always finds the best route, whatever heuristic you give it.</p></div>
+    <div class="f"><span class="label">Fact</span><p>A* is guaranteed optimal only when the heuristic never overestimates (admissible), and for graph search, when it is consistent.</p></div>
+  </div>
+  <div class="recap"><span class="label">Remember</span><ul>
+    <li>One loop, different frontier rules: FIFO = BFS, LIFO = DFS, cheapest g = UCS, cheapest g + h = A*.</li>
+    <li>BFS finds the fewest steps; UCS and A* find the lowest cost.</li>
+    <li>A good admissible heuristic keeps A* optimal and makes it explore far less.</li>
+  </ul></div>
+  <div class="quiz" data-quiz="ch2"></div>
+</div>
+</section>
+
+<!-- ============ CHAPTER 3 ============ -->
+<section class="chapter" id="ch3">
+<div class="wrap prose">
+  <div class="ch-head"><div class="ch-num">03</div><div class="ch-meta"><span class="label">Week 3 · Local search and constraint satisfaction</span><h2>The Land of Hills and Puzzles</h2></div></div>
+  <p class="ch-lede">Sometimes the path does not matter at all. Only the final arrangement does.</p>
+  <div class="story">
+    <svg aria-hidden="true"><use href="#bot"/></svg>
+    <div><p>In the third land Tulpar became a courier in Astana. It had to visit QAIRU, Bäiterek, EXPO, the Botanical Garden, Khan Shatyr, the National Museum, the railway station and the airport, then return. Its first route was 76 km. "There are thousands of possible orders," it sighed. <span class="say">"Then do not search for a path to an answer,"</span> said Bürkit. <span class="say">"Take any complete answer and keep improving it. Swap two stops. Is it shorter? Keep it."</span> After one swap, the route was 68 km.</p></div>
+  </div>
+
+  <h3>Local search: improve a complete configuration</h3>
+  <p>In Chapter 2 the answer was a path. In problems like the <b>travelling salesperson problem (TSP)</b>, <b>n-queens</b> or a timetable, the answer is a complete arrangement and the way we reached it is irrelevant. <span class="term">Local search</span> keeps one (or a few) complete candidate solutions and moves to better <span class="term">neighbours</span>. It uses very little memory, because it does not store a frontier.</p>
+  <dl class="terms">
+    <div><dt>State</dt><dd>One complete candidate, e.g. a full delivery route.</dd></div>
+    <div><dt>Neighbour</dt><dd>A small change to it: swap two cities, reverse a segment (2-opt), move one queen in its column.</dd></div>
+    <div><dt>Objective function</dt><dd>One number that scores a state: total route length to minimise, or "fitness" to maximise.</dd></div>
+  </dl>
+
+  <h3>Hill climbing and its traps</h3>
+  <p><span class="term">Hill climbing</span> repeatedly moves to the best neighbour and stops when no neighbour is better. On the list of values [1, 3, 5, 8, 6, 4, 2], starting at index 0, it climbs 1 → 3 → 5 → 8 and stops, because both neighbours of 8 (5 and 6) are lower. That is fast and greedy. It can also get stuck:</p>
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 680 230" width="680" role="img" aria-label="An objective landscape with a local maximum, a plateau, and a higher global maximum">
+        <path d="M10 200 C60 190 80 120 130 115 C175 112 190 175 235 170 C270 166 280 135 330 135 L420 135 C460 135 480 60 540 40 C590 25 620 120 670 190" fill="none" class="st-sky" stroke-width="3"/>
+        <circle cx="130" cy="115" r="7" class="s-gold"/><text x="130" y="98" text-anchor="middle" class="s-ink" font-size="12">local maximum</text>
+        <path d="M330 135H420" class="st-gold" stroke-width="5" stroke-linecap="round"/><text x="375" y="122" text-anchor="middle" class="s-ink" font-size="12">plateau</text>
+        <circle cx="545" cy="39" r="7" class="s-steppe"/><text x="545" y="24" text-anchor="middle" class="s-ink" font-size="12">global maximum</text>
+        <use href="#bot" x="98" y="72" width="30" height="30" style="color:var(--ink)"/>
+        <text x="340" y="220" text-anchor="middle" class="s-soft" font-size="11">state space →</text>
+        <text x="14" y="20" class="s-soft" font-size="11">objective ↑</text>
+      </svg>
+    </div>
+    <figcaption>Hill climbing stops at the first peak it reaches. A <b>plateau</b> gives no direction; a <b>ridge</b> needs a sequence of moves that no single neighbour offers.</figcaption>
+  </figure>
+  <ul>
+    <li><b>Random-restart hill climbing</b> runs hill climbing from several random starts and keeps the best result. Different starts fall into different "basins", so one of them may reach the global peak.</li>
+    <li><b>Simulated annealing</b> sometimes accepts a worse move, with probability e<sup>ΔE/T</sup>, where ΔE &lt; 0 is how much worse the move is and T is a "temperature" that slowly decreases. Early on (high T) it explores; later (low T) it behaves greedily. The name comes from metallurgy, where metal cooled slowly forms a stronger structure.</li>
+    <li><b>Local beam search</b> keeps k states at once and chooses the best k from all their neighbours, so a good region found by one search attracts the others.</li>
+    <li><b>Genetic algorithms</b> keep a population, select the fittest, combine pairs (<i>crossover</i>) and add random changes (<i>mutation</i>), generation after generation.</li>
+    <li><b>Gradient descent</b> works in continuous spaces: x ← x − α ∇f(x), stepping against the slope with step size α (the learning rate). This same idea trains the neural networks of Chapter 9.</li>
+  </ul>
+  <div class="worked"><span class="label">Worked example · annealing acceptance</span>
+    <p>A neighbour is worse by ΔE = −2.</p>
+    <ol>
+      <li>At high temperature T = 10: P(accept) = e<sup>−2/10</sup> = e<sup>−0.2</sup> ≈ <b>0.82</b>. The bad move is usually accepted, so the search can cross a valley.</li>
+      <li>At low temperature T = 1: P(accept) = e<sup>−2</sup> ≈ <b>0.14</b>. The search is now mostly greedy.</li>
+      <li>A better move (ΔE &gt; 0) is always accepted. In the courier story, 76 km → 68 km is an improvement, so every method accepts it.</li>
+    </ol>
+  </div>
+  <pre class="code"><span class="k">import</span> random, math
+
+<span class="k">def</span> anneal(values, start, T=10.0):
+    current = start
+    <span class="k">while</span> T &gt; 0.1:
+        nxt = min(max(current + random.choice([-1, 1]), 0), len(values) - 1)
+        dE = values[nxt] - values[current]          <span class="c"># maximisation</span>
+        <span class="k">if</span> dE &gt; 0 <span class="k">or</span> random.random() &lt; math.exp(dE / T):
+            current = nxt
+        T *= 0.95                                    <span class="c"># cooling schedule</span>
+    <span class="k">return</span> current
+
+landscape = [1, 3, 5, 4, 2, 6, 9, 7, 3]
+print(anneal(landscape, 0))   <span class="c"># often ends at index 6 (value 9), beyond the local peak 5</span></pre>
+  <p class="code-cap">The result is random. Run it several times: hill climbing from index 0 always stops at 5, while annealing often reaches 9.</p>
+
+  <h3>Constraint satisfaction problems (CSP)</h3>
+  <p>Some puzzles are best described by rules rather than by a path. A <span class="term">CSP</span> has <b>variables</b>, a <b>domain</b> of possible values for each, and <b>constraints</b> that say which combinations are allowed. A solution assigns a value to every variable without breaking any constraint.</p>
+  <div class="worked"><span class="label">Example · a small QAIRU timetable</span>
+    <p><b>Variables:</b> the lectures AI, Math, Physics, Python. <b>Domain:</b> time slots {Mon 9:00, Mon 11:00, Tue 9:00}. <b>Constraints:</b> AI and Python share a teacher, so AI ≠ Python; Math and Physics use the same room, so Math ≠ Physics; the same student group takes AI and Math, so AI ≠ Math.</p>
+    <ol>
+      <li><b>Backtracking search</b> assigns one variable at a time and goes back as soon as a constraint fails.</li>
+      <li><b>MRV (minimum remaining values)</b>: pick the variable with the fewest legal values left; it is the most likely to fail, so we find out early.</li>
+      <li><b>Forward checking</b>: after AI = Mon 9:00, remove Mon 9:00 from Python and Math at once.</li>
+      <li>One solution: AI = Mon 9:00, Math = Mon 11:00, Physics = Mon 9:00, Python = Mon 11:00.</li>
+    </ol>
+  </div>
+  <p>Large real timetables are often solved with local search on a cost such as <code>Cost = 100·T + 100·R + 20·S + 5·W</code> (teacher clashes, room clashes, student-group clashes, wasted gaps), where hard constraints get large weights. The <b>min-conflicts</b> heuristic, which moves a variable to the value with the fewest conflicts, is very effective on puzzles such as n-queens.</p>
+
+  <div class="did"><span class="label">Did you know?</span><p>According to Russell and Norvig's textbook, the min-conflicts method solves even the million-queens problem in about 50 steps on average after its initial assignment.</p></div>
+  <div class="myth">
+    <div class="m"><span class="label">Myth</span><p>Simulated annealing is just random guessing.</p></div>
+    <div class="f"><span class="label">Fact</span><p>It is guided search. It always accepts improvements and accepts bad moves less and less often as the temperature falls.</p></div>
+  </div>
+  <div class="recap"><span class="label">Remember</span><ul>
+    <li>Local search improves a whole configuration and keeps almost no memory.</li>
+    <li>Local maxima, plateaus and ridges trap hill climbing; restarts and annealing help.</li>
+    <li>A CSP is variables + domains + constraints; backtracking with MRV and forward checking solves small ones.</li>
+  </ul></div>
+  <div class="quiz" data-quiz="ch3"></div>
+</div>
+</section>
+
+<!-- ============ CHAPTER 4 ============ -->
+<section class="chapter" id="ch4">
+<div class="wrap prose">
+  <div class="ch-head"><div class="ch-num">04</div><div class="ch-meta"><span class="label">Week 4 · Adversarial search and game trees</span><h2>The Land of Rivals</h2></div></div>
+  <p class="ch-lede">When another agent wants the opposite of what you want, the world fights back.</p>
+  <div class="story">
+    <svg aria-hidden="true"><use href="#bot"/></svg>
+    <div><p>In the fourth land a rival robot challenged Tulpar to <b>togyz kumalak</b>, the Kazakh board game of "nine stones", played on two rows of nine holes. Tulpar picked the move that led to the biggest possible score and lost in five turns. <span class="say">"You chose as if your rival would help you,"</span> said Bürkit. <span class="say">"Assume instead that it will always make the move that hurts you most."</span></p></div>
+  </div>
+
+  <h3>Games as search problems</h3>
+  <p>Togyz kumalak, chess and tic-tac-toe are <b>deterministic, two-player, perfect-information, zero-sum</b> games. <span class="term">Zero-sum</span> means one player's gain is the other's loss, so a single number can describe each outcome: MAX wants it high, MIN wants it low. A game is defined by an initial state, whose turn it is, the legal actions, the transition model, a <b>terminal test</b> (is the game over?) and a <b>utility</b> for terminal states, such as +1 win, 0 draw, −1 loss. In a <b>general-sum</b> game, such as a negotiation, players have separate utilities and may partly cooperate.</p>
+
+  <h3>Minimax</h3>
+  <p>The <span class="term">minimax value</span> of a state is the best utility MAX can <i>guarantee</i> if both players play perfectly:</p>
+  <div class="math">V(s) = U(s) if s is terminal   ·   V(s) = max over children if MAX moves   ·   V(s) = min over children if MIN moves</div>
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 660 280" width="660" role="img" aria-label="Minimax tree: MAX root with three MIN children whose leaves are 3,12,8; 2,4,6; 14,5,2. MIN values 3, 2, 2. Root value 3. Alpha-beta prunes leaves 4 and 6.">
+        <g stroke-width="2" class="st-line" fill="none">
+          <path d="M330 52L110 128M330 52L330 128M330 52L550 128"/>
+          <path d="M110 150L50 222M110 150L110 222M110 150L170 222"/>
+          <path d="M330 150L270 222M330 150L330 222M330 150L390 222"/>
+          <path d="M550 150L490 222M550 150L550 222M550 150L610 222"/>
+        </g>
+        <path d="M330 52L110 128" class="st-gold" stroke-width="4"/><path d="M110 150L50 222" class="st-gold" stroke-width="4"/>
+        <polygon points="330,18 360,58 300,58" class="s-sky"/><text x="330" y="52" text-anchor="middle" class="s-card" font-weight="800" font-size="15">3</text>
+        <text x="375" y="40" class="s-sky" font-size="12" font-weight="600">MAX</text>
+        <g>
+          <polygon points="80,128 140,128 110,168" class="s-danger"/><text x="110" y="146" text-anchor="middle" class="s-card" font-weight="800" font-size="15">3</text>
+          <polygon points="300,128 360,128 330,168" class="s-danger"/><text x="330" y="146" text-anchor="middle" class="s-card" font-weight="800" font-size="15">2</text>
+          <polygon points="520,128 580,128 550,168" class="s-danger"/><text x="550" y="146" text-anchor="middle" class="s-card" font-weight="800" font-size="15">2</text>
+          <text x="595" y="146" class="s-danger" font-size="12" font-weight="600">MIN</text>
+        </g>
+        <g font-weight="600" font-size="14">
+          <rect x="34" y="222" width="32" height="28" rx="6" class="s-goldsoft"/><text x="50" y="241" text-anchor="middle" class="s-ink">3</text>
+          <rect x="94" y="222" width="32" height="28" rx="6" class="s-paper2"/><text x="110" y="241" text-anchor="middle" class="s-ink">12</text>
+          <rect x="154" y="222" width="32" height="28" rx="6" class="s-paper2"/><text x="170" y="241" text-anchor="middle" class="s-ink">8</text>
+          <rect x="254" y="222" width="32" height="28" rx="6" class="s-paper2"/><text x="270" y="241" text-anchor="middle" class="s-ink">2</text>
+          <rect x="314" y="222" width="32" height="28" rx="6" class="s-paper2" stroke-dasharray="4 3" opacity=".45"/><text x="330" y="241" text-anchor="middle" class="s-soft" opacity=".6">4</text>
+          <rect x="374" y="222" width="32" height="28" rx="6" class="s-paper2" opacity=".45"/><text x="390" y="241" text-anchor="middle" class="s-soft" opacity=".6">6</text>
+          <rect x="474" y="222" width="32" height="28" rx="6" class="s-paper2"/><text x="490" y="241" text-anchor="middle" class="s-ink">14</text>
+          <rect x="534" y="222" width="32" height="28" rx="6" class="s-paper2"/><text x="550" y="241" text-anchor="middle" class="s-ink">5</text>
+          <rect x="594" y="222" width="32" height="28" rx="6" class="s-paper2"/><text x="610" y="241" text-anchor="middle" class="s-ink">2</text>
+        </g>
+        <path d="M312 205L408 205" class="st-danger" stroke-width="3"/><text x="360" y="272" text-anchor="middle" class="s-danger" font-size="12">pruned by alpha–beta</text>
+      </svg>
+    </div>
+    <figcaption>MIN takes the smallest child: min(3, 12, 8) = 3, min(2, 4, 6) = 2, min(14, 5, 2) = 2. MAX then takes max(3, 2, 2) = 3 and plays the left move.</figcaption>
+  </figure>
+  <p>Why doesn't MAX aim for the 14 in the right branch? Because MIN chooses there, and MIN would pick 2. Minimax evaluates what MAX can guarantee, not the largest number visible somewhere in the tree. The cost is high: with branching factor b and depth m, minimax looks at O(b<sup>m</sup>) states. Chess has roughly 35 legal moves per position, so full search is impossible.</p>
+
+  <h3>Alpha–beta pruning</h3>
+  <p>Alpha–beta returns <b>the same decision as minimax</b> while skipping branches that cannot change it. It carries two numbers down the tree:</p>
+  <dl class="terms">
+    <div><dt>α (alpha)</dt><dd>The best value MAX can already guarantee on the current path. Starts at −∞.</dd></div>
+    <div><dt>β (beta)</dt><dd>The best value MIN can already guarantee on the current path. Starts at +∞.</dd></div>
+    <div><dt>Prune when α ≥ β</dt><dd>The remaining children cannot affect the choice at the root.</dd></div>
+  </dl>
+  <div class="worked"><span class="label">Worked example · the tree above</span>
+    <ol>
+      <li>Left MIN node: sees 3, 12, 8 → value 3. Back at the root, α = 3.</li>
+      <li>Middle MIN node: its first leaf is 2, so this node's value is at most 2. MAX already has 3 elsewhere, so 2 ≤ α: stop. Leaves 4 and 6 are never examined.</li>
+      <li>Right MIN node: 14, then 5, then 2. No cut is possible until the last leaf, so all three are examined. The root value is still 3.</li>
+    </ol>
+  </div>
+  <p><b>Move ordering</b> matters: if the best moves are tried first, bounds tighten sooner and alpha–beta can examine about O(b<sup>m/2</sup>) nodes, which effectively doubles the depth searchable in the same time.</p>
+
+  <h3>Real games: depth limits and evaluation functions</h3>
+  <p>Real programs stop at a depth limit and score the position with an <span class="term">evaluation function</span>, often a weighted sum of features: Eval(s) = w₁f₁(s) + w₂f₂(s) + … For chess the features might be material, mobility, king safety and centre control. A danger of depth limits is the <span class="term">horizon effect</span>: a disaster just beyond the depth limit stays invisible, so a position looks good one move before it collapses.</p>
+
+  <h3>Expectimax: when the opponent is chance</h3>
+  <p>If outcomes depend on dice, slipping wheels or a random ghost in Pac-Man, worst-case thinking is too pessimistic. <span class="term">Expectimax</span> replaces MIN nodes with <b>chance nodes</b> that take the probability-weighted average: V(chance) = Σ P(s′)·V(s′).</p>
+  <div class="worked"><span class="label">Worked example · a chance node</span>
+    <p>Outcomes 8, 24 and −12 with probabilities 1/2, 1/3 and 1/6: (1/2)·8 + (1/3)·24 + (1/6)·(−12) = 4 + 8 − 2 = <b>10</b>.</p>
+  </div>
+  <div class="tbl"><table><thead><tr><th></th><th>Minimax</th><th>Expectimax</th></tr></thead><tbody>
+    <tr><td>Uncontrolled node</td><td>MIN: worst case for us</td><td>CHANCE: average outcome</td></tr>
+    <tr><td>Good model of</td><td>A clever, hostile opponent</td><td>Dice, noise, random behaviour</td></tr>
+    <tr><td>Risk if wrong</td><td>Too pessimistic against a random world</td><td>Dangerously optimistic against a real adversary</td></tr>
+  </tbody></table></div>
+
+  <pre class="code"><span class="k">def</span> alphabeta(node, alpha, beta, maximizing):
+    <span class="k">if</span> isinstance(node, int):              <span class="c"># leaf = terminal utility</span>
+        <span class="k">return</span> node
+    <span class="k">if</span> maximizing:
+        value = float("-inf")
+        <span class="k">for</span> child <span class="k">in</span> node:
+            value = max(value, alphabeta(child, alpha, beta, False))
+            alpha = max(alpha, value)
+            <span class="k">if</span> alpha &gt;= beta: <span class="k">break</span>          <span class="c"># prune</span>
+        <span class="k">return</span> value
+    value = float("inf")
+    <span class="k">for</span> child <span class="k">in</span> node:
+        value = min(value, alphabeta(child, alpha, beta, True))
+        beta = min(beta, value)
+        <span class="k">if</span> alpha &gt;= beta: <span class="k">break</span>
+    <span class="k">return</span> value
+
+tree = [[3, 12, 8], [2, 4, 6], [14, 5, 2]]
+print(alphabeta(tree, float("-inf"), float("inf"), True))   <span class="c"># 3</span></pre>
+
+  <div class="did"><span class="label">Did you know?</span><p>IBM's Deep Blue defeated world chess champion Garry Kasparov in 1997. Checkers was "solved" in 2007 by Jonathan Schaeffer's team: with perfect play from both sides it is a draw. In 2016 DeepMind's AlphaGo beat Lee Sedol at Go 4–1 by combining tree search with neural-network evaluation.</p></div>
+  <div class="myth">
+    <div class="m"><span class="label">Myth</span><p>Alpha–beta pruning is a shortcut that sometimes gives a worse move than minimax.</p></div>
+    <div class="f"><span class="label">Fact</span><p>Alpha–beta always returns the same root value and move as minimax. It only skips work that cannot change the answer.</p></div>
+  </div>
+  <div class="recap"><span class="label">Remember</span><ul>
+    <li>Minimax backs values up the tree: MIN takes the minimum, MAX the maximum.</li>
+    <li>Alpha–beta prunes when α ≥ β and never changes the result.</li>
+    <li>Use evaluation functions at a depth limit; use expectimax when uncertainty is chance, not an enemy.</li>
+  </ul></div>
+  <div class="quiz" data-quiz="ch4"></div>
+</div>
+</section>
+
+<!-- ============ CHAPTER 5 ============ -->
+<section class="chapter" id="ch5">
+<div class="wrap prose">
+  <div class="ch-head"><div class="ch-num">05</div><div class="ch-meta"><span class="label">Week 5 · Markov decision processes and reinforcement learning</span><h2>The Land of Long Journeys</h2></div></div>
+  <p class="ch-lede">When actions have uncertain results and rewards come later, a single path is no longer enough. You need a policy.</p>
+  <div class="story">
+    <svg aria-hidden="true"><use href="#bot"/></svg>
+    <div><p>Winter came to the fifth land, and Astana's pavements turned to ice. When Tulpar tried to move right, it went right 80% of the time, but slipped up 10% of the time and down 10% of the time. Its carefully planned path was useless after the first slip. <span class="say">"Stop memorising paths,"</span> said Bürkit. <span class="say">"Learn what to do in every place you might end up."</span></p></div>
+  </div>
+
+  <h3>The MDP model</h3>
+  <p>A <span class="term">Markov decision process (MDP)</span> describes sequential decisions under uncertainty with five parts:</p>
+  <dl class="terms">
+    <div><dt>States S</dt><dd>What the agent needs to know, e.g. grid position, or (battery charge, price, hour).</dd></div>
+    <div><dt>Actions A</dt><dd>The available choices: UP, DOWN, LEFT, RIGHT; or CHARGE, HOLD, DISCHARGE.</dd></div>
+    <div><dt>Transition model T(s′ | s, a)</dt><dd>The probability of reaching s′ after doing a in s. "Markov" means it depends only on the current state, not on the history.</dd></div>
+    <div><dt>Reward R(s, a, s′)</dt><dd>Immediate feedback, e.g. +10 at the goal, −10 in danger, −1 per step.</dd></div>
+    <div><dt>Discount γ (gamma)</dt><dd>A number between 0 and 1 that sets how much future rewards matter.</dd></div>
+  </dl>
+  <p>The answer to an MDP is a <span class="term">policy</span> π: a rule that says what to do in each state, π(s) = a. If Tulpar slips, the policy still tells it what to do next. Search returns a path; an MDP returns a policy.</p>
+
+  <h3>Return, value and the Bellman equation</h3>
+  <p>The agent maximises the <span class="term">return</span>, the discounted sum of future rewards: G = R₁ + γR₂ + γ²R₃ + … With rewards 5, 10, 20 and γ = 0.9, G = 5 + 0.9·10 + 0.81·20 = <b>30.2</b>. The discount factor changes a lot: a reward of 100 that arrives 10 steps later is worth about 0.10 today if γ = 0.5, 34.87 if γ = 0.9, and 90.44 if γ = 0.99.</p>
+  <p><b>Reward is not value.</b> Reward is what you get right now. The <span class="term">value</span> V(s) is the expected return from state s onward. A state next to the goal may have reward 0 and still be very valuable. The <span class="term">Q-value</span> Q(s, a) is the expected return if you take action a in s and then act well. The <span class="term">Bellman equation</span> breaks the future into "now + later":</p>
+  <div class="math">V*(s) = max over a of  Σ T(s′|s,a) · [ R(s,a,s′) + γ · V*(s′) ]</div>
+  <div class="worked"><span class="label">Worked example · Bellman on ice</span>
+    <p>Moving RIGHT reaches a GOOD state (V = 10) with probability 0.8 and a BAD state (V = −5) with probability 0.2. Each step costs −1 and γ = 0.9.</p>
+    <ol>
+      <li>Good branch: 0.8 × (−1 + 0.9 × 10) = 0.8 × 8 = 6.4</li>
+      <li>Bad branch: 0.2 × (−1 + 0.9 × (−5)) = 0.2 × (−5.5) = −1.1</li>
+      <li>Q(s, RIGHT) = 6.4 − 1.1 = <b>5.3</b></li>
+    </ol>
+  </div>
+
+  <h3>Planning when the model is known</h3>
+  <ul>
+    <li><b>Value iteration</b> starts with V = 0 and applies the Bellman update to every state, again and again, until values stop changing. Value spreads backwards from the goal. In a 4-state chain with goal value 10, step cost −1 and γ = 0.9, the values become 8, then 6.2, then 4.58 as information travels back one state per sweep.</li>
+    <li><b>Policy iteration</b> alternates two steps: <i>evaluate</i> the current policy (compute V<sup>π</sup>), then <i>improve</i> it by choosing in each state the action with the best one-step look-ahead. It stops when the policy no longer changes.</li>
+  </ul>
+
+  <h3>Reinforcement learning: when the model is unknown</h3>
+  <p>Often nobody knows T or R exactly. What is the probability that a motor fails tomorrow given its vibration? <span class="term">Reinforcement learning (RL)</span> learns from experience instead: the agent acts, sees (s, a, r, s′) and updates its estimates. There are no labels saying "this was the right action", and feedback can be delayed by many steps.</p>
+  <p>RL has to balance <span class="term">exploration</span> (try something new to learn more) and <span class="term">exploitation</span> (use what seems best now). The simplest method is <b>ε-greedy</b>: with probability ε take a random action, otherwise the best known one.</p>
+  <p><b>Temporal-difference (TD) learning</b> updates an estimate using one step of experience and the next estimate (this reuse of an estimate is called bootstrapping). <b>Q-learning</b> applies this to action values:</p>
+  <div class="math">Q(s,a) ← Q(s,a) + α · [ r + γ · max<sub>a′</sub> Q(s′,a′) − Q(s,a) ]</div>
+  <div class="worked"><span class="label">Worked example · one Q-learning update</span>
+    <p>Q(A, RIGHT) = 4, reward r = 2, best next value max Q(B, ·) = 8, γ = 0.9, α = 0.5.</p>
+    <ol>
+      <li>Target = 2 + 0.9 × 8 = 9.2</li>
+      <li>TD error = 9.2 − 4 = 5.2 (better than expected)</li>
+      <li>New Q = 4 + 0.5 × 5.2 = <b>6.6</b></li>
+    </ol>
+  </div>
+  <div class="tbl"><table><thead><tr><th>Symbol</th><th>Name</th><th>Question it answers</th></tr></thead><tbody>
+    <tr><td>α</td><td>Learning rate</td><td>How much should one new experience change my estimate?</td></tr>
+    <tr><td>γ</td><td>Discount factor</td><td>How much do future rewards matter now?</td></tr>
+    <tr><td>ε</td><td>Exploration rate</td><td>How often should I try something other than my current best?</td></tr>
+  </tbody></table></div>
+  <p><b>SARSA</b> is almost the same as Q-learning, but its target uses the action the agent actually takes next, Q(s′, a′), instead of the maximum. That makes SARSA <i>on-policy</i> (it learns the value of how it really behaves, exploration included) and Q-learning <i>off-policy</i> (it learns the value of the greedy policy while exploring).</p>
+
+  <div class="lab" id="labQ"><span class="label">Try it · train a Q-learner</span>
+    <p style="font-size:.95rem">Five states in a row. Tulpar starts at state 0; state 4 is the charging station (+10). Every other step costs −1. Settings: α = 0.5, γ = 0.9, ε = 0.2. Train and watch the Q-table and the arrows (the learned policy) change.</p>
+    <div class="lab-row"><button class="btn primary" type="button" id="q1">Train 1 episode</button><button class="btn primary" type="button" id="q50">Train 50 episodes</button><button class="btn" type="button" id="qReset">Reset</button></div>
+    <div id="qView"></div>
+    <div class="lab-out" id="qOut" aria-live="polite">Episodes trained: 0</div>
+  </div>
+
+  <h3>Beyond tables: deep reinforcement learning</h3>
+  <p>A battery controller with 10 charge levels, 20 prices, 20 demand levels, 20 solar levels and 24 hours already has 1,920,000 states. Tables cannot scale to images or continuous sensors. <b>Deep Q-Networks (DQN)</b> replace the table with a neural network that estimates Q(s, a). <b>Policy-gradient</b> methods learn the policy directly, which suits continuous actions like steering. <b>Actor–critic</b> methods combine both: the actor chooses actions, the critic judges them.</p>
+  <p><b>Safety note.</b> A badly designed reward can be "hacked": the agent maximises the number, not what we meant. Real systems keep hard safety limits outside the reward, train in simulators first, and keep a human able to override.</p>
+
+  <div class="did"><span class="label">Did you know?</span><p>In 1992 Gerald Tesauro's TD-Gammon learned to play backgammon at a strong level mainly by playing against itself with TD learning. In 2015 DeepMind's DQN learned to play dozens of Atari games directly from screen pixels.</p></div>
+  <div class="myth">
+    <div class="m"><span class="label">Myth</span><p>An RL agent should always take the action with the highest reward right now.</p></div>
+    <div class="f"><span class="label">Fact</span><p>RL maximises long-term return. Paying for maintenance today (−15) can be right if it prevents a −200 breakdown later.</p></div>
+  </div>
+  <div class="recap"><span class="label">Remember</span><ul>
+    <li>An MDP = states, actions, transitions, rewards, discount. Its solution is a policy.</li>
+    <li>Bellman: value now = reward + discounted value later. Value and policy iteration use it when the model is known.</li>
+    <li>Q-learning learns from experience: move Q partway (α) toward r + γ·max Q(s′, ·).</li>
+  </ul></div>
+  <div class="quiz" data-quiz="ch5"></div>
+</div>
+</section>
+
+<!-- ============ CHAPTER 6 ============ -->
+<section class="chapter" id="ch6">
+<div class="wrap prose">
+  <div class="ch-head"><div class="ch-num">06</div><div class="ch-meta"><span class="label">Week 6 · Probability and Bayesian networks</span><h2>The Land of Fog</h2></div></div>
+  <p class="ch-lede">Real sensors are noisy. Probability lets an agent hold a degree of belief instead of a false certainty.</p>
+  <div class="story">
+    <svg aria-hidden="true"><use href="#eagle"/></svg>
+    <div><p>Fog covered the sixth land. A medical drone landed next to Tulpar, shaking. "My test says the shepherd is ill! The test is 95% accurate!" Bürkit closed his eyes. <span class="say">"And how many shepherds in this valley are ill at all?"</span> "One in a hundred," said the drone. <span class="say">"Then sit down. Let us count before we panic."</span></p></div>
+  </div>
+
+  <h3>The language of uncertainty</h3>
+  <dl class="terms">
+    <div><dt>Random variable</dt><dd>A quantity with uncertain value, e.g. Rain ∈ {true, false} or Weather ∈ {sunny, cloudy, rainy}.</dd></div>
+    <div><dt>Distribution</dt><dd>Probabilities for every value, adding to 1: sunny 0.5, cloudy 0.3, rainy 0.2.</dd></div>
+    <div><dt>Joint probability P(A, B)</dt><dd>The probability that A and B happen together.</dd></div>
+    <div><dt>Conditional P(A | B)</dt><dd>The probability of A once we know B: P(A | B) = P(A, B) / P(B).</dd></div>
+  </dl>
+  <div class="worked"><span class="label">Worked example · conditioning shrinks the world</span>
+    <p>Over 100 days: rain and heavy traffic on 24 days, rain and light traffic on 6, no rain and heavy traffic on 21, no rain and light traffic on 49.</p>
+    <ol>
+      <li>P(Heavy) = (24 + 21) / 100 = 45%.</li>
+      <li>P(Heavy | Rain): look only at the 30 rainy days. 24 of them have heavy traffic: 24 / 30 = <b>80%</b>.</li>
+    </ol>
+    <p>Conditioning changes the denominator from all days to only the days that match the evidence.</p>
+  </div>
+
+  <h3>Bayes' theorem</h3>
+  <p>Bayes' theorem reverses a conditional probability. It turns "how likely is this evidence if the hypothesis is true?" into "how likely is the hypothesis now that I see the evidence?"</p>
+  <div class="math">P(H | E) = P(E | H) · P(H) / P(E)      where   P(E) = P(E|H)·P(H) + P(E|¬H)·P(¬H)</div>
+  <p>P(H) is the <span class="term">prior</span>, P(E | H) the <span class="term">likelihood</span>, P(E) the <span class="term">evidence</span> and P(H | E) the <span class="term">posterior</span>.</p>
+  <div class="worked"><span class="label">Worked example · the drone's test</span>
+    <p>Prevalence P(D) = 1%, sensitivity P(+ | D) = 95%, false-positive rate P(+ | ¬D) = 10%. Imagine 10,000 shepherds:</p>
+    <ol>
+      <li>100 are ill; 95 of them test positive.</li>
+      <li>9,900 are healthy; 10% of them, 990, also test positive.</li>
+      <li>P(D | +) = 95 / (95 + 990) = 95 / 1,085 ≈ <b>8.76%</b>.</li>
+    </ol>
+    <p>A positive result raises the risk from 1% to about 9%. That is worth a second test, not a panic. Forgetting the small prior is called the <b>base-rate fallacy</b>.</p>
+  </div>
+
+  <div class="lab" id="labBayes"><span class="label">Try it · Bayes calculator</span>
+    <div class="slider"><label for="bPrior">Prior: how common is the condition?</label><input type="range" id="bPrior" min="0.1" max="50" step="0.1" value="1"><output id="oPrior">1.0%</output></div>
+    <div class="slider"><label for="bSens">Sensitivity P(+ | ill)</label><input type="range" id="bSens" min="50" max="100" step="0.5" value="95"><output id="oSens">95.0%</output></div>
+    <div class="slider"><label for="bFp">False-positive rate P(+ | healthy)</label><input type="range" id="bFp" min="0.5" max="40" step="0.5" value="10"><output id="oFp">10.0%</output></div>
+    <svg id="bayesBar" viewBox="0 0 600 70" width="100%" height="70" role="img" aria-label="Among positive tests: true positives versus false positives"></svg>
+    <div class="lab-out" id="bayesOut" aria-live="polite"></div>
+  </div>
+
+  <h3>Bayesian networks</h3>
+  <p>A full joint table over n true/false variables needs 2<sup>n</sup> numbers, which is impossible for large n. A <span class="term">Bayesian network</span> is a <b>directed acyclic graph</b> (arrows, no loops) where each node is a variable and each node stores a <b>conditional probability table (CPT)</b> given its parents. The joint distribution factorises into small pieces:</p>
+  <div class="math">P(X₁, …, Xₙ) = Π P(Xᵢ | Parents(Xᵢ))      e.g.   P(R, S, W) = P(R) · P(S | R) · P(W | R, S)</div>
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 660 230" width="660" role="img" aria-label="Bayesian network: Rain points to Sprinkler and to Wet grass; Sprinkler points to Wet grass">
+        <g stroke-width="2.5" class="st-soft" fill="none"><path d="M175 60L300 60"/><path d="M130 85L275 165"/><path d="M370 85L340 150"/></g>
+        <path d="M300 60l-11-6v12z" class="s-soft"/><path d="M276 166l-12 0 6-10z" class="s-soft"/><path d="M338 152l-9 -8 11-2z" class="s-soft"/>
+        <rect x="40" y="35" width="135" height="50" rx="25" class="s-skysoft"/><text x="107" y="66" text-anchor="middle" class="s-sky" font-weight="600">Rain</text>
+        <rect x="300" y="35" width="150" height="50" rx="25" class="s-goldsoft"/><text x="375" y="66" text-anchor="middle" class="s-gold" font-weight="600">Sprinkler</text>
+        <rect x="235" y="150" width="160" height="50" rx="25" class="s-steppesoft"/><text x="315" y="181" text-anchor="middle" class="s-steppe" font-weight="600">Wet grass</text>
+        <g class="t-mono" font-size="11">
+          <text x="40" y="112" class="s-soft">P(R) = 0.20</text>
+          <text x="470" y="52" class="s-soft">P(S | R)  = 0.01</text>
+          <text x="470" y="68" class="s-soft">P(S | ¬R) = 0.40</text>
+          <text x="420" y="150" class="s-soft">P(W | R, S)   = 0.99</text>
+          <text x="420" y="166" class="s-soft">P(W | R, ¬S)  = 0.80</text>
+          <text x="420" y="182" class="s-soft">P(W | ¬R, S)  = 0.90</text>
+          <text x="420" y="198" class="s-soft">P(W | ¬R, ¬S) = 0.00</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption>The rain–sprinkler–wet-grass network. People rarely run the sprinkler when it rains, so Rain also points to Sprinkler.</figcaption>
+  </figure>
+  <div class="worked"><span class="label">Worked example · inference by enumeration</span>
+    <p>The grass is wet. Did it rain? Sum over the hidden Sprinkler variable, then normalise.</p>
+    <ol>
+      <li>Rain = true: 0.20 × [0.01 × 0.99 + 0.99 × 0.80] = 0.20 × 0.8019 = 0.16038</li>
+      <li>Rain = false: 0.80 × [0.40 × 0.90 + 0.60 × 0] = 0.80 × 0.36 = 0.288</li>
+      <li>P(Rain | Wet) = 0.16038 / (0.16038 + 0.288) ≈ <b>35.8%</b>, up from the prior of 20%.</li>
+    </ol>
+  </div>
+  <p>Three small patterns explain how evidence flows through a network. In a <b>chain</b> A → B → C and a <b>fork</b> A ← B → C, knowing B blocks the flow between A and C (they become <span class="term">conditionally independent</span> given B). In a <b>collider</b> A → B ← C, it is the opposite: A and C are independent until B is observed. This is <span class="term">explaining away</span>: if the grass is wet and you learn the sprinkler was on, rain becomes less necessary as an explanation.</p>
+  <h3>Exact and approximate inference</h3>
+  <ul>
+    <li><b>Enumeration</b> sums over every hidden variable, as above. It is exact but repeats work.</li>
+    <li><b>Variable elimination</b> sums out one variable at a time and stores intermediate factors. The elimination order affects speed.</li>
+    <li><b>Rejection sampling</b> simulates the network many times and keeps only samples where the evidence is true. It wastes samples when the evidence is rare.</li>
+    <li><b>Likelihood weighting</b> fixes the evidence and weights each sample by how likely that evidence was.</li>
+    <li><b>Gibbs sampling</b> repeatedly resamples one non-evidence variable given all the others.</li>
+  </ul>
+  <pre class="code"><span class="k">import</span> random
+random.seed(42)
+<span class="k">def</span> p_wet(r, s): <span class="k">return</span> {(1,1):.99, (1,0):.80, (0,1):.90, (0,0):0.0}[(r, s)]
+
+kept = rain_and_wet = 0
+<span class="k">for</span> _ <span class="k">in</span> range(100_000):
+    rain = random.random() &lt; 0.20
+    sprinkler = random.random() &lt; (0.01 <span class="k">if</span> rain <span class="k">else</span> 0.40)
+    wet = random.random() &lt; p_wet(rain, sprinkler)
+    <span class="k">if</span> wet:                       <span class="c"># reject samples that contradict the evidence</span>
+        kept += 1
+        rain_and_wet += rain
+print(rain_and_wet / kept)           <span class="c"># 0.356, close to the exact 0.3577</span></pre>
+
+  <div class="did"><span class="label">Did you know?</span><p>Judea Pearl developed Bayesian networks in the 1980s and received the 2011 Turing Award, the highest prize in computer science, for his work on probabilistic and causal reasoning.</p></div>
+  <div class="myth">
+    <div class="m"><span class="label">Myth</span><p>If a 95%-sensitive test is positive, there is a 95% chance you have the disease.</p></div>
+    <div class="f"><span class="label">Fact</span><p>P(+ | D) and P(D | +) are different. With a rare disease the answer can be under 10%, as the worked example shows.</p></div>
+  </div>
+  <div class="recap"><span class="label">Remember</span><ul>
+    <li>Posterior ∝ likelihood × prior. Always include the false-positive pathway in P(E).</li>
+    <li>A Bayesian network = DAG + CPTs; it stores small local tables instead of one huge joint table.</li>
+    <li>Exact inference sums and normalises; sampling estimates the same answer by counting.</li>
+  </ul></div>
+  <div class="quiz" data-quiz="ch6"></div>
+</div>
+</section>
+
+<!-- ============ CHAPTER 7 ============ -->
+<section class="chapter" id="ch7">
+<div class="wrap prose">
+  <div class="ch-head"><div class="ch-num">07</div><div class="ch-meta"><span class="label">Week 7 · Hidden Markov models and sequential inference</span><h2>The Land of Hidden Things</h2></div></div>
+  <p class="ch-lede">Some things can never be seen directly, only guessed from the clues they leave over time.</p>
+  <div class="story">
+    <svg aria-hidden="true"><use href="#bot"/></svg>
+    <div><p>In the seventh land Tulpar's left wheel motor began to feel strange. It could not look inside the motor; it had only a temperature sensor that said NORMAL or HIGH. The sensor said HIGH. "Am I broken?" Bürkit tilted his head. <span class="say">"One reading is a rumour. Two readings in a row are a story. Let us follow the story, one step at a time."</span></p></div>
+  </div>
+
+  <h3>Markov chains</h3>
+  <p>A <span class="term">Markov chain</span> describes how a state changes over time. The <span class="term">Markov assumption</span> says the next state depends only on the current one: P(X<sub>t+1</sub> | X<sub>t</sub>, X<sub>t−1</sub>, …) = P(X<sub>t+1</sub> | X<sub>t</sub>). The probabilities are stored in a <b>transition matrix</b> whose rows add up to 1.</p>
+  <div class="two">
+    <div class="tbl"><table><thead><tr><th>Now → next</th><th class="num">Healthy</th><th class="num">Faulty</th></tr></thead>
+      <tbody><tr><td>Healthy</td><td class="num">0.90</td><td class="num">0.10</td></tr><tr><td>Faulty</td><td class="num">0.20</td><td class="num">0.80</td></tr></tbody></table></div>
+    <div class="tbl"><table><thead><tr><th>Emission</th><th class="num">NORMAL</th><th class="num">HIGH</th></tr></thead>
+      <tbody><tr><td>Healthy</td><td class="num">0.80</td><td class="num">0.20</td></tr><tr><td>Faulty</td><td class="num">0.30</td><td class="num">0.70</td></tr></tbody></table></div>
+  </div>
+  <p class="code-cap">Left: transition probabilities T. Right: emission probabilities O, how likely each reading is in each hidden state. Note that P(HIGH | Faulty) = 0.7 is not P(Faulty | HIGH); to reverse it we need Bayes' rule.</p>
+  <p>Prediction multiplies the belief vector by the matrix. If today's belief is [Healthy 0.8, Faulty 0.2], tomorrow's is [0.8·0.9 + 0.2·0.2, 0.8·0.1 + 0.2·0.8] = <b>[0.76, 0.24]</b>.</p>
+
+  <h3>Hidden Markov models</h3>
+  <p>A <span class="term">hidden Markov model (HMM)</span> adds observations to a Markov chain. The true state is hidden, but at each time step it produces an observation. An HMM has three ingredients: initial probabilities π (here 80% Healthy, 20% Faulty), the transition matrix T and the emission matrix O.</p>
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 640 200" width="640" role="img" aria-label="HMM structure: hidden states X1 to X4 linked left to right by transitions, each emitting an observation E1 to E4 below">
+        <g class="st-sky" stroke-width="2.5"><path d="M115 60H185M275 60H345M435 60H505"/></g>
+        <g class="s-sky"><path d="M185 60l-10-5v10z"/><path d="M345 60l-10-5v10z"/><path d="M505 60l-10-5v10z"/></g>
+        <g class="st-gold" stroke-width="2.5"><path d="M70 85V125M230 85V125M390 85V125M550 85V125"/></g>
+        <g class="s-gold"><path d="M70 125l-5-10h10z"/><path d="M230 125l-5-10h10z"/><path d="M390 125l-5-10h10z"/><path d="M550 125l-5-10h10z"/></g>
+        <g font-weight="600">
+          <circle cx="70" cy="60" r="25" class="s-skysoft"/><text x="70" y="65" text-anchor="middle" class="s-sky">X₁</text>
+          <circle cx="230" cy="60" r="25" class="s-skysoft"/><text x="230" y="65" text-anchor="middle" class="s-sky">X₂</text>
+          <circle cx="390" cy="60" r="25" class="s-skysoft"/><text x="390" y="65" text-anchor="middle" class="s-sky">X₃</text>
+          <circle cx="550" cy="60" r="25" class="s-skysoft"/><text x="550" y="65" text-anchor="middle" class="s-sky">X₄</text>
+          <rect x="45" y="128" width="50" height="36" rx="8" class="s-goldsoft"/><text x="70" y="151" text-anchor="middle" class="s-gold">E₁</text>
+          <rect x="205" y="128" width="50" height="36" rx="8" class="s-goldsoft"/><text x="230" y="151" text-anchor="middle" class="s-gold">E₂</text>
+          <rect x="365" y="128" width="50" height="36" rx="8" class="s-goldsoft"/><text x="390" y="151" text-anchor="middle" class="s-gold">E₃</text>
+          <rect x="525" y="128" width="50" height="36" rx="8" class="s-goldsoft"/><text x="550" y="151" text-anchor="middle" class="s-gold">E₄</text>
+        </g>
+        <text x="310" y="22" text-anchor="middle" class="s-soft" font-size="11">hidden states (transitions T)</text>
+        <text x="310" y="190" text-anchor="middle" class="s-soft" font-size="11">observations (emissions O)</text>
+      </svg>
+    </div>
+    <figcaption>Horizontal arrows are transitions between hidden states; vertical arrows are emissions of what we can measure.</figcaption>
+  </figure>
+
+  <h3>Four questions an HMM can answer</h3>
+  <div class="tbl"><table><thead><tr><th>Task</th><th>Question</th><th>Our motor after HIGH, HIGH</th></tr></thead><tbody>
+    <tr><td><b>Filtering</b></td><td>What is the state <i>now</i>?</td><td>P(Faulty at t=2) ≈ 72.3%</td></tr>
+    <tr><td><b>Prediction</b></td><td>What will the state be next?</td><td>P(Faulty at t=3) ≈ 60.6%, before reading 3</td></tr>
+    <tr><td><b>Smoothing</b></td><td>What was the state <i>earlier</i>, using later evidence too?</td><td>P(Faulty at t=1) ≈ 67.7%</td></tr>
+    <tr><td><b>Viterbi</b></td><td>Which complete sequence of states is most likely?</td><td>[Faulty, Faulty]</td></tr>
+  </tbody></table></div>
+
+  <div class="worked"><span class="label">Worked example · filtering two HIGH readings</span>
+    <ol>
+      <li><b>Time 1, correct with HIGH.</b> Healthy: 0.8 × 0.2 = 0.16. Faulty: 0.2 × 0.7 = 0.14. Normalise by 0.30 → [53.3%, 46.7%].</li>
+      <li><b>Time 2, predict.</b> Healthy: 0.533 × 0.9 + 0.467 × 0.2 ≈ 0.573. Faulty: 0.533 × 0.1 + 0.467 × 0.8 ≈ 0.427.</li>
+      <li><b>Time 2, correct with HIGH.</b> [0.573 × 0.2, 0.427 × 0.7] = [0.115, 0.299]. Normalise by 0.413 → <b>[27.7%, 72.3%]</b>.</li>
+    </ol>
+    <p>Filtering is always <i>predict, then observe, then correct, then normalise</i>. The motor's real condition may not have changed; our information has.</p>
+  </div>
+  <div class="lab" id="labHmm"><span class="label">Try it · be the filter</span>
+    <p style="font-size:.95rem">Feed Tulpar sensor readings and watch its belief about the hidden motor state. Uses the T and O tables above, starting from 80% Healthy.</p>
+    <div class="lab-row"><button class="btn primary" type="button" id="hHigh">Reading: HIGH</button><button class="btn primary" type="button" id="hNorm">Reading: NORMAL</button><button class="btn" type="button" id="hReset">Reset</button></div>
+    <svg id="hmmBar" viewBox="0 0 600 64" width="100%" height="64" role="img" aria-label="Current belief: healthy versus faulty"></svg>
+    <div class="lab-out" id="hmmOut" aria-live="polite"></div>
+  </div>
+
+  <div class="worked"><span class="label">Worked example · Viterbi by listing every path</span>
+    <p>Path score = π(first) × O(HIGH | first) × T(first → second) × O(HIGH | second).</p>
+    <div class="tbl"><table><thead><tr><th>Path</th><th>Calculation</th><th class="num">Score</th></tr></thead><tbody>
+      <tr><td>Healthy, Healthy</td><td>0.8 × 0.2 × 0.9 × 0.2</td><td class="num">0.0288</td></tr>
+      <tr><td>Healthy, Faulty</td><td>0.8 × 0.2 × 0.1 × 0.7</td><td class="num">0.0112</td></tr>
+      <tr><td>Faulty, Healthy</td><td>0.2 × 0.7 × 0.2 × 0.2</td><td class="num">0.0056</td></tr>
+      <tr><td><b>Faulty, Faulty</b></td><td>0.2 × 0.7 × 0.8 × 0.7</td><td class="num"><b>0.0784</b></td></tr>
+    </tbody></table></div>
+    <p>With long sequences there are too many paths to list, so the Viterbi algorithm keeps, for each state, only the best path ending there, using δ<sub>t</sub>(j) = O<sub>j</sub>(e<sub>t</sub>) × max<sub>i</sub> [δ<sub>t−1</sub>(i) × T<sub>ij</sub>], and then backtracks. Filtering combines alternatives with a <b>sum</b>; Viterbi uses a <b>max</b>.</p>
+  </div>
+  <pre class="code"><span class="k">import</span> numpy <span class="k">as</span> np
+T = np.array([[.9, .1], [.2, .8]])            <span class="c"># transitions: rows = current state</span>
+O = {"High": np.array([.2, .7]), "Normal": np.array([.8, .3])}
+belief = np.array([.8, .2])                   <span class="c"># [Healthy, Faulty]</span>
+<span class="k">for</span> t, reading <span class="k">in</span> enumerate(["High", "High"]):
+    <span class="k">if</span> t &gt; 0:
+        belief = belief @ T                   <span class="c"># predict</span>
+    belief = belief * O[reading]              <span class="c"># correct with the evidence</span>
+    belief = belief / belief.sum()            <span class="c"># normalise</span>
+    print(t + 1, belief.round(3))             <span class="c"># 1 [0.533 0.467] · 2 [0.277 0.723]</span></pre>
+
+  <div class="did"><span class="label">Did you know?</span><p>For decades, most speech-recognition systems were built on HMMs, with hidden states for sounds and observations for acoustic features. Robots use the same filtering idea to estimate where they are from noisy distance sensors; the Kalman filter is its continuous-valued relative.</p></div>
+  <div class="myth">
+    <div class="m"><span class="label">Myth</span><p>To get the best path, just take the most likely state at each time step.</p></div>
+    <div class="f"><span class="label">Fact</span><p>The most likely individual states do not always form the most likely whole sequence. Viterbi optimises the path as a whole.</p></div>
+  </div>
+  <div class="recap"><span class="label">Remember</span><ul>
+    <li>HMM = initial probabilities π + transitions T + emissions O.</li>
+    <li>Filtering: predict with T, weight by O, normalise. Prediction: multiply by T with no new evidence.</li>
+    <li>Smoothing uses future evidence for a past state; Viterbi finds the single best whole path.</li>
+  </ul></div>
+  <div class="quiz" data-quiz="ch7"></div>
+</div>
+</section>
+
+<!-- ============ CHAPTER 8 ============ -->
+<section class="chapter" id="ch8">
+<div class="wrap prose">
+  <div class="ch-head"><div class="ch-num">08</div><div class="ch-meta"><span class="label">Week 8 · Rational decisions and classical machine learning</span><h2>The Land of Choices and Data</h2></div></div>
+  <p class="ch-lede">Data gives predictions. Utilities turn predictions into wise actions. A model that predicts well is not automatically a system that decides well.</p>
+  <div class="story">
+    <svg aria-hidden="true"><use href="#bot"/></svg>
+    <div><p>In the eighth land a factory foreman asked Tulpar to decide when to repair the machines. "Here are a thousand records of temperature, vibration and breakdowns," he said. <span class="say">"Learn from the past,"</span> said Bürkit, <span class="say">"but do not stop at a prediction. Ask what each mistake would cost."</span></p></div>
+  </div>
+
+  <h3>Expected utility</h3>
+  <p>A <span class="term">utility</span> is a number that says how much we like an outcome. The <span class="term">expected utility</span> of an action averages the utilities of its outcomes, weighted by probability: EU(a) = Σ P(o | a) · U(o). The <b>principle of maximum expected utility (MEU)</b> says a rational agent picks a* = argmax<sub>a</sub> EU(a).</p>
+  <div class="worked"><span class="label">Worked example · two projects</span>
+    <ol>
+      <li>Project A: 90% success (+100), 10% failure (−20). EU = 0.9·100 + 0.1·(−20) = <b>88</b>.</li>
+      <li>Project B: 60% success (+200), 40% failure (−50). EU = 0.6·200 + 0.4·(−50) = <b>100</b>.</li>
+      <li>B is riskier but has higher expected utility, so MEU chooses B. A <i>risk-averse</i> agent, whose utility curve bends down for large losses, might still prefer A.</li>
+    </ol>
+  </div>
+  <div class="worked"><span class="label">Worked example · when to repair a machine</span>
+    <p>Repair costs $2,000 and prevents failure. A failure costs $10,000. If we continue, the expected cost is p × $10,000.</p>
+    <ol>
+      <li>Repair when p × 10,000 &gt; 2,000, that is, when p &gt; 2,000 / 10,000 = <b>0.20</b>.</li>
+      <li>With p = 0.30, expected cost of continuing = $3,000 &gt; $2,000, so repair.</li>
+    </ol>
+    <p>The 20% threshold comes from the costs, not from the model's accuracy. If failures were more expensive, the threshold would drop.</p>
+  </div>
+
+  <h3>From rules to learning</h3>
+  <p>In traditional programming, people write the rules: "if temperature &gt; 80 then alarm". In <span class="term">machine learning (ML)</span>, the algorithm learns a model ŷ = f<sub>θ</sub>(x) from examples, where x are the input <b>features</b>, θ the learned <b>parameters</b> and ŷ the prediction.</p>
+  <div class="tbl"><table><thead><tr><th></th><th>Supervised</th><th>Unsupervised</th><th>Reinforcement</th></tr></thead><tbody>
+    <tr><td>Training signal</td><td>Correct labels</td><td>No labels</td><td>Rewards and penalties</td></tr>
+    <tr><td>Goal</td><td>Predict a target</td><td>Find structure</td><td>Maximise total reward</td></tr>
+    <tr><td>Output</td><td>A class or a number</td><td>Clusters, components</td><td>A policy</td></tr>
+    <tr><td>Factory example</td><td>Will this machine fail?</td><td>Which operating modes exist?</td><td>When should we repair?</td></tr>
+    <tr><td>Algorithms</td><td>Linear and logistic regression, trees, Naive Bayes</td><td>K-means, PCA</td><td>Q-learning, DQN</td></tr>
+  </tbody></table></div>
+
+  <h3>Classical supervised models</h3>
+  <ul>
+    <li><b>Linear regression</b> predicts a number: ŷ = wx + b. Training finds w and b that minimise the <b>mean squared error</b> MSE = (1/n) Σ (yᵢ − ŷᵢ)². Example: if consumption = 5 × temperature + 100, then at 30°C the prediction is 250 kWh.</li>
+    <li><b>Logistic regression</b> predicts a probability for a class: P(y = 1 | x) = σ(wᵀx + b), where the <b>sigmoid</b> σ(z) = 1 / (1 + e<sup>−z</sup>) squeezes any score into (0, 1). σ(0) = 0.5, σ(2) ≈ 0.88, σ(−2) ≈ 0.12. To turn the probability into a yes/no answer we choose a <b>threshold</b> τ; it does not have to be 0.5.</li>
+    <li><b>Naive Bayes</b> classifies with Bayes' rule and the "naive" assumption that features are independent given the class: P(C | x) ∝ P(C) · Π P(xᵢ | C). It is fast, needs little data and works well for text such as spam filtering.</li>
+    <li><b>Decision trees</b> learn readable if-then questions ("temperature &gt; 70°C? vibration &gt; 3?"). Deep trees can <b>overfit</b>.</li>
+    <li><b>Random forests</b> train many trees on random samples of rows and features, then vote. This usually reduces variance and generalises better, at some cost in interpretability.</li>
+  </ul>
+  <div class="worked"><span class="label">Worked example · Naive Bayes spam filter</span>
+    <p>P(spam) = 0.4. The word "free" appears in 30% of spam and 2% of normal mail; "meeting" appears in 5% of spam and 20% of normal mail. An email contains both words.</p>
+    <ol>
+      <li>Spam score: 0.4 × 0.30 × 0.05 = 0.0060</li>
+      <li>Not-spam score: 0.6 × 0.02 × 0.20 = 0.0024</li>
+      <li>P(spam | email) = 0.0060 / (0.0060 + 0.0024) ≈ <b>71%</b>.</li>
+    </ol>
+  </div>
+
+  <h3>Unsupervised learning: K-means</h3>
+  <p><b>K-means</b> groups unlabeled points into K clusters: choose K centres, assign every point to its nearest centre, move each centre to the mean of its points, and repeat until nothing changes. It minimises J = Σ<sub>k</sub> Σ<sub>x∈C<sub>k</sub></sub> ||x − μ<sub>k</sub>||². Scale the features first, or the feature with the biggest numbers dominates the distances. The algorithm finds groups; people still decide what the groups mean.</p>
+
+  <h3>Measuring a classifier honestly</h3>
+  <div class="worked"><span class="label">Worked example · 1,000 machines, 20 real failures</span>
+    <div class="tbl"><table><thead><tr><th></th><th class="num">Predicted failure</th><th class="num">Predicted normal</th></tr></thead><tbody>
+      <tr><td>Actually failed</td><td class="num">TP = 18</td><td class="num">FN = 2</td></tr>
+      <tr><td>Actually normal</td><td class="num">FP = 30</td><td class="num">TN = 950</td></tr>
+    </tbody></table></div>
+    <ol>
+      <li><b>Accuracy</b> = (TP + TN) / N = 968 / 1000 = 96.8%</li>
+      <li><b>Recall</b> = TP / (TP + FN) = 18 / 20 = 90%: how many real failures we caught.</li>
+      <li><b>Precision</b> = TP / (TP + FP) = 18 / 48 = 37.5%: how many alarms were real.</li>
+      <li><b>F1</b> = 2PR / (P + R) = 2 × 0.375 × 0.9 / 1.275 ≈ 0.53</li>
+    </ol>
+    <p>A lazy model that always says "normal" would score 98% accuracy here and catch zero failures. With rare events, look at recall and precision, not accuracy alone.</p>
+  </div>
+  <ul>
+    <li>Split data into <b>training</b> (fit), <b>validation</b> (tune the model and threshold) and <b>test</b> (final, untouched estimate).</li>
+    <li><b>Overfitting</b>: the model memorises noise and fails on new data. <b>Data leakage</b>: information from the test set or the future sneaks into training. <b>Distribution shift</b>: new data differs from training data.</li>
+    <li><b>Calibration</b>: when a calibrated model says 70%, the event happens about 70% of the time. Decisions based on expected cost need calibrated probabilities.</li>
+  </ul>
+  <pre class="code"><span class="k">from</span> sklearn.pipeline <span class="k">import</span> make_pipeline
+<span class="k">from</span> sklearn.preprocessing <span class="k">import</span> StandardScaler
+<span class="k">from</span> sklearn.linear_model <span class="k">import</span> LogisticRegression
+
+X = [[60,1.0],[65,1.5],[70,2.0],[72,2.2],[78,4.0],[82,4.5],[85,5.0],[88,5.5]]  <span class="c"># [temp °C, vibration]</span>
+y = [0, 0, 0, 0, 1, 1, 1, 1]                                                   <span class="c"># 1 = failed</span>
+model = make_pipeline(StandardScaler(), LogisticRegression()).fit(X, y)
+
+p = model.predict_proba([[75, 3.0]])[0, 1]          <span class="c"># predicted failure probability</span>
+choice = "Repair" <span class="k">if</span> p * 10_000 &gt; 2_000 <span class="k">else</span> "Continue"   <span class="c"># cost-based threshold</span>
+print(round(p, 2), choice)                         <span class="c"># 0.46 Repair</span></pre>
+  <p class="code-cap">Prediction and decision are two separate steps: the classifier gives a probability, and the cost model turns it into an action.</p>
+
+  <div class="did"><span class="label">Did you know?</span><p>Arthur Samuel is usually credited with popularising the term "machine learning" in 1959, describing a checkers program that improved by playing against itself.</p></div>
+  <div class="myth">
+    <div class="m"><span class="label">Myth</span><p>The model with the highest accuracy is always the best one to deploy.</p></div>
+    <div class="f"><span class="label">Fact</span><p>A 95%-accurate model with 60% recall can be worse than a 92%-accurate model with 90% recall when missed failures are dangerous. Choose by consequences.</p></div>
+  </div>
+  <div class="recap"><span class="label">Remember</span><ul>
+    <li>Rational action = maximise expected utility (or minimise expected cost).</li>
+    <li>Supervised learns from labels, unsupervised finds structure, RL learns from reward.</li>
+    <li>Evaluate on unseen data and pick metrics that match the cost of each mistake.</li>
+  </ul></div>
+  <div class="quiz" data-quiz="ch8"></div>
+</div>
+</section>
+
+<!-- ============ CHAPTER 9 ============ -->
+<section class="chapter" id="ch9">
+<div class="wrap prose">
+  <div class="ch-head"><div class="ch-num">09</div><div class="ch-meta"><span class="label">Week 9 · Perceptrons and neural networks</span><h2>The Land of Neurons</h2></div></div>
+  <p class="ch-lede">Instead of writing features and rules by hand, a neural network learns its own internal representation from data.</p>
+  <div class="story">
+    <svg aria-hidden="true"><use href="#eagle"/></svg>
+    <div><p>The ninth land was a forest of glowing threads. Each thread carried a little signal, and each knot added up the signals it received and decided whether to pass one on. <span class="say">"This is how you will learn to see,"</span> said Bürkit. <span class="say">"Not one wise rule, but thousands of tiny ones that adjust themselves when they are wrong."</span></p></div>
+  </div>
+
+  <h3>The perceptron</h3>
+  <p>A <span class="term">perceptron</span> is the simplest artificial neuron. It multiplies each input xᵢ by a <b>weight</b> wᵢ, adds a <b>bias</b> b, and passes the result through an <b>activation function</b>. For the classic perceptron the activation is a step:</p>
+  <div class="math">z = w₁x₁ + w₂x₂ + … + b      ŷ = 1 if z &gt; 0, otherwise 0</div>
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 620 200" width="620" role="img" aria-label="Perceptron: inputs x1 and x2 with weights w1, w2 and a bias feed a summation node, then a step activation, giving output y-hat">
+        <g class="st-soft" stroke-width="2"><path d="M75 55L265 95M75 145L265 110M75 100L265 102"/></g>
+        <g font-weight="600">
+          <circle cx="55" cy="55" r="22" class="s-skysoft"/><text x="55" y="60" text-anchor="middle" class="s-sky">x₁</text>
+          <circle cx="55" cy="145" r="22" class="s-skysoft"/><text x="55" y="150" text-anchor="middle" class="s-sky">x₂</text>
+          <circle cx="55" cy="100" r="16" class="s-goldsoft"/><text x="55" y="105" text-anchor="middle" class="s-gold" font-size="12">1</text>
+          <text x="160" y="62" class="s-ink" font-size="12">w₁</text><text x="160" y="146" class="s-ink" font-size="12">w₂</text><text x="160" y="96" class="s-gold" font-size="12">b</text>
+          <circle cx="295" cy="102" r="32" class="s-paper2 st-sky" stroke-width="2"/><text x="295" y="110" text-anchor="middle" class="s-sky" font-size="22">Σ</text>
+          <path d="M327 102H395" class="st-soft" stroke-width="2"/>
+          <rect x="395" y="72" width="80" height="60" rx="10" class="s-paper2"/>
+          <path d="M410 115H433V88H460" fill="none" class="st-gold" stroke-width="3"/>
+          <path d="M475 102H545" class="st-soft" stroke-width="2"/><path d="M545 102l-10-5v10z" class="s-soft"/>
+          <text x="575" y="108" text-anchor="middle" class="s-ink" font-size="16">ŷ</text>
+          <text x="295" y="160" text-anchor="middle" class="s-soft" font-size="11">weighted sum z</text>
+          <text x="435" y="150" text-anchor="middle" class="s-soft" font-size="11">step activation</text>
+        </g>
+      </svg>
+    </div>
+  </figure>
+  <div class="worked"><span class="label">Worked example · a perceptron that computes AND</span>
+    <p>Weights w₁ = w₂ = 1, bias b = −1.5.</p>
+    <ol>
+      <li>(1, 1): z = 1 + 1 − 1.5 = 0.5 &gt; 0 → <b>1</b></li>
+      <li>(1, 0) or (0, 1): z = −0.5 → <b>0</b>; (0, 0): z = −1.5 → <b>0</b></li>
+      <li>Change the bias to −0.5 and the same neuron computes OR.</li>
+    </ol>
+  </div>
+  <p><b>The perceptron learning rule.</b> Show an example, compare the prediction ŷ with the true label y, and nudge the weights: wᵢ ← wᵢ + η (y − ŷ) xᵢ and b ← b + η (y − ŷ), where η is the learning rate. If the prediction is right, nothing changes. If the classes can be separated by a straight line (they are <span class="term">linearly separable</span>), this rule is guaranteed to find a separating line.</p>
+
+  <h3>The XOR problem and hidden layers</h3>
+  <p>XOR outputs 1 when exactly one input is 1. No single straight line separates (0,1) and (1,0) from (0,0) and (1,1), so one perceptron cannot learn it. Marvin Minsky and Seymour Papert made this limitation famous in 1969. The fix is to add a <span class="term">hidden layer</span>:</p>
+  <div class="worked"><span class="label">Worked example · two layers compute XOR</span>
+    <ol>
+      <li>Hidden neuron h₁ = step(x₁ + x₂ − 0.5) computes OR.</li>
+      <li>Hidden neuron h₂ = step(x₁ + x₂ − 1.5) computes AND.</li>
+      <li>Output = step(h₁ − h₂ − 0.5): "OR but not AND". Check (1, 1): h₁ = 1, h₂ = 1, output z = −0.5 → 0. Check (1, 0): h₁ = 1, h₂ = 0, z = 0.5 → 1.</li>
+    </ol>
+  </div>
+  <div class="lab" id="labPerc"><span class="label">Try it · train a perceptron</span>
+    <p style="font-size:.95rem">Choose a logic gate and train with the perceptron rule (η = 0.2, starting from w = [0, 0], b = −0.1). Blue dots should end up on the shaded side of the line, gold dots on the other. AND and OR converge in a few epochs. XOR never does.</p>
+    <div class="lab-row"><button class="btn" type="button" data-gate="AND" aria-pressed="true">AND</button><button class="btn" type="button" data-gate="OR" aria-pressed="false">OR</button><button class="btn" type="button" data-gate="XOR" aria-pressed="false">XOR</button><span style="flex:1"></span><button class="btn primary" type="button" id="pStep">Train 1 epoch</button><button class="btn" type="button" id="pReset">Reset</button></div>
+    <svg id="percPlot" viewBox="0 0 320 320" width="320" style="max-width:100%;align-self:center" role="img" aria-label="Perceptron decision boundary over four input points"></svg>
+    <div class="lab-out" id="percOut" aria-live="polite"></div>
+  </div>
+
+  <h3>Multi-layer neural networks</h3>
+  <p>A <span class="term">multi-layer perceptron (MLP)</span> stacks layers: input → one or more hidden layers → output. Each neuron computes a weighted sum and applies a smooth, non-linear activation such as <b>sigmoid</b>, <b>tanh</b> or <b>ReLU</b>(z) = max(0, z). Without non-linear activations, many layers would collapse into one linear function. With them, a network with enough hidden units can approximate a very wide range of functions; this is the <b>universal approximation</b> result.</p>
+  <div class="worked"><span class="label">Worked example · one neuron's forward pass</span>
+    <p>Inputs x = [2, −1], weights w = [0.5, 0.3], bias b = 0.1.</p>
+    <ol>
+      <li>z = 0.5·2 + 0.3·(−1) + 0.1 = 1 − 0.3 + 0.1 = 0.8</li>
+      <li>ReLU(0.8) = 0.8; sigmoid(0.8) = 1 / (1 + e<sup>−0.8</sup>) ≈ 0.69</li>
+    </ol>
+  </div>
+  <h3>How a network learns</h3>
+  <ol>
+    <li><b>Forward pass</b>: compute predictions from the inputs, layer by layer.</li>
+    <li><b>Loss</b>: measure the error, e.g. mean squared error for numbers or cross-entropy for classes.</li>
+    <li><b>Backpropagation</b>: use the chain rule of calculus to compute how much each weight contributed to the error (the gradient), starting from the output and moving backwards.</li>
+    <li><b>Gradient descent</b>: move every weight a little against its gradient, w ← w − η ∂Loss/∂w, the same idea as in Chapter 3.</li>
+    <li>Repeat over many <b>epochs</b> (passes through the data), usually in small <b>mini-batches</b>.</li>
+  </ol>
+  <p>Networks with many parameters can overfit. Common defences are a validation set with <b>early stopping</b>, <b>dropout</b> (randomly switching off neurons during training) and more data. Special architectures suit special data: <b>convolutional networks (CNNs)</b> share weights across an image to find edges, then shapes, then objects; <b>recurrent networks</b> and <b>transformers</b> handle sequences such as text and sensor streams.</p>
+  <pre class="code"><span class="k">from</span> sklearn.linear_model <span class="k">import</span> Perceptron
+<span class="k">from</span> sklearn.neural_network <span class="k">import</span> MLPClassifier
+
+X = [[0, 0], [0, 1], [1, 0], [1, 1]]
+y_xor = [0, 1, 1, 0]
+
+p = Perceptron(max_iter=1000).fit(X, y_xor)
+print("perceptron:", p.predict(X))   <span class="c"># cannot get all four right</span>
+
+mlp = MLPClassifier(hidden_layer_sizes=(4,), activation="tanh",
+                    solver="lbfgs", random_state=1, max_iter=2000).fit(X, y_xor)
+print("MLP:", mlp.predict(X))         <span class="c"># [0 1 1 0] with a hidden layer</span></pre>
+
+  <div class="did"><span class="label">Did you know?</span><p>Frank Rosenblatt introduced the perceptron in 1958 and built it as a physical machine, the Mark I Perceptron. Deep learning took off in 2012, when the AlexNet network won the ImageNet image-recognition challenge by a large margin, trained on graphics processors (GPUs).</p></div>
+  <div class="myth">
+    <div class="m"><span class="label">Myth</span><p>Artificial neural networks work just like the human brain.</p></div>
+    <div class="f"><span class="label">Fact</span><p>They are loosely inspired by neurons, but they are mathematical functions trained with calculus. Real brains are far more complex and learn in different ways.</p></div>
+  </div>
+  <div class="recap"><span class="label">Remember</span><ul>
+    <li>Perceptron: weighted sum + bias + step. It learns any linearly separable pattern, but not XOR.</li>
+    <li>Hidden layers with non-linear activations make networks far more expressive.</li>
+    <li>Training = forward pass → loss → backpropagation → gradient descent, repeated.</li>
+  </ul></div>
+  <div class="quiz" data-quiz="ch9"></div>
+</div>
+</section>
+
+<!-- ============ CHAPTER 10 ============ -->
+<section class="chapter" id="ch10">
+<div class="wrap prose">
+  <div class="ch-head"><div class="ch-num">10</div><div class="ch-meta"><span class="label">Week 10 · LLMs, generative AI and AI safety</span><h2>The Land of Words and Responsibility</h2></div></div>
+  <p class="ch-lede">Machines can now write, draw and talk. The last lesson is how they do it, where they fail, and who is responsible.</p>
+  <div class="story">
+    <svg aria-hidden="true"><use href="#bot"/></svg>
+    <div><p>In the last land stood a talking stone that answered any question in beautiful sentences. Tulpar asked it the height of Bäiterek. The stone answered confidently, and Bürkit, who had flown over the tower a hundred times, laughed. <span class="say">"It speaks well. That is not the same as speaking truly. A wise robot checks."</span></p></div>
+  </div>
+
+  <h3>What a large language model does</h3>
+  <p>A <span class="term">language model</span> assigns probabilities to the next piece of text given the text so far: P(next token | previous tokens). Text is split into <span class="term">tokens</span>, which are words or pieces of words. Each token becomes a vector of numbers called an <span class="term">embedding</span>, and similar meanings end up with similar vectors. A <span class="term">large language model (LLM)</span> is a very large neural network, usually a <span class="term">transformer</span>, trained on huge amounts of text to predict the next token. It generates text one token at a time, sampling from its predicted distribution and appending the result.</p>
+  <dl class="terms">
+    <div><dt>Transformer and attention</dt><dd>Introduced in the 2017 paper "Attention Is All You Need". <b>Attention</b> lets every token look at every other token and decide which ones matter for its meaning, e.g. what "it" refers to.</dd></div>
+    <div><dt>Pre-training</dt><dd>Learning next-token prediction on a very large text corpus. This is self-supervised: the labels are simply the next words.</dd></div>
+    <div><dt>Fine-tuning and RLHF</dt><dd>Further training on examples of helpful answers, and <b>reinforcement learning from human feedback</b>, where human preferences are turned into a reward signal. This links back to Chapter 5.</dd></div>
+    <div><dt>Context window</dt><dd>How much text the model can read at once. Anything outside it is not "remembered".</dd></div>
+  </dl>
+  <div class="worked"><span class="label">Worked example · temperature when sampling</span>
+    <p>The model gives raw scores (logits) 2, 1 and 0 to the next words "steppe", "city" and "sea". The <b>softmax</b> turns scores into probabilities: pᵢ = e<sup>zᵢ/T</sup> / Σ e<sup>zⱼ/T</sup>, where T is the temperature.</p>
+    <div class="tbl"><table><thead><tr><th>Temperature</th><th class="num">"steppe"</th><th class="num">"city"</th><th class="num">"sea"</th><th>Effect</th></tr></thead><tbody>
+      <tr><td>T = 0.5</td><td class="num">86.7%</td><td class="num">11.7%</td><td class="num">1.6%</td><td>Focused, predictable</td></tr>
+      <tr><td>T = 1</td><td class="num">66.5%</td><td class="num">24.5%</td><td class="num">9.0%</td><td>The model's own distribution</td></tr>
+      <tr><td>T = 2</td><td class="num">50.6%</td><td class="num">30.7%</td><td class="num">18.6%</td><td>More varied, more surprising</td></tr>
+    </tbody></table></div>
+    <p>Just like the temperature in simulated annealing (Chapter 3), a higher T allows less likely choices.</p>
+  </div>
+
+  <h3>Other generative models</h3>
+  <ul>
+    <li><b>Generative vs discriminative</b>: a discriminative model learns P(label | input), e.g. "spam or not?". A generative model learns how the data itself is distributed, so it can produce new examples.</li>
+    <li><b>GANs</b> (generative adversarial networks, 2014): a generator makes fake images and a discriminator tries to catch them. They improve by competing, a small game tree of their own (Chapter 4).</li>
+    <li><b>Diffusion models</b> learn to remove noise step by step. To make an image, they start from pure noise and denoise it, guided by a text prompt.</li>
+  </ul>
+
+  <h3>Limitations you must know</h3>
+  <div class="two">
+    <div class="panel"><h4>Hallucination</h4><p>An LLM can produce fluent, confident text that is false, including invented sources. It predicts likely words, not verified facts.</p></div>
+    <div class="panel"><h4>Bias</h4><p>Models learn patterns, including unfair ones, from their training data, and can repeat stereotypes.</p></div>
+    <div class="panel"><h4>Outdated knowledge</h4><p>A model knows only what was in its training data, up to a cutoff date, unless it is connected to search or documents.</p></div>
+    <div class="panel"><h4>Privacy and security</h4><p>Pasting confidential or personal data into a public chatbot can leak it. Prompts can also be manipulated ("prompt injection").</p></div>
+  </div>
+
+  <h3>AI safety: making AI do what we actually want</h3>
+  <ul>
+    <li><b>Alignment</b>: the system's goals should match human intentions and values.</li>
+    <li><b>Specification gaming</b>: an agent optimises the reward we wrote, not what we meant (Chapter 5).</li>
+    <li><b>Robustness</b>: small changes or <b>adversarial examples</b> (inputs crafted to fool a model) should not cause dangerous failures; models should cope with <b>distribution shift</b>.</li>
+    <li><b>Human oversight</b>: a person must be able to understand, correct and stop high-impact systems. A human who always clicks "accept" is not real oversight.</li>
+    <li><b>Transparency</b>: people should know when they are dealing with AI and when content is synthetic.</li>
+  </ul>
+
+  <h3>The law: Kazakhstan's AI Law</h3>
+  <p>Kazakhstan adopted a dedicated law, <b>"On Artificial Intelligence" (No. 230-VIII ZRK, 17 November 2025)</b>, one of the first comprehensive AI laws in Central Asia. Key ideas from the course lecture:</p>
+  <div class="two">
+    <div class="panel"><h4>Principles</h4><ul><li>Human life, rights and autonomy come first</li><li>Fairness, transparency, accountability</li><li>Privacy, safety and security</li></ul></div>
+    <div class="panel"><h4>Risk and autonomy</h4><ul><li>Risk levels: minimal, medium, high</li><li>Autonomy: low (AI recommends, a person decides), medium (a person can correct or cancel), high (no human correction)</li><li>Assess both, separately</li></ul></div>
+    <div class="panel"><h4>Prohibited and required</h4><ul><li>Manipulative AI that distorts behaviour or pressures people into harmful decisions is prohibited</li><li>Users must be told when AI is used; synthetic results must be labelled</li></ul></div>
+    <div class="panel"><h4>Copyright and data</h4><ul><li>AI-assisted works are protected only where there is a creative human contribution</li><li>Personal-data and privacy rules still apply to training and use</li></ul></div>
+  </div>
+  <p>The lecture's practical playbook for any organisation has seven steps: <b>inventory</b> every AI system, <b>classify</b> its risk, autonomy and data sensitivity, <b>assess</b> privacy, IP, security and fairness, <b>approve</b> an accountable owner, <b>deploy</b> with controls, <b>monitor</b> incidents and drift, and <b>review</b> whenever the model, data, vendor, purpose or law changes. Elsewhere, the European Union's AI Act follows a similar risk-based approach.</p>
+
+  <h3>Physical AI: where it all comes together</h3>
+  <p>For students of Physical AI, the destination is robots like Tulpar. A modern robot perceives with neural networks (Chapter 9), tracks hidden states with filters (Chapter 7), plans routes with search (Chapter 2), decides under uncertainty with expected utility and MDPs (Chapters 5 and 8), and increasingly takes instructions in natural language through language models (this chapter). Safety and law decide whether it may be deployed at all.</p>
+
+  <div class="did"><span class="label">Did you know?</span><p>ChatGPT, released in November 2022, reached an estimated 100 million users in about two months, according to an analysis by the bank UBS. At the time, that made it the fastest-growing consumer app on record.</p></div>
+  <div class="myth">
+    <div class="m"><span class="label">Myth</span><p>An LLM looks answers up in a database, so if it says something confidently, it must be true.</p></div>
+    <div class="f"><span class="label">Fact</span><p>An LLM generates text from patterns learned in training. Confidence is not evidence; important facts need checking against reliable sources.</p></div>
+  </div>
+  <div class="recap"><span class="label">Remember</span><ul>
+    <li>LLMs predict the next token with transformer networks, then are fine-tuned, often with RLHF.</li>
+    <li>Temperature controls randomness; hallucination, bias and privacy are real limits.</li>
+    <li>Safe AI needs alignment, robustness, human oversight, transparency and legal compliance.</li>
+  </ul></div>
+  <div class="quiz" data-quiz="ch10"></div>
+</div>
+</section>
+
+<!-- ============ EPILOGUE ============ -->
+<section class="chapter" id="epilogue">
+<div class="wrap prose">
+  <span class="label" style="color:var(--gold)">Epilogue</span>
+  <h2>The whole map</h2>
+  <div class="story">
+    <svg aria-hidden="true"><use href="#bot"/></svg>
+    <div><p>Tulpar rolled back into the university building. The corridor was blocked again. This time it remembered the map, planned a new route, estimated the chance that the lift was busy, weighed the time against the battery, and delivered the papers four minutes early. Bürkit, on the windowsill, said nothing at all. He did not need to.</p></div>
+  </div>
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 720 300" width="720" role="img" aria-label="Concept map linking the ten chapters: agents lead to search; search leads to local search, games and MDPs; probability feeds HMMs and decisions; decisions feed machine learning; neural networks feed LLMs; safety surrounds all">
+        <rect x="6" y="6" width="708" height="288" rx="18" fill="none" class="st-danger" stroke-width="2" stroke-dasharray="6 6"/>
+        <text x="360" y="286" text-anchor="middle" class="s-danger" font-size="11">10 · safety, ethics and law surround every system</text>
+        <g class="st-soft" stroke-width="2" fill="none">
+          <path d="M130 60H200"/><path d="M310 60H380"/><path d="M490 60H560"/>
+          <path d="M255 80V125"/><path d="M615 80V125"/>
+          <path d="M310 150H380"/><path d="M490 150H560"/>
+          <path d="M490 165L560 225"/><path d="M615 175V215"/><path d="M560 240H490"/>
+        </g>
+        <g font-size="12" font-weight="600">
+          <rect x="20" y="38" width="110" height="44" rx="10" class="s-skysoft"/><text x="75" y="57" text-anchor="middle" class="s-sky">01 Agents</text><text x="75" y="73" text-anchor="middle" class="s-soft" font-size="10">PEAS · rationality</text>
+          <rect x="200" y="38" width="110" height="44" rx="10" class="s-skysoft"/><text x="255" y="57" text-anchor="middle" class="s-sky">02 Search</text><text x="255" y="73" text-anchor="middle" class="s-soft" font-size="10">BFS · UCS · A*</text>
+          <rect x="380" y="38" width="110" height="44" rx="10" class="s-skysoft"/><text x="435" y="57" text-anchor="middle" class="s-sky">04 Games</text><text x="435" y="73" text-anchor="middle" class="s-soft" font-size="10">minimax · α–β</text>
+          <rect x="560" y="38" width="140" height="44" rx="10" class="s-skysoft"/><text x="630" y="57" text-anchor="middle" class="s-sky">05 MDP · RL</text><text x="630" y="73" text-anchor="middle" class="s-soft" font-size="10">Bellman · Q-learning</text>
+          <rect x="200" y="125" width="110" height="50" rx="10" class="s-goldsoft"/><text x="255" y="147" text-anchor="middle" class="s-gold">03 Local · CSP</text><text x="255" y="163" text-anchor="middle" class="s-soft" font-size="10">hill climb · anneal</text>
+          <rect x="380" y="125" width="110" height="50" rx="10" class="s-goldsoft"/><text x="435" y="147" text-anchor="middle" class="s-gold">06 Probability</text><text x="435" y="163" text-anchor="middle" class="s-soft" font-size="10">Bayes · networks</text>
+          <rect x="560" y="125" width="140" height="50" rx="10" class="s-goldsoft"/><text x="630" y="147" text-anchor="middle" class="s-gold">07 HMMs</text><text x="630" y="163" text-anchor="middle" class="s-soft" font-size="10">filtering · Viterbi</text>
+          <rect x="380" y="215" width="110" height="50" rx="10" class="s-steppesoft"/><text x="435" y="237" text-anchor="middle" class="s-steppe">09 Neural nets</text><text x="435" y="253" text-anchor="middle" class="s-soft" font-size="10">perceptron · backprop</text>
+          <rect x="560" y="215" width="140" height="50" rx="10" class="s-steppesoft"/><text x="630" y="237" text-anchor="middle" class="s-steppe">08 Decisions · ML</text><text x="630" y="253" text-anchor="middle" class="s-soft" font-size="10">MEU · classifiers</text>
+          <rect x="200" y="215" width="110" height="50" rx="10" class="s-steppesoft"/><text x="255" y="237" text-anchor="middle" class="s-steppe">10 LLMs</text><text x="255" y="253" text-anchor="middle" class="s-soft" font-size="10">transformers</text>
+        </g>
+        <path d="M380 240H310" class="st-soft" stroke-width="2"/>
+      </svg>
+    </div>
+    <figcaption>How the ideas connect. Search becomes games when there is an opponent and MDPs when there is chance; probability feeds hidden-state tracking and decisions; learning from data grows into neural networks and language models.</figcaption>
+  </figure>
+
+  <h3>AI vs human: who is better at what?</h3>
+  <div class="tbl"><table><thead><tr><th>Task</th><th>Today's AI</th><th>Humans</th></tr></thead><tbody>
+    <tr><td>Searching millions of options (chess, routes)</td><td class="yes">Far faster and more exhaustive</td><td>Rely on intuition and experience</td></tr>
+    <tr><td>Exact probability arithmetic</td><td class="yes">Precise and tireless</td><td>Often fall for the base-rate fallacy</td></tr>
+    <tr><td>Learning from very few examples</td><td>Usually needs lots of data</td><td class="yes">Often learn from one or two examples</td></tr>
+    <tr><td>Common sense in new situations</td><td>Brittle outside training data</td><td class="yes">Flexible and adaptable</td></tr>
+    <tr><td>Knowing when it is wrong</td><td>Can hallucinate confidently</td><td>Better, though imperfect</td></tr>
+    <tr><td>Taking moral and legal responsibility</td><td class="no">Cannot</td><td class="yes">People and organisations remain accountable</td></tr>
+  </tbody></table></div>
+</div>
+</section>
+
+<!-- ============ HISTORY ============ -->
+<section class="chapter" id="history">
+<div class="wrap prose">
+  <span class="label" style="color:var(--gold)">Appendix A</span>
+  <h2>AI history milestones</h2>
+  <ol class="timeline">
+    <li><b>1950</b><p>Alan Turing publishes "Computing Machinery and Intelligence" and proposes the imitation game, now called the Turing test.</p></li>
+    <li><b>1956</b><p>The Dartmouth workshop gives the field its name: artificial intelligence.</p></li>
+    <li><b>1958</b><p>Frank Rosenblatt introduces the perceptron.</p></li>
+    <li><b>1959</b><p>Arthur Samuel's self-improving checkers program popularises the term "machine learning".</p></li>
+    <li><b>1966–72</b><p>Shakey the robot at SRI combines perception, planning and action; A* (1968) is developed for it.</p></li>
+    <li><b>1969</b><p>Minsky and Papert's book <i>Perceptrons</i> shows that one layer cannot learn XOR.</p></li>
+    <li><b>1980s</b><p>Expert systems spread in industry; Judea Pearl develops Bayesian networks; backpropagation is popularised (Rumelhart, Hinton and Williams, 1986).</p></li>
+    <li><b>1989</b><p>Chris Watkins introduces Q-learning.</p></li>
+    <li><b>1992</b><p>TD-Gammon learns backgammon through self-play.</p></li>
+    <li><b>1997</b><p>IBM Deep Blue defeats world chess champion Garry Kasparov.</p></li>
+    <li><b>2012</b><p>AlexNet wins ImageNet and starts the deep learning boom.</p></li>
+    <li><b>2014</b><p>Generative adversarial networks (GANs) are introduced.</p></li>
+    <li><b>2016</b><p>AlphaGo defeats Lee Sedol at Go, 4–1.</p></li>
+    <li><b>2017</b><p>"Attention Is All You Need" introduces the transformer.</p></li>
+    <li><b>2022</b><p>ChatGPT brings large language models to the public.</p></li>
+    <li><b>2024</b><p>The EU AI Act enters into force.</p></li>
+    <li><b>2025</b><p>Kazakhstan adopts its Law "On Artificial Intelligence" (No. 230-VIII ZRK).</p></li>
+  </ol>
+</div>
+</section>
+
+<!-- ============ GLOSSARY ============ -->
+<section class="chapter" id="glossary">
+<div class="wrap prose">
+  <span class="label" style="color:var(--gold)">Appendix B</span>
+  <h2>Glossary</h2>
+  <dl class="gloss">
+    <div><dt>Admissible heuristic</dt><dd>Never overestimates the true remaining cost. <i>CH 2</i></dd></div>
+    <div><dt>Agent</dt><dd>Perceives its environment through sensors and acts through actuators. <i>CH 1</i></dd></div>
+    <div><dt>Alpha–beta pruning</dt><dd>Skips game-tree branches that cannot change the minimax decision. <i>CH 4</i></dd></div>
+    <div><dt>Backpropagation</dt><dd>Computes each weight's gradient with the chain rule, from output to input. <i>CH 9</i></dd></div>
+    <div><dt>Bayes' theorem</dt><dd>P(H|E) = P(E|H)P(H)/P(E): updates belief with evidence. <i>CH 6</i></dd></div>
+    <div><dt>Bayesian network</dt><dd>A DAG of variables with a conditional probability table per node. <i>CH 6</i></dd></div>
+    <div><dt>Bellman equation</dt><dd>Value now = expected immediate reward + discounted value later. <i>CH 5</i></dd></div>
+    <div><dt>BFS / DFS</dt><dd>Search that expands the shallowest / deepest node first. <i>CH 2</i></dd></div>
+    <div><dt>Calibration</dt><dd>Predicted probabilities match observed frequencies. <i>CH 8</i></dd></div>
+    <div><dt>CSP</dt><dd>Constraint satisfaction problem: variables, domains, constraints. <i>CH 3</i></dd></div>
+    <div><dt>Discount factor γ</dt><dd>Weight given to future rewards, between 0 and 1. <i>CH 5</i></dd></div>
+    <div><dt>Embedding</dt><dd>A vector of numbers that represents a token's meaning. <i>CH 10</i></dd></div>
+    <div><dt>Evaluation function</dt><dd>Estimates how good a non-terminal game position is. <i>CH 4</i></dd></div>
+    <div><dt>Expected utility</dt><dd>Probability-weighted average utility of an action's outcomes. <i>CH 8</i></dd></div>
+    <div><dt>Expectimax</dt><dd>Game search where chance nodes average instead of minimising. <i>CH 4</i></dd></div>
+    <div><dt>Exploration vs exploitation</dt><dd>Trying new actions to learn vs using the best known action. <i>CH 5</i></dd></div>
+    <div><dt>Filtering</dt><dd>Estimating the current hidden state from evidence so far. <i>CH 7</i></dd></div>
+    <div><dt>Frontier</dt><dd>The set of nodes waiting to be expanded in a search. <i>CH 2</i></dd></div>
+    <div><dt>Gradient descent</dt><dd>Move parameters against the slope of the loss to reduce it. <i>CH 3, 9</i></dd></div>
+    <div><dt>Hallucination</dt><dd>Fluent but false output from a generative model. <i>CH 10</i></dd></div>
+    <div><dt>Heuristic</dt><dd>An estimate of the cost from a state to the goal. <i>CH 2</i></dd></div>
+    <div><dt>Hidden Markov model</dt><dd>Hidden states with Markov transitions that emit observations. <i>CH 7</i></dd></div>
+    <div><dt>Hill climbing</dt><dd>Local search that always moves to a better neighbour. <i>CH 3</i></dd></div>
+    <div><dt>K-means</dt><dd>Clustering that alternates assigning points and moving centres. <i>CH 8</i></dd></div>
+    <div><dt>Large language model</dt><dd>A huge transformer trained to predict the next token. <i>CH 10</i></dd></div>
+    <div><dt>MDP</dt><dd>States, actions, transition probabilities, rewards and a discount. <i>CH 5</i></dd></div>
+    <div><dt>Minimax</dt><dd>Value assuming both players play optimally. <i>CH 4</i></dd></div>
+    <div><dt>Overfitting</dt><dd>Learning noise in the training data, so new data is predicted poorly. <i>CH 8, 9</i></dd></div>
+    <div><dt>PEAS</dt><dd>Performance, Environment, Actuators, Sensors. <i>CH 1</i></dd></div>
+    <div><dt>Perceptron</dt><dd>A neuron: weighted sum plus bias, then a step function. <i>CH 9</i></dd></div>
+    <div><dt>Policy</dt><dd>A rule that says which action to take in each state. <i>CH 5</i></dd></div>
+    <div><dt>Precision / recall</dt><dd>Share of alarms that are real / share of real cases caught. <i>CH 8</i></dd></div>
+    <div><dt>Q-learning</dt><dd>Model-free RL that learns action values from TD errors. <i>CH 5</i></dd></div>
+    <div><dt>Rational agent</dt><dd>Chooses the action with the best expected performance given its evidence. <i>CH 1</i></dd></div>
+    <div><dt>RLHF</dt><dd>Reinforcement learning from human feedback, used to fine-tune LLMs. <i>CH 10</i></dd></div>
+    <div><dt>Simulated annealing</dt><dd>Local search that sometimes accepts worse moves, less often as it cools. <i>CH 3</i></dd></div>
+    <div><dt>Smoothing</dt><dd>Re-estimating a past hidden state using later evidence. <i>CH 7</i></dd></div>
+    <div><dt>Transformer</dt><dd>A neural network built around attention; the basis of LLMs. <i>CH 10</i></dd></div>
+    <div><dt>UCS</dt><dd>Uniform-cost search: expands the lowest path cost first. <i>CH 2</i></dd></div>
+    <div><dt>Utility</dt><dd>A number expressing how desirable an outcome is. <i>CH 1, 8</i></dd></div>
+    <div><dt>Viterbi algorithm</dt><dd>Finds the most likely complete sequence of hidden states. <i>CH 7</i></dd></div>
+    <div><dt>Zero-sum game</dt><dd>One player's gain is exactly the other's loss. <i>CH 4</i></dd></div>
+  </dl>
+</div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="chapter" id="about">
+<div class="wrap prose">
+  <span class="label" style="color:var(--gold)">Appendix C</span>
+  <h2>Sources, team and AI use</h2>
+  <h3>Team 67</h3>
+  <div class="tbl"><table><thead><tr><th>Member</th><th>Chapters presented at the defence</th></tr></thead><tbody>
+    <tr><td>Alua</td><td>Prologue, 01 Agents, 02 Search</td></tr>
+    <tr><td>Eldar</td><td>03 Local search and CSP, 04 Games, 05 MDP and RL</td></tr>
+    <tr><td>Zeynep</td><td>06 Probability, 07 HMMs</td></tr>
+    <tr><td>Aruzhan</td><td>08 Decisions and ML, 09 Neural networks, 10 LLMs and safety</td></tr>
+  </tbody></table></div>
+  <h3>References</h3>
+  <ol>
+    <li>Russell, S. J., &amp; Norvig, P. <i>Artificial Intelligence: A Modern Approach</i>. Pearson. (Main course textbook.)</li>
+    <li>QAIRU AI Fundamentals lecture notes and practical guides, weeks 1–8, 2026 (agents and environments; search and A*; local search; adversarial search; MDPs and RL; probability and Bayesian networks; hidden Markov models; rational decisions and classical ML).</li>
+    <li>QAIRU lecture "Understanding Kazakhstan's AI Legal Framework", September 2026.</li>
+    <li>Law of the Republic of Kazakhstan "On Artificial Intelligence", No. 230-VIII ZRK, 17 November 2025. <a href="https://adilet.zan.kz/eng/docs/Z2500000230" target="_blank" rel="noopener">adilet.zan.kz</a></li>
+    <li>Hart, P. E., Nilsson, N. J., &amp; Raphael, B. (1968). A formal basis for the heuristic determination of minimum cost paths. <i>IEEE Transactions on Systems Science and Cybernetics</i>.</li>
+    <li>Vaswani, A., et al. (2017). Attention is all you need. <i>Advances in Neural Information Processing Systems</i>.</li>
+    <li>Mnih, V., et al. (2015). Human-level control through deep reinforcement learning. <i>Nature</i>, 518.</li>
+    <li>Sutton, R. S., &amp; Barto, A. G. (2018). <i>Reinforcement Learning: An Introduction</i> (2nd ed.). MIT Press.</li>
+    <li>Scikit-learn documentation, <a href="https://scikit-learn.org" target="_blank" rel="noopener">scikit-learn.org</a>.</li>
+  </ol>
+  <h3>AI use declaration</h3>
+  <div class="tbl"><table><tbody>
+    <tr><td style="width:30%"><b>Assignment</b></td><td>AI Fundamentals End-Term Creative Project, Team 67</td></tr>
+    <tr><td><b>AI tool</b></td><td>Claude (Anthropic), November 2026, web app</td></tr>
+    <tr><td><b>Purpose</b></td><td>Drafting explanations and story text from our lecture materials, drawing diagrams, writing the interactive demos and code examples, and suggesting quiz questions.</td></tr>
+    <tr><td><b>Key prompts</b></td><td>"Create an AI Fundamentals e-book in English that covers weeks 1–10 using our syllabus and lecture slides", plus follow-up requests for corrections.</td></tr>
+    <tr><td><b>Verification</b></td><td>Worked examples were checked against the numbers in our lecture slides and recalculated in Python; code snippets were run; facts and dates were checked against the textbook and the sources above. Chapters 9 and 10 are based on the syllabus and textbook because we did not use lecture slides for those weeks.</td></tr>
+    <tr><td><b>Statement</b></td><td>We, the members of Team 67, have reviewed the content, take responsibility for the final work and have disclosed our AI use.</td></tr>
+  </tbody></table></div>
+</div>
+</section>
+</main>
+
+<footer>
+  <svg class="band" aria-hidden="true"><rect width="100%" height="22" fill="url(#horn)"/></svg>
+  <div class="wrap" style="padding-top:1rem">
+    <p><b>Tulpar: a small robot's journey through the ten lands of AI.</b> Team 67 · QAIRU · AI Fundamentals (AIF1303) · 2026–2027.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function css(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+var NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent){ var e=document.createElementNS(NS,tag); for(var k in attrs){ e.setAttribute(k, attrs[k]); } if(parent) parent.appendChild(e); return e; }
+var redrawers = [];
+function redrawAll(){ redrawers.forEach(function(f){ try{ f(); }catch(e){} }); }
+
+/* ---------- theme ---------- */
+var root = document.documentElement;
+try { var saved = localStorage.getItem("tulpar-theme"); if(saved==="dark"||saved==="light"){ root.setAttribute("data-theme", saved); } } catch(e){}
+function isDark(){ var t=root.getAttribute("data-theme"); if(t) return t==="dark"; return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; }
+function labelTheme(){ document.getElementById("themeBtn").textContent = isDark() ? "Light" : "Dark"; }
+document.getElementById("themeBtn").addEventListener("click", function(){
+  var next = isDark() ? "light" : "dark"; root.setAttribute("data-theme", next);
+  try { localStorage.setItem("tulpar-theme", next); } catch(e){}
+  labelTheme(); redrawAll();
+});
+if(window.matchMedia){ var mq=window.matchMedia("(prefers-color-scheme: dark)"); var onMq=function(){ labelTheme(); redrawAll(); }; if(mq.addEventListener) mq.addEventListener("change", onMq); else if(mq.addListener) mq.addListener(onMq); }
+labelTheme();
+
+/* ---------- drawer + progress ---------- */
+var drawer=document.getElementById("drawer"), scrim=document.getElementById("scrim"), tocBtn=document.getElementById("tocBtn");
+function openToc(o){ drawer.classList.toggle("open", o); scrim.hidden=!o; tocBtn.setAttribute("aria-expanded", o?"true":"false"); }
+tocBtn.addEventListener("click", function(){ openToc(!drawer.classList.contains("open")); });
+document.getElementById("closeToc").addEventListener("click", function(){ openToc(false); });
+scrim.addEventListener("click", function(){ openToc(false); });
+drawer.querySelectorAll("a").forEach(function(a){ a.addEventListener("click", function(){ openToc(false); }); });
+document.addEventListener("keydown", function(e){ if(e.key==="Escape") openToc(false); });
+var prog=document.getElementById("progress");
+function onScroll(){ var h=document.documentElement.scrollHeight-window.innerHeight; prog.style.width = (h>0? Math.min(100, window.scrollY/h*100):0)+"%"; }
+window.addEventListener("scroll", onScroll, {passive:true}); onScroll();
+
+/* ---------- quizzes ---------- */
+var QUIZ = {
+ ch1:[
+  {q:"A heater that switches on whenever the temperature is below 18°C is which kind of agent?", o:["Simple reflex","Goal-based","Utility-based"], a:0, e:"It maps the current percept straight to an action with a rule. No memory, goal or trade-off is needed."},
+  {q:"Tulpar must choose between a faster route and a safer route. Which architecture fits best?", o:["Model-based","Utility-based","Simple reflex"], a:1, e:"Comparing two acceptable outcomes needs a utility that expresses the trade-off between time and risk."},
+  {q:"A taxi's sensors cannot see around corners. Its environment is…", o:["Fully observable","Partially observable","Episodic"], a:1, e:"The sensors reveal only part of the relevant state, so the environment is partially observable."}
+ ],
+ ch2:[
+  {q:"Which search algorithm uses a FIFO queue as its frontier?", o:["DFS","BFS","A*"], a:1, e:"Breadth-first search removes the oldest node first, which is first-in, first-out."},
+  {q:"Node X has g = 6 and h = 5. Node Y has g = 9 and h = 1. Which does A* expand first?", o:["X, because its g is smaller","Y, because f = 10 < 11","Either, they are equal"], a:1, e:"A* compares f = g + h: X has 11, Y has 10, so Y is expanded first."},
+  {q:"What happens to A* if the heuristic is h(n) = 0 for every node?", o:["It becomes uniform-cost search","It becomes depth-first search","It stops being complete"], a:0, e:"With h = 0, f = g, so A* orders the frontier exactly like UCS."}
+ ],
+ ch3:[
+  {q:"Why can hill climbing return a solution that is not the best?", o:["It uses too much memory","It can stop at a local maximum","It always picks random moves"], a:1, e:"It stops when no neighbour is better, which may be a peak lower than the global maximum."},
+  {q:"In simulated annealing, what happens to the chance of accepting a worse move as T decreases?", o:["It increases","It stays the same","It decreases"], a:2, e:"P = e^(ΔE/T) with ΔE < 0 gets smaller as T falls, so the search becomes greedier."},
+  {q:"In a CSP, what does the MRV heuristic choose?", o:["The variable with the fewest legal values left","The value that is used most often","The constraint with the largest weight"], a:0, e:"Minimum remaining values picks the most constrained variable so that failures are detected early."}
+ ],
+ ch4:[
+  {q:"A MIN node has children with values 7, 4 and 9. What is its minimax value?", o:["9","4","20/3"], a:1, e:"MIN chooses the smallest child value: 4."},
+  {q:"What does alpha–beta pruning change compared with minimax?", o:["The value at the root","The number of nodes examined","The rules of the game"], a:1, e:"It examines fewer nodes but always returns the same root value and move."},
+  {q:"A chance node has outcomes 10 (probability 0.5) and −2 (probability 0.5). Its expectimax value is…", o:["−2","10","4"], a:2, e:"0.5 × 10 + 0.5 × (−2) = 5 − 1 = 4."}
+ ],
+ ch5:[
+  {q:"Rewards are 10, 0, 10 with γ = 0.5. What is the return G?", o:["20","12.5","15"], a:1, e:"G = 10 + 0.5 × 0 + 0.25 × 10 = 12.5."},
+  {q:"Which parameter controls how often a Q-learner tries random actions?", o:["α (alpha)","γ (gamma)","ε (epsilon)"], a:2, e:"ε is the exploration rate in ε-greedy action selection."},
+  {q:"Q(s,a) = 2, r = 1, max Q(s′,·) = 10, γ = 0.9, α = 0.5. What is the new Q(s,a)?", o:["6","10","5"], a:0, e:"Target = 1 + 0.9 × 10 = 10. Error = 10 − 2 = 8. New Q = 2 + 0.5 × 8 = 6."}
+ ],
+ ch6:[
+  {q:"P(Rain) = 0.3 and P(Heavy, Rain) = 0.24. What is P(Heavy | Rain)?", o:["0.24","0.8","0.072"], a:1, e:"P(Heavy | Rain) = P(Heavy, Rain) / P(Rain) = 0.24 / 0.3 = 0.8."},
+  {q:"A rare disease and a fairly accurate test give a positive result. Why can P(disease | +) still be low?", o:["Because the test is broken","Because healthy people are so many that their false positives outnumber true positives","Because Bayes' rule ignores the prior"], a:1, e:"This is the base-rate effect: 10% of 9,900 healthy people is 990 false positives versus 95 true positives."},
+  {q:"In a Bayesian network, what must the graph not contain?", o:["Arrows","Directed cycles","More than three nodes"], a:1, e:"A Bayesian network is a directed acyclic graph (DAG): no directed loops."}
+ ],
+ ch7:[
+  {q:"What does the emission probability P(HIGH | Faulty) describe?", o:["How likely the state changes to Faulty","How likely a HIGH reading is when the motor is Faulty","How likely the motor is Faulty after a HIGH reading"], a:1, e:"Emissions describe observations given hidden states. The reverse question needs Bayes' rule."},
+  {q:"Which HMM task uses later observations to re-estimate an earlier state?", o:["Filtering","Prediction","Smoothing"], a:2, e:"Smoothing combines forward and backward messages to revise a past state."},
+  {q:"Filtering combines alternatives with a sum. What does Viterbi use instead?", o:["A max","A product of priors only","An average"], a:0, e:"Viterbi keeps the best (maximum) path into each state and then backtracks."}
+ ],
+ ch8:[
+  {q:"Action A: 50% chance of +40, 50% chance of 0. Action B: certain +15. Which maximises expected utility?", o:["A, EU = 20","B, EU = 15","They are equal"], a:0, e:"EU(A) = 0.5 × 40 + 0.5 × 0 = 20, which is greater than 15."},
+  {q:"Predicting tomorrow's electricity demand in kWh is…", o:["Classification","Regression","Clustering"], a:1, e:"The target is a continuous number, so it is regression."},
+  {q:"Failures are dangerous and rare. Which metric matters most for catching them?", o:["Accuracy","Recall","Training loss"], a:1, e:"Recall = TP / (TP + FN) measures how many real failures the model detects."}
+ ],
+ ch9:[
+  {q:"A perceptron has w = [1, 1] and b = −1.5. What does it output for input (1, 1)?", o:["0","1","0.5"], a:1, e:"z = 1 + 1 − 1.5 = 0.5 > 0, so the step outputs 1. This perceptron computes AND."},
+  {q:"Why can't a single perceptron learn XOR?", o:["XOR needs negative inputs","XOR is not linearly separable","The learning rate is too small"], a:1, e:"No single straight line separates XOR's positive and negative points. A hidden layer is needed."},
+  {q:"What does backpropagation compute?", o:["The gradient of the loss with respect to every weight","The best network architecture","The training data labels"], a:0, e:"It applies the chain rule backwards through the network; gradient descent then uses these gradients."}
+ ],
+ ch10:[
+  {q:"What is a large language model trained to do during pre-training?", o:["Look up facts in a database","Predict the next token","Classify images"], a:1, e:"Pre-training is next-token prediction on large amounts of text."},
+  {q:"Raising the sampling temperature makes an LLM's output…", o:["More predictable","More varied","Always more accurate"], a:1, e:"Higher temperature flattens the softmax distribution, so less likely tokens are chosen more often."},
+  {q:"Under Kazakhstan's AI Law, what must happen when synthetic AI results are distributed?", o:["Nothing, if the model is open source","They must be labelled and users warned","They must be printed"], a:1, e:"The law requires informing users and marking synthetic results, including machine-readable labels."}
+ ]
+};
+document.querySelectorAll(".quiz[data-quiz]").forEach(function(box){
+  var items = QUIZ[box.getAttribute("data-quiz")]; if(!items) return;
+  var lab=document.createElement("span"); lab.className="label"; lab.textContent="Mini-quiz"; box.appendChild(lab);
+  var score=0, answered=0; var sc=document.createElement("div"); sc.className="score"; sc.setAttribute("aria-live","polite");
+  items.forEach(function(it, qi){
+    var q=document.createElement("div"); q.className="q";
+    var p=document.createElement("div"); p.className="prompt"; p.textContent=(qi+1)+". "+it.q; q.appendChild(p);
+    var opts=document.createElement("div"); opts.className="opts"; q.appendChild(opts);
+    var ex=document.createElement("div"); ex.className="explain"; ex.hidden=true;
+    it.o.forEach(function(text, oi){
+      var b=document.createElement("button"); b.type="button"; b.className="opt"; b.textContent=text;
+      b.addEventListener("click", function(){
+        var btns=opts.querySelectorAll("button"); btns.forEach(function(x){ x.disabled=true; });
+        btns[it.a].classList.add("right"); if(oi!==it.a) b.classList.add("wrong"); else score++;
+        answered++; ex.hidden=false; ex.textContent=(oi===it.a?"Correct. ":"Not quite. ")+it.e;
+        sc.textContent = answered===items.length ? "Score: "+score+" / "+items.length : "";
+      });
+      opts.appendChild(b);
+    });
+    q.appendChild(ex); box.appendChild(q);
+  });
+  box.appendChild(sc);
+});
+
+/* ---------- grid search lab ---------- */
+(function(){
+  var cv=document.getElementById("gridCanvas"); if(!cv) return;
+  var ctx=cv.getContext("2d"), C=20, R=10, S=32;
+  var start=[1,5], goal=[18,4], walls={};
+  function w(c,r){ walls[c+","+r]=1; }
+  for(var r=0;r<8;r++) w(6,r);
+  for(r=2;r<10;r++) w(12,r);
+  for(var c=7;c<11;c++) w(c,5);
+  [[15,1],[15,2],[15,3],[16,3],[3,2],[3,3],[3,7],[4,7],[9,8],[9,9],[16,6],[17,6],[16,7]].forEach(function(p){ w(p[0],p[1]); });
+  var state={visited:[],path:[],shown:0,anim:null};
+  function nb(p){ var out=[]; [[1,0],[-1,0],[0,1],[0,-1]].forEach(function(d){ var x=p[0]+d[0], y=p[1]+d[1]; if(x>=0&&y>=0&&x<C&&y<R&&!walls[x+","+y]) out.push([x,y]); }); return out; }
+  function key(p){ return p[0]+","+p[1]; }
+  function rebuild(came, g){ var path=[], k=key(g); while(k){ var s=k.split(",").map(Number); path.push(s); k=came[k]; } return path.reverse(); }
+  function bfs(){ var q=[start], came={}, seen={}, order=[]; seen[key(start)]=1; came[key(start)]=null;
+    while(q.length){ var cur=q.shift(); order.push(cur); if(key(cur)===key(goal)) return {order:order,path:rebuild(came,goal)};
+      nb(cur).forEach(function(n){ if(!seen[key(n)]){ seen[key(n)]=1; came[key(n)]=key(cur); q.push(n); } }); }
+    return {order:order,path:[]}; }
+  function astar(){ var h=function(p){ return Math.abs(p[0]-goal[0])+Math.abs(p[1]-goal[1]); };
+    var open=[{p:start,g:0,f:h(start),t:0}], came={}, gs={}, closed={}, order=[], tick=0; gs[key(start)]=0; came[key(start)]=null;
+    while(open.length){ open.sort(function(a,b){ return a.f-b.f || b.g-a.g || a.t-b.t; }); var cur=open.shift(); var k=key(cur.p);
+      if(closed[k]) continue; closed[k]=1; order.push(cur.p); if(k===key(goal)) return {order:order,path:rebuild(came,goal)};
+      nb(cur.p).forEach(function(n){ var nk=key(n), ng=cur.g+1; if(gs[nk]===undefined || ng<gs[nk]){ gs[nk]=ng; came[nk]=k; open.push({p:n,g:ng,f:ng+h(n),t:++tick}); } }); }
+    return {order:order,path:[]}; }
+  function draw(){
+    var bg=css("--card"), line=css("--line"), wall=css("--ink"), vis=css("--sky-soft"), pathC=css("--gold"), st=css("--steppe"), gl=css("--gold"), edge=css("--sky");
+    ctx.fillStyle=bg; ctx.fillRect(0,0,cv.width,cv.height);
+    for(var i=0;i<state.shown && i<state.visited.length;i++){ var v=state.visited[i]; ctx.fillStyle=vis; ctx.fillRect(v[0]*S,v[1]*S,S,S); }
+    if(state.shown>0 && state.shown<state.visited.length){ var e=state.visited[state.shown-1]; ctx.fillStyle=edge; ctx.fillRect(e[0]*S+8,e[1]*S+8,S-16,S-16); }
+    if(state.shown>=state.visited.length){ ctx.strokeStyle=pathC; ctx.lineWidth=6; ctx.lineCap="round"; ctx.lineJoin="round"; ctx.beginPath(); state.path.forEach(function(p,j){ var x=p[0]*S+S/2,y=p[1]*S+S/2; if(j) ctx.lineTo(x,y); else ctx.moveTo(x,y); }); ctx.stroke(); }
+    for(var k in walls){ var s=k.split(",").map(Number); ctx.fillStyle=wall; ctx.fillRect(s[0]*S+1,s[1]*S+1,S-2,S-2); }
+    ctx.strokeStyle=line; ctx.lineWidth=1; for(var x=0;x<=C;x++){ ctx.beginPath(); ctx.moveTo(x*S+.5,0); ctx.lineTo(x*S+.5,R*S); ctx.stroke(); } for(var y=0;y<=R;y++){ ctx.beginPath(); ctx.moveTo(0,y*S+.5); ctx.lineTo(C*S,y*S+.5); ctx.stroke(); }
+    ctx.fillStyle=st; ctx.beginPath(); ctx.arc(start[0]*S+S/2,start[1]*S+S/2,11,0,7); ctx.fill();
+    ctx.fillStyle=gl; ctx.fillRect(goal[0]*S+6,goal[1]*S+6,S-12,S-12);
+  }
+  function run(kind){
+    if(state.anim) cancelAnimationFrame(state.anim);
+    var res = kind==="bfs"? bfs() : astar(); state.visited=res.order; state.path=res.path; state.shown=0;
+    var out=document.getElementById("searchOut"); var name = kind==="bfs"?"BFS":"A* (Manhattan)";
+    var finish=function(){ out.textContent = name+": explored "+res.order.length+" cells, path length "+(res.path.length-1)+" steps."; };
+    if(reduce){ state.shown=state.visited.length; draw(); finish(); return; }
+    var stepf=function(){ state.shown=Math.min(state.visited.length, state.shown+3); draw(); out.textContent=name+": exploring… "+state.shown+" cells"; if(state.shown<state.visited.length) state.anim=requestAnimationFrame(stepf); else finish(); };
+    stepf();
+  }
+  document.getElementById("runBfs").addEventListener("click", function(){ run("bfs"); });
+  document.getElementById("runAstar").addEventListener("click", function(){ run("astar"); });
+  document.getElementById("clearGrid").addEventListener("click", function(){ if(state.anim) cancelAnimationFrame(state.anim); state={visited:[],path:[],shown:0,anim:null}; draw(); document.getElementById("searchOut").textContent="Press a button to start."; });
+  redrawers.push(draw); draw();
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+})();
+
+/* ---------- Q-learning lab ---------- */
+(function(){
+  var view=document.getElementById("qView"); if(!view) return;
+  var N=5, GOAL=4, alpha=0.5, gamma=0.9, eps=0.2, Q, eps_n, last;
+  function reset(){ Q=[]; for(var i=0;i<N;i++) Q.push([0,0]); eps_n=0; last=[]; render(); }
+  function greedy(s){ if(Q[s][0]===Q[s][1]) return Math.random()<0.5?0:1; return Q[s][1]>Q[s][0]?1:0; }
+  function episode(){ var s=0, traj=[0], steps=0; while(s!==GOAL && steps<100){ var a = Math.random()<eps ? (Math.random()<0.5?0:1) : greedy(s);
+      var ns = a===0? Math.max(0,s-1) : Math.min(GOAL,s+1); var r = ns===GOAL?10:-1; var target = r + (ns===GOAL?0:gamma*Math.max(Q[ns][0],Q[ns][1]));
+      Q[s][a] += alpha*(target-Q[s][a]); s=ns; traj.push(s); steps++; } eps_n++; last=traj; }
+  function render(){
+    var h='<div class="tbl"><table><thead><tr><th>State</th><th class="num">Q(s, LEFT)</th><th class="num">Q(s, RIGHT)</th><th>Policy</th></tr></thead><tbody>';
+    for(var s=0;s<N;s++){ if(s===GOAL){ h+='<tr><td>4 · charger</td><td class="num">–</td><td class="num">–</td><td>goal</td></tr>'; continue; }
+      var best = Q[s][0]===Q[s][1] ? "?" : (Q[s][1]>Q[s][0] ? "→ RIGHT" : "← LEFT");
+      h+='<tr><td>'+s+(s===0?' · start':'')+'</td><td class="num">'+Q[s][0].toFixed(2)+'</td><td class="num">'+Q[s][1].toFixed(2)+'</td><td'+(best==="→ RIGHT"?' class="yes"':'')+'>'+best+'</td></tr>'; }
+    h+='</tbody></table></div>'; view.innerHTML=h;
+    document.getElementById("qOut").textContent = "Episodes trained: "+eps_n + (last.length? " · last path: "+last.join(" → ")+" ("+(last.length-1)+" moves)" : "") + (eps_n>0 ? " · exact optimum: Q(3,RIGHT) = 10, Q(2,RIGHT) = 8, Q(1,RIGHT) = 6.2, Q(0,RIGHT) = 4.58" : "");
+  }
+  document.getElementById("q1").addEventListener("click", function(){ episode(); render(); });
+  document.getElementById("q50").addEventListener("click", function(){ for(var i=0;i<50;i++) episode(); render(); });
+  document.getElementById("qReset").addEventListener("click", reset);
+  reset();
+})();
+
+/* ---------- Bayes lab ---------- */
+(function(){
+  var pr=document.getElementById("bPrior"); if(!pr) return;
+  var se=document.getElementById("bSens"), fp=document.getElementById("bFp"), bar=document.getElementById("bayesBar");
+  function upd(){
+    var p=+pr.value/100, s=+se.value/100, f=+fp.value/100;
+    document.getElementById("oPrior").textContent=(p*100).toFixed(1)+"%"; document.getElementById("oSens").textContent=(s*100).toFixed(1)+"%"; document.getElementById("oFp").textContent=(f*100).toFixed(1)+"%";
+    var tp=s*p*10000, fpos=f*(1-p)*10000, post=tp/(tp+fpos);
+    while(bar.firstChild) bar.removeChild(bar.firstChild);
+    var W=600, wt=Math.max(2, W*post);
+    el("rect",{x:0,y:8,width:wt,height:30,rx:6,"class":"s-steppe"},bar);
+    el("rect",{x:wt,y:8,width:Math.max(0,W-wt),height:30,rx:6,"class":"s-danger",opacity:".75"},bar);
+    var t1=el("text",{x:4,y:58,"class":"s-steppe","font-size":"13"},bar); t1.textContent="true positives ≈ "+Math.round(tp);
+    var t2=el("text",{x:W-4,y:58,"text-anchor":"end","class":"s-danger","font-size":"13"},bar); t2.textContent="false positives ≈ "+Math.round(fpos);
+    document.getElementById("bayesOut").textContent="Out of 10,000 people, "+Math.round(tp+fpos)+" test positive. P(ill | positive) = "+(post*100).toFixed(2)+"%";
+  }
+  [pr,se,fp].forEach(function(x){ x.addEventListener("input", upd); }); upd();
+})();
+
+/* ---------- HMM lab ---------- */
+(function(){
+  var bar=document.getElementById("hmmBar"); if(!bar) return;
+  var T=[[.9,.1],[.2,.8]], O={HIGH:[.2,.7],NORMAL:[.8,.3]}, b, t, hist;
+  function reset(){ b=[.8,.2]; t=0; hist=[]; draw(); }
+  function obs(r){ if(t>0){ b=[b[0]*T[0][0]+b[1]*T[1][0], b[0]*T[0][1]+b[1]*T[1][1]]; }
+    b=[b[0]*O[r][0], b[1]*O[r][1]]; var z=b[0]+b[1]; b=[b[0]/z,b[1]/z]; t++; hist.push(r); draw(); }
+  function draw(){
+    while(bar.firstChild) bar.removeChild(bar.firstChild);
+    var W=600, wh=W*b[0];
+    el("rect",{x:0,y:6,width:wh,height:30,rx:6,"class":"s-steppe"},bar);
+    el("rect",{x:wh,y:6,width:W-wh,height:30,rx:6,"class":"s-danger"},bar);
+    var a=el("text",{x:4,y:56,"class":"s-steppe","font-size":"13"},bar); a.textContent="Healthy "+(b[0]*100).toFixed(1)+"%";
+    var c=el("text",{x:W-4,y:56,"text-anchor":"end","class":"s-danger","font-size":"13"},bar); c.textContent="Faulty "+(b[1]*100).toFixed(1)+"%";
+    document.getElementById("hmmOut").textContent = t===0 ? "Time 0: prior belief, no readings yet." : "Time "+t+" · readings: "+hist.join(", ");
+  }
+  document.getElementById("hHigh").addEventListener("click", function(){ obs("HIGH"); });
+  document.getElementById("hNorm").addEventListener("click", function(){ obs("NORMAL"); });
+  document.getElementById("hReset").addEventListener("click", reset);
+  reset();
+})();
+
+/* ---------- Perceptron lab ---------- */
+(function(){
+  var svg=document.getElementById("percPlot"); if(!svg) return;
+  var gates={AND:[0,0,0,1], OR:[0,1,1,1], XOR:[0,1,1,0]}, X=[[0,0],[0,1],[1,0],[1,1]];
+  var gate="AND", w, bias, epochs, errors, eta=0.2;
+  function px(x){ return 40 + (x+0.5)/2*240; } function py(y){ return 280 - (y+0.5)/2*240; }
+  function z(x,y){ return w[0]*x + w[1]*y + bias; }
+  function reset(){ w=[0,0]; bias=-0.1; epochs=0; errors=null; draw(); }
+  function epoch(){ var err=0; for(var i=0;i<4;i++){ var y=gates[gate][i], yh = z(X[i][0],X[i][1])>0?1:0, d=y-yh; if(d!==0){ err++; w[0]+=eta*d*X[i][0]; w[1]+=eta*d*X[i][1]; bias+=eta*d; } }
+    epochs++; var e2=0; for(i=0;i<4;i++){ if(((z(X[i][0],X[i][1])>0)?1:0)!==gates[gate][i]) e2++; } errors=e2; draw(); }
+  function clip(){ var poly=[[-0.5,-0.5],[1.5,-0.5],[1.5,1.5],[-0.5,1.5]], out=[];
+    for(var i=0;i<poly.length;i++){ var A=poly[i], B=poly[(i+1)%poly.length], za=z(A[0],A[1]), zb=z(B[0],B[1]);
+      if(za>0) out.push(A); if((za>0)!==(zb>0)){ var t=za/(za-zb); out.push([A[0]+t*(B[0]-A[0]), A[1]+t*(B[1]-A[1])]); } } return out; }
+  function draw(){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    el("rect",{x:40,y:40,width:240,height:240,rx:8,"class":"s-paper2"},svg);
+    var poly=clip(); if(poly.length>2) el("polygon",{points:poly.map(function(p){ return px(p[0])+","+py(p[1]); }).join(" "),"class":"s-skysoft"},svg);
+    var box=[[-0.5,-0.5],[1.5,-0.5],[1.5,1.5],[-0.5,1.5]], pts=[];
+    for(var bi=0;bi<4;bi++){ var A=box[bi], B=box[(bi+1)%4], za=z(A[0],A[1]), zb=z(B[0],B[1]); if((za>0)!==(zb>0) && za!==zb){ var tt0=za/(za-zb); pts.push([A[0]+tt0*(B[0]-A[0]), A[1]+tt0*(B[1]-A[1])]); } }
+    if(pts.length>=2) el("line",{x1:px(pts[0][0]),y1:py(pts[0][1]),x2:px(pts[1][0]),y2:py(pts[1][1]),"class":"st-sky","stroke-width":"3"},svg);
+    X.forEach(function(p,i){ var y=gates[gate][i]; el("circle",{cx:px(p[0]),cy:py(p[1]),r:13,"class":y?"s-sky":"s-gold"},svg);
+      var t=el("text",{x:px(p[0]),y:py(p[1])+28,"text-anchor":"middle","class":"s-soft","font-size":"11"},svg); t.textContent="("+p[0]+","+p[1]+") → "+y; });
+    var tt=el("text",{x:160,y:24,"text-anchor":"middle","class":"s-ink","font-size":"13"},svg); tt.textContent=gate+" gate";
+    var msg = "w = ["+w[0].toFixed(2)+", "+w[1].toFixed(2)+"], b = "+bias.toFixed(2)+" · epochs: "+epochs;
+    if(errors===0) msg += " · converged: all 4 points correct";
+    else if(errors!==null) msg += " · misclassified: "+errors + (gate==="XOR" && epochs>=6 ? " (XOR is not linearly separable, so this never reaches 0)" : "");
+    document.getElementById("percOut").textContent=msg;
+  }
+  document.querySelectorAll("[data-gate]").forEach(function(b){ b.addEventListener("click", function(){ gate=b.getAttribute("data-gate"); document.querySelectorAll("[data-gate]").forEach(function(x){ x.setAttribute("aria-pressed", x===b?"true":"false"); x.classList.toggle("primary", x===b); }); reset(); }); });
+  document.querySelector('[data-gate="AND"]').classList.add("primary");
+  document.getElementById("pStep").addEventListener("click", epoch);
+  document.getElementById("pReset").addEventListener("click", reset);
+  reset();
+})();
+})();
+</script>
+
+</body>
+</html>
 
